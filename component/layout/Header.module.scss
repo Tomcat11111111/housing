@@ -1,0 +1,67 @@
+.header {
+  position: -webkit-sticky; /* For Safari */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(246, 246, 246, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 3;
+
+  &[data-header='white'] {
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0px 2px 8px 0px rgba(99, 99, 99, 0.2);
+  }
+}
+
+.headerContent {
+  width: 1168px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.iconArea {
+  padding: 16px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.linkArea {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  color: #ccc;
+  line-height: 20px;
+
+  > button {
+    padding: 21px 0;
+
+    &[data-active='active'] {
+      color: #ff8e26;
+      font-weight: 700;
+      border-bottom: 3px solid #ff8e26;
+    }
+  }
+}
+
+.buttonArea {
+  padding: 16px 0;
+  display: flex;
+  gap: 16px;
+}
+
+.button {
+  border-radius: 8px;
+  background: #ff8e26;
+  padding: 8px;
+  color: #fff;
+  line-height: 20px;
+}
+
+.memberArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
