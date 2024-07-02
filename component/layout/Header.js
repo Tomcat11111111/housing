@@ -10,8 +10,18 @@ const Header = ({ headerType = 'default' }) => {
     >
       <div className={styles.headerContent}>
         <div className={styles.iconArea}>
-          <Image src="/icon/ellipse.svg" alt="ellipse" width={30} height={30} />
-          <Image src="/icon/icon.svg" alt="icon" width={72} height={20} />
+          <Image
+            src="/housing/icon/ellipse.svg"
+            alt="ellipse"
+            width={30}
+            height={30}
+          />
+          <Image
+            src="/housing/icon/icon.svg"
+            alt="icon"
+            width={72}
+            height={20}
+          />
         </div>
         {headerType === 'white' && (
           <div className={styles.linkArea}>
@@ -30,7 +40,7 @@ const Header = ({ headerType = 'default' }) => {
                 <div>|</div>
                 <div>註冊</div>
                 <Image
-                  src="/icon/account.svg"
+                  src="/housing/icon/account.svg"
                   alt="account"
                   width={30}
                   height={30}

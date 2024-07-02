@@ -46,11 +46,11 @@ export default function Home() {
   }, []);
 
   const images = [
-    '/image/house.png',
-    '/image/house.png',
-    '/image/house.png',
-    '/image/house.png',
-    '/image/house.png',
+    '/housing/image/house.png',
+    '/housing/image/house.png',
+    '/housing/image/house.png',
+    '/housing/image/house.png',
+    '/housing/image/house.png',
   ];
 
   return (
@@ -76,7 +76,7 @@ export default function Home() {
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
-                  src="/icon/domain.svg"
+                  src="/housing/icon/domain.svg"
                   alt="account"
                   width={30}
                   height={30}
@@ -85,13 +85,18 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image src="/icon/arrow.svg" alt="account" width={24} height={24} />
+            <Image
+              src="/housing/icon/arrow.svg"
+              alt="account"
+              width={24}
+              height={24}
+            />
           </div>
           <div className={styles.pageCard}>
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
-                  src="/icon/domain.svg"
+                  src="/housing/icon/domain.svg"
                   alt="account"
                   width={30}
                   height={30}
@@ -100,13 +105,18 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image src="/icon/arrow.svg" alt="account" width={24} height={24} />
+            <Image
+              src="/housing/icon/arrow.svg"
+              alt="account"
+              width={24}
+              height={24}
+            />
           </div>
           <div className={styles.pageCard}>
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
-                  src="/icon/domain.svg"
+                  src="/housing/icon/domain.svg"
                   alt="account"
                   width={30}
                   height={30}
@@ -115,7 +125,12 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image src="/icon/arrow.svg" alt="account" width={24} height={24} />
+            <Image
+              src="/housing/icon/arrow.svg"
+              alt="account"
+              width={24}
+              height={24}
+            />
           </div>
         </div>
         <div className={styles.search} data-sticky={isSticky ? 'sticky' : ''}>
@@ -159,7 +174,7 @@ export default function Home() {
                 iconPosition="left"
                 icon={
                   <Image
-                    src="/icon/setting.svg"
+                    src="/housing/icon/setting.svg"
                     alt="setting"
                     width={24}
                     height={24}

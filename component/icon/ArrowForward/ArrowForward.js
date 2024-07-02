@@ -5,7 +5,7 @@ const ArrowForward = () => {
   return (
     <div className={styles.arrowSquareBox}>
       <Image
-        src="/icon/arrow_forward.svg"
+        src="/housing/icon/arrow_forward.svg"
         alt="arrow_forward"
         width={24}
         height={24}

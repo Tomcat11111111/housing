@@ -2,7 +2,7 @@
 const nextConfig = {
   basePath: '/housing',
   assetPrefix: '/housing/',
-  output: 'export',
+  images: { unoptimized: true },
   reactStrictMode: true,
 };
 

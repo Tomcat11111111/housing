@@ -5,7 +5,7 @@ const ArrowBack = () => {
   return (
     <div className={styles.arrowSquareBox}>
       <Image
-        src="/icon/arrow_back.svg"
+        src="/housing/icon/arrow_back.svg"
         alt="arrow_back"
         width={24}
         height={24}

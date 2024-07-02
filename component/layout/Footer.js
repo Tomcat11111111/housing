@@ -9,7 +9,12 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image src="/icon/info.png" alt="info" width={24} height={24} />
+                <Image
+                  src="/housing/icon/info.png"
+                  alt="info"
+                  width={24}
+                  height={24}
+                />
               </div>
               <span>關於我們</span>
             </div>
@@ -25,7 +30,7 @@ const Footer = () => {
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
                 <Image
-                  src="/icon/content.svg"
+                  src="/housing/icon/content.svg"
                   alt="info"
                   width={24}
                   height={24}
@@ -46,7 +51,7 @@ const Footer = () => {
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
                 <Image
-                  src="/icon/person.svg"
+                  src="/housing/icon/person.svg"
                   alt="person"
                   width={24}
                   height={24}
@@ -63,7 +68,7 @@ const Footer = () => {
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
                 <Image
-                  src="/icon/people.svg"
+                  src="/housing/icon/people.svg"
                   alt="people"
                   width={24}
                   height={24}
@@ -79,7 +84,12 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image src="/icon/cs.svg" alt="cs" width={24} height={24} />
+                <Image
+                  src="/housing/icon/cs.svg"
+                  alt="cs"
+                  width={24}
+                  height={24}
+                />
               </div>
               <span>客服中心</span>
             </div>

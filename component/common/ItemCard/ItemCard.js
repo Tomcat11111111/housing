@@ -10,7 +10,7 @@ const priceStatusMap = new Map([
       color: '#E85454',
       icon: (
         <Image
-          src="/icon/trending_up.svg"
+          src="/housing/icon/trending_up.svg"
           alt="trending_up"
           width={20}
           height={20}
@@ -25,7 +25,7 @@ const priceStatusMap = new Map([
       color: '#52C32A',
       icon: (
         <Image
-          src="/icon/trending_down.svg"
+          src="/housing/icon/trending_down.svg"
           alt="trending_down"
           width={20}
           height={20}
@@ -40,7 +40,7 @@ const priceStatusMap = new Map([
       color: '#FAAF1D',
       icon: (
         <Image
-          src="/icon/trending_flat.svg"
+          src="/housing/icon/trending_flat.svg"
           alt="trending_flat"
           width={20}
           height={20}
@@ -57,7 +57,7 @@ const ItemCard = (props) => {
   return (
     <div className={styles.itemCard}>
       <Image
-        src="/image/house_item.png"
+        src="/housing/image/house_item.png"
         alt="house_item"
         width={389}
         height={182}
@@ -70,7 +70,12 @@ const ItemCard = (props) => {
           <Tag
             text="321人瀏覽"
             icon={
-              <Image src="/icon/eye.svg" alt="eye" width={20} height={20} />
+              <Image
+                src="/housing/icon/eye.svg"
+                alt="eye"
+                width={20}
+                height={20}
+              />
             }
             gap="4px"
             iconPosition="left"
@@ -79,7 +84,12 @@ const ItemCard = (props) => {
           <Tag
             text="10小時內更新"
             icon={
-              <Image src="/icon/time.svg" alt="time" width={20} height={20} />
+              <Image
+                src="/housing/icon/time.svg"
+                alt="time"
+                width={20}
+                height={20}
+              />
             }
             gap="4px"
             iconPosition="left"
@@ -90,7 +100,12 @@ const ItemCard = (props) => {
           <Tag
             text="3房"
             icon={
-              <Image src="/icon/bed.svg" alt="bed" width={20} height={20} />
+              <Image
+                src="/housing/icon/bed.svg"
+                alt="bed"
+                width={20}
+                height={20}
+              />
             }
             gap="8px"
             padding="8px"
@@ -108,7 +123,12 @@ const ItemCard = (props) => {
           <Tag
             text="2聽"
             icon={
-              <Image src="/icon/couch.svg" alt="couch" width={20} height={20} />
+              <Image
+                src="/housing/icon/couch.svg"
+                alt="couch"
+                width={20}
+                height={20}
+              />
             }
             gap="8px"
             padding="8px"
@@ -126,7 +146,12 @@ const ItemCard = (props) => {
           <Tag
             text="3衛"
             icon={
-              <Image src="/icon/tub.svg" alt="tub" width={20} height={20} />
+              <Image
+                src="/housing/icon/tub.svg"
+                alt="tub"
+                width={20}
+                height={20}
+              />
             }
             gap="8px"
             padding="8px"

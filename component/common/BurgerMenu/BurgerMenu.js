@@ -26,7 +26,7 @@ function BurgerMenu() {
           >
             未登入
             <Image
-              src="/icon/account.svg"
+              src="/housing/icon/account.svg"
               alt="account"
               width={30}
               height={30}
