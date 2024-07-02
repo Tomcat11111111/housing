@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: '/housing',
-  assetPrefix: '/housing/',
+  assetPrefix: '/housing/public',
   output: 'export',
   reactStrictMode: true,
 };
