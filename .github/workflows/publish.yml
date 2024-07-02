@@ -18,8 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4.1.1
+        with:
+          # Fine-grained PAT with contents:write and workflows:write
+          # scopes
+          token: ${{ secrets.WORKFLOW_TOKEN }}
 
       - name: Setup Node.js ⚙️ - Cache dependencies ⚡ - Install dependencies 🔧
         uses: ./.github/workflows/setup-node
