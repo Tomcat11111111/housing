@@ -8,12 +8,11 @@ import Search from '../../../component/icon/Search/Search';
 import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
-  const { isStickyMode } = props;
-  console.log('isStickyMode', isStickyMode);
+  const { isStickyMode, isShrinkMode } = props;
 
   return (
     <div className={styles.search} data-sticky={isStickyMode ? 'sticky' : ''}>
-      {isStickyMode ? (
+      {isShrinkMode ? (
         <div className={styles.stickySearchBar}>
           <Button
             buttonText="買房子"

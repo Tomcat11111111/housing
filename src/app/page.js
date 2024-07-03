@@ -15,6 +15,7 @@ import styles from './page.module.scss';
 
 export default function Home() {
   const [isSticky, setIsSticky] = useState(false);
+  const [isShrink, setIsShrink] = useState(false);
   const [headerType, setHeaderType] = useState('default');
 
   const handleScroll = () => {
@@ -30,6 +31,13 @@ export default function Home() {
       setIsSticky(true);
     } else {
       setIsSticky(false);
+    }
+
+    if (window.scrollY > 590) {
+      // 527+?
+      setIsShrink(true);
+    } else {
+      setIsShrink(false);
     }
   };
 
@@ -128,7 +136,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <SearchBar isStickyMode={isSticky} />
+        <SearchBar isStickyMode={isSticky} isShrinkMode={isShrink} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
             <span>熱門物件</span>
