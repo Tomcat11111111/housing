@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import ArrowDropdown from '../../icon/ArrowDropdown/ArrowDropdown';
-import Input from '../Input/Input';
 import Menu from '../Menu/Menu';
 import styles from './Dropdown.module.scss';
 
 const Dropdown = (props) => {
-  const { placeholder, isHasBorder, optionList = [], value } = props;
+  const { placeholder, optionList = [], value } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  console.log('isMenuOpen', isMenuOpen);
 
   const dropDownShowText = () => {
     const result = optionList.filter(
@@ -22,8 +22,10 @@ const Dropdown = (props) => {
     <div className={styles.dropdownContainer}>
       <button
         className={styles.dropdownButton}
-        data-border={isHasBorder ? 'hasBorder' : ''}
+        data-open={isMenuOpen ? 'open' : ''}
+        data-selected={!!value ? 'selected' : ''}
         onClick={() => {
+          console.log('onClick');
           setIsMenuOpen((prev) => !prev);
         }}
       >

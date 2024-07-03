@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import BurgerMenu from '../common/BurgerMenu/BurgerMenu';
+import BurgerMenu from '../../common/BurgerMenu/BurgerMenu';
 import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
