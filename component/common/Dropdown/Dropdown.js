@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ArrowDropdown from '../../icon/ArrowDropdown/ArrowDropdown';
 import Menu from '../Menu/Menu';
+import useOutSideClose from '../../../utils/hooks/useoutsideClose';
 import styles from './Dropdown.module.scss';
 
 const Dropdown = (props) => {
   const { placeholder, optionList = [], value } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log('isMenuOpen', isMenuOpen);
+
+  const dropdownRef = useRef(null);
 
   const dropDownShowText = () => {
     const result = optionList.filter(
@@ -18,8 +20,12 @@ const Dropdown = (props) => {
     return result.length > 0 ? result[0].text : placeholder;
   };
 
+  useOutSideClose(dropdownRef, () => {
+    setIsMenuOpen(false);
+  });
+
   return (
-    <div className={styles.dropdownContainer}>
+    <div className={styles.dropdownContainer} ref={dropdownRef}>
       <button
         className={styles.dropdownButton}
         data-open={isMenuOpen ? 'open' : ''}

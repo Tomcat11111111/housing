@@ -1,5 +1,5 @@
 .footer {
-  background: var(--N1, #333);
+  background: #333;
   padding: 48px 0;
 }
 
@@ -8,18 +8,22 @@
   gap: 48px;
   padding-bottom: 32px;
   border-bottom: 1px solid #ccc;
+
+  > div {
+    width: 100%;
+  }
 }
 
 .listTitle {
   display: flex;
-  color: var(--N5, #e9e9e9);
-  font-family: Montserrat;
-  font-size: 20px;
+  color: #e9e9e9;
+  font-size: 16px;
   font-weight: 700;
   line-height: 30px; /* 150% */
   align-items: center;
   border-bottom: 1px solid #ccc;
   padding-bottom: 8px;
+  justify-content: center;
 
   > span {
     margin-left: 4px;
@@ -35,9 +39,7 @@
 }
 
 .list {
-  color: var(--N4, #ccc);
-  font-family: Montserrat;
-  font-size: 16px;
+  color: #ccc;
   font-weight: 400;
   line-height: 24px; /* 150% */
   margin-top: 16px;
@@ -58,8 +60,6 @@
 }
 
 .companyInfo {
-  color: var(--N4, #ccc);
-  font-family: Montserrat;
-  font-size: 16px;
+  color: #ccc;
   text-align: center;
 }

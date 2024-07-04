@@ -3,19 +3,16 @@ import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
 import Arrow from '../../component/icon/Arrow/Arrow';
-import ArrowBack from '../../component/icon/ArrowBack/ArrowBack';
-import ArrowForward from '../../component/icon/ArrowForward/ArrowForward';
 import Button from '../../component/common/Button/Button';
 import Carousel from '../../component/common/Carousel/Carousel';
 import Footer from '../../component/layout/Footer/Footer';
 import Header from '../../component/layout/Header/Header';
-import ItemCard from '../../component/common/ItemCard/ItemCard';
 import SearchBar from '../../component/layout/SearchBar/SearchBar';
+import CardCarouselBox from '../../component/common/CardCarouselBox/CardCarouselBox';
 import styles from './page.module.scss';
 
 export default function Home() {
   const [isSticky, setIsSticky] = useState(false);
-  const [isShrink, setIsShrink] = useState(false);
   const [headerType, setHeaderType] = useState('default');
 
   const handleScroll = () => {
@@ -31,13 +28,6 @@ export default function Home() {
       setIsSticky(true);
     } else {
       setIsSticky(false);
-    }
-
-    if (window.scrollY > 590) {
-      // 527+?
-      setIsShrink(true);
-    } else {
-      setIsShrink(false);
     }
   };
 
@@ -67,12 +57,7 @@ export default function Home() {
       </div>
       <div className={styles.page}>
         <div className={styles.carouselContainer}>
-          <Carousel
-            images={images}
-            indicatorsPosition="right"
-            isAutoSlide
-            isHasArrow
-          />
+          <Carousel images={images} indicatorsPosition="right" isAutoSlide />
         </div>
         <div className={styles.pageCardArea}>
           <div className={styles.pageCard}>
@@ -88,12 +73,7 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image
-              src="/housing/icon/arrow.svg"
-              alt="account"
-              width={24}
-              height={24}
-            />
+            <Arrow />
           </div>
           <div className={styles.pageCard}>
             <div className={styles.cardLeft}>
@@ -108,12 +88,7 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image
-              src="/housing/icon/arrow.svg"
-              alt="account"
-              width={24}
-              height={24}
-            />
+            <Arrow />
           </div>
           <div className={styles.pageCard}>
             <div className={styles.cardLeft}>
@@ -128,15 +103,10 @@ export default function Home() {
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
-            <Image
-              src="/housing/icon/arrow.svg"
-              alt="account"
-              width={24}
-              height={24}
-            />
+            <Arrow />
           </div>
         </div>
-        <SearchBar isStickyMode={isSticky} isShrinkMode={isShrink} />
+        <SearchBar isStickyMode={isSticky} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
             <span>熱門物件</span>
@@ -146,7 +116,6 @@ export default function Home() {
               icon={<Arrow />}
               textStyle={{
                 color: '#333',
-                fontFamily: 'Noto Sans TC',
                 fontSize: '14px',
                 lineHeight: '20px',
               }}
@@ -158,17 +127,7 @@ export default function Home() {
               }}
             />
           </div>
-          <div className={styles.cardcontainer}>
-            <div className={styles.arrowForward}>
-              <ArrowForward />
-            </div>
-            <ItemCard priceStatus="above" />
-            <ItemCard priceStatus="below" />
-            <ItemCard priceStatus="equal" />
-            <div className={styles.arrowBack}>
-              <ArrowBack />
-            </div>
-          </div>
+          <CardCarouselBox />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
@@ -179,7 +138,6 @@ export default function Home() {
               icon={<Arrow />}
               textStyle={{
                 color: '#333',
-                fontFamily: 'Noto Sans TC',
                 fontSize: '14px',
                 lineHeight: '20px',
               }}
@@ -191,17 +149,7 @@ export default function Home() {
               }}
             />
           </div>
-          <div className={styles.cardcontainer}>
-            <div className={styles.arrowForward}>
-              <ArrowForward />
-            </div>
-            <ItemCard priceStatus="above" />
-            <ItemCard priceStatus="below" />
-            <ItemCard priceStatus="equal" />
-            <div className={styles.arrowBack}>
-              <ArrowBack />
-            </div>
-          </div>
+          <CardCarouselBox />
         </div>
       </div>
       <Footer />

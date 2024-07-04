@@ -8,11 +8,11 @@ import Search from '../../../component/icon/Search/Search';
 import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
-  const { isStickyMode, isShrinkMode } = props;
+  const { isStickyMode } = props;
 
   return (
     <div className={styles.search} data-sticky={isStickyMode ? 'sticky' : ''}>
-      {isShrinkMode ? (
+      {isStickyMode ? (
         <div className={styles.stickySearchBar}>
           <Button
             buttonText="買房子"
@@ -69,7 +69,6 @@ const SearchBar = (props) => {
             }
             textStyle={{
               color: '#333',
-              fontFamily: 'Noto Sans TC',
               fontSize: '14px',
               lineHeight: '20px',
             }}
@@ -86,7 +85,6 @@ const SearchBar = (props) => {
             icon={<Arrow />}
             textStyle={{
               color: '#333',
-              fontFamily: 'Noto Sans TC',
               fontSize: '14px',
               lineHeight: '20px',
             }}
@@ -148,7 +146,6 @@ const SearchBar = (props) => {
                 }
                 textStyle={{
                   color: '#333',
-                  fontFamily: 'Noto Sans TC',
                   fontSize: '14px',
                   lineHeight: '20px',
                 }}
@@ -165,7 +162,6 @@ const SearchBar = (props) => {
                 icon={<Arrow />}
                 textStyle={{
                   color: '#333',
-                  fontFamily: 'Noto Sans TC',
                   fontSize: '14px',
                   lineHeight: '20px',
                 }}

@@ -5,6 +5,7 @@ const Tag = (props) => {
     text = '',
     textStyle = {},
     tagColor = '',
+    borderColor = '',
     gap = '',
     icon = {},
     iconPosition = '',
@@ -15,6 +16,7 @@ const Tag = (props) => {
     <div
       className={styles.tag}
       style={{
+        border: borderColor ? `1px solid ${borderColor}` : '',
         backgroundColor: tagColor,
         gap: gap,
         padding: padding,
