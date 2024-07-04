@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
 import Arrow from '../../component/icon/Arrow/Arrow';
@@ -40,24 +40,26 @@ export default function Home() {
 
   const images = [
     '/housing/image/house.png',
-    '/housing/image/house.png',
-    '/housing/image/house.png',
-    '/housing/image/house.png',
-    '/housing/image/house.png',
+    '/housing/image/banner_example.png',
+    '/housing/image/banner_example_2.png',
+    '/housing/image/banner_example_3.png',
   ];
 
   return (
     <main className={styles.basic}>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM&libraries=places`}
-        strategy="beforeInteractive"
-      />
       <div className={styles.headerContainer}>
         <Header headerType={headerType} />
       </div>
       <div className={styles.page}>
         <div className={styles.carouselContainer}>
-          <Carousel images={images} indicatorsPosition="right" isAutoSlide />
+          <Carousel
+            images={images}
+            indicatorsPosition="right"
+            width={1200}
+            height={400}
+            isAutoSlide
+            isHasIndicator
+          />
         </div>
         <div className={styles.pageCardArea}>
           <div className={styles.pageCard}>
@@ -106,12 +108,13 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        <SearchBar isStickyMode={isSticky} />
+        <SearchBar isStickyMode={isSticky} setIsSticky={setIsSticky} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
             <span>熱門物件</span>
             <Button
               buttonText="瀏覽更多"
+              buttonType="transparent"
               iconPosition="right"
               icon={<Arrow />}
               textStyle={{
@@ -134,6 +137,7 @@ export default function Home() {
             <span>熱門物件</span>
             <Button
               buttonText="瀏覽更多"
+              buttonType="transparent"
               iconPosition="right"
               icon={<Arrow />}
               textStyle={{
@@ -153,6 +157,10 @@ export default function Home() {
         </div>
       </div>
       <Footer />
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM&callback=initMap`}
+        strategy="beforeInteractive"
+      />
     </main>
   );
 }

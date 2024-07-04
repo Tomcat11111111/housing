@@ -2,4 +2,18 @@
   display: flex;
   border-radius: 8px;
   align-items: center;
+
+  &[data-button-type='orange'] {
+  }
+
+  &[data-button-type='orange']:hover {
+    opacity: 0.6;
+  }
+
+  &[data-button-type='transparent'] {
+  }
+
+  &[data-button-type='transparent']:hover {
+    background: #e9e9e9;
+  }
 }

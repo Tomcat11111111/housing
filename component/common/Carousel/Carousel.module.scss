@@ -5,10 +5,19 @@
 .carouselInner {
   display: flex;
   transition: transform 0.5s ease;
+  // position: relative;
 }
 
 .carouselItem {
   min-width: 100%;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // bottom: 0;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
 }
 
 .carousel img {

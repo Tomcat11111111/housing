@@ -1,14 +1,40 @@
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '../../common/Button/Button';
 import Dropdown from '../../common/Dropdown/Dropdown';
 import Input from '../../common/Input/Input';
 import House from '../../../component/icon/House/House';
 import Arrow from '../../../component/icon/Arrow/Arrow';
+import Remove from '../../../component/icon/Remove/Remove';
 import Search from '../../../component/icon/Search/Search';
+import CountySelector from '../../common/Dropdown/CountySelector';
 import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
-  const { isStickyMode } = props;
+  const { isStickyMode, setIsSticky } = props;
+
+  const mapRef = useRef(null);
+  const [county, setCounty] = useState('台北市');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.google && !isStickyMode) {
+      initMap();
+    }
+  }, [isStickyMode]);
+
+  const initMap = () => {
+    const TWlocation = { lat: 25.033, lng: 121.5654 };
+
+    const map = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 25.033, lng: 121.5654 },
+      zoom: 10,
+    });
+
+    const markerTW = new google.maps.Marker({
+      position: TWlocation,
+      map: map,
+    });
+  };
 
   return (
     <div className={styles.search} data-sticky={isStickyMode ? 'sticky' : ''}>
@@ -26,16 +52,12 @@ const SearchBar = (props) => {
             iconPosition="left"
           />
           <div className={styles.group}>
-            <Dropdown
-              isHasBorder={false}
-              optionList={[
-                { text: '台北市', value: 'taipei' },
-                { text: '高雄市', value: 'kaoshiun' },
-                { text: '台南市', value: 'tainan' },
-                { text: '花蓮市', value: 'hualien' },
-              ]}
-              value="taipei"
-            />
+            <Dropdown isHasBorder={false} value={county}>
+              <CountySelector
+                value={county}
+                onChange={(county) => setCounty(county)}
+              />
+            </Dropdown>
             <div className={styles.searchInput}>
               <Input
                 iconPosition="left"
@@ -57,7 +79,8 @@ const SearchBar = (props) => {
             />
           </div>
           <Button
-            buttonText="縮小篩選"
+            buttonText="進階篩選"
+            buttonType="transparent"
             iconPosition="left"
             icon={
               <Image
@@ -78,9 +101,11 @@ const SearchBar = (props) => {
               padding: '8px 16px 8px 16px',
               gap: '8px',
             }}
+            // action={() => setIsSticky(false)}
           />
           <Button
             buttonText="篩選更多"
+            buttonType="transparent"
             iconPosition="right"
             icon={<Arrow />}
             textStyle={{
@@ -135,15 +160,9 @@ const SearchBar = (props) => {
             <div className={styles.buttonArea}>
               <Button
                 buttonText="縮小篩選"
+                buttonType="transparent"
                 iconPosition="left"
-                icon={
-                  <Image
-                    src="/housing/icon/setting.svg"
-                    alt="setting"
-                    width={24}
-                    height={24}
-                  />
-                }
+                icon={<Remove />}
                 textStyle={{
                   color: '#333',
                   fontSize: '14px',
@@ -155,9 +174,11 @@ const SearchBar = (props) => {
                   padding: '8px 16px 8px 16px',
                   gap: '8px',
                 }}
+                // action={() => setIsSticky(true)}
               />
               <Button
                 buttonText="篩選更多"
+                buttonType="transparent"
                 iconPosition="right"
                 icon={<Arrow />}
                 textStyle={{
@@ -174,17 +195,13 @@ const SearchBar = (props) => {
               />
             </div>
           </div>
-          <div className={styles.mapFill}></div>
+          <div ref={mapRef} className={styles.mapFill} id="map"></div>
           <div className={styles.searchBar}>
             <Dropdown
               isHasBorder={false}
-              optionList={[
-                { text: '台北市', value: 'taipei' },
-                { text: '高雄市', value: 'kaoshiun' },
-                { text: '台南市', value: 'tainan' },
-                { text: '花蓮市', value: 'hualien' },
-              ]}
-              value="taipei"
+              value={county}
+              dropdownType="county"
+              onChange={(key) => setCounty(key)}
             />
             <div className={styles.searchInput}>
               <Input
@@ -208,13 +225,21 @@ const SearchBar = (props) => {
           </div>
           <div className={styles.dropdownBar}>
             <div className={styles.dropdown}>
-              <Dropdown isHasBorder placeholder="物件類型" />
+              <Dropdown
+                isHasBorder
+                placeholder="物件類型"
+                dropdownType="checkbox"
+              />
             </div>
             <div className={styles.dropdown}>
-              <Dropdown isHasBorder placeholder="總售價" />
+              <Dropdown isHasBorder placeholder="總售價" dropdownType="price" />
             </div>
             <div className={styles.dropdown}>
-              <Dropdown isHasBorder placeholder="單坪售價" />
+              <Dropdown
+                isHasBorder
+                placeholder="單坪售價"
+                dropdownType="price"
+              />
             </div>
           </div>
         </>

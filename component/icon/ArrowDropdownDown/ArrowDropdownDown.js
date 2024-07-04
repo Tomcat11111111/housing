@@ -1,4 +1,4 @@
-const ArrowDropdown = ({ color = '#909090' }) => {
+const ArrowDropdownDown = ({ color = '#909090' }) => {
   return (
     <svg
       width="25"
@@ -18,4 +18,4 @@ const ArrowDropdown = ({ color = '#909090' }) => {
   );
 };
 
-export default ArrowDropdown;
+export default ArrowDropdownDown;

@@ -1,5 +1,7 @@
 import Image from 'next/image';
+import Account from '../../icon/Account/Account';
 import BurgerMenu from '../../common/BurgerMenu/BurgerMenu';
+import Button from '../../common/Button/Button';
 import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
@@ -33,18 +35,29 @@ const Header = ({ headerType = 'default' }) => {
         <div className={styles.buttonArea}>
           {headerType === 'default' && (
             <>
-              <button className={styles.button}>我有房子</button>
-              <button className={styles.button}>我有廣告</button>
+              <Button
+                buttonText="我有房子"
+                buttonType="orange"
+                textStyle={{ color: '#FFFFFF' }}
+                buttonStyle={{
+                  backgroundColor: '#FF8E26',
+                  padding: '8px',
+                }}
+              />
+              <Button
+                buttonText="我有廣告"
+                buttonType="orange"
+                textStyle={{ color: '#FFFFFF' }}
+                buttonStyle={{
+                  backgroundColor: '#FF8E26',
+                  padding: '8px',
+                }}
+              />
               <div className={styles.memberArea}>
                 <div>登入</div>
                 <div>|</div>
-                <div>註冊</div>
-                <Image
-                  src="/housing/icon/account.svg"
-                  alt="account"
-                  width={30}
-                  height={30}
-                />
+                <div style={{ fontWeight: 700 }}>註冊</div>
+                <Account />
               </div>
             </>
           )}

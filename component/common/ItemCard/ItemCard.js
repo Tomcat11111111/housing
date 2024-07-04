@@ -1,5 +1,8 @@
+import React, { useRef, useState, useEffect } from 'react';
+import Arrow from '../../icon/Arrow/Arrow';
 import Image from 'next/image';
 import Tag from '../Tag/Tag';
+import Carousel from '../Carousel/Carousel';
 import styles from './ItemCard.module.scss';
 
 const priceStatusMap = new Map([
@@ -54,14 +57,63 @@ const ItemCard = (props) => {
   const { priceStatus } = props;
   const priceStatusInfo = priceStatusMap.get(priceStatus);
 
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef();
+
+  useEffect(() => {
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
+
+    const node = cardRef.current;
+    if (node) {
+      node.addEventListener('mouseenter', handleMouseEnter);
+      node.addEventListener('mouseleave', handleMouseLeave);
+
+      // Cleanup event listeners on unmount
+      return () => {
+        node.removeEventListener('mouseenter', handleMouseEnter);
+        node.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }
+  }, [cardRef]);
+
+  const images = [
+    '/housing/image/house_item.png',
+    '/housing/image/house_item.png',
+    '/housing/image/house_item.png',
+    '/housing/image/house_item.png',
+  ];
+
   return (
-    <div className={styles.itemCard}>
-      <Image
-        src="/housing/image/house_item.png"
-        alt="house_item"
-        width={389}
-        height={182}
-      />
+    <div className={styles.itemCard} ref={cardRef}>
+      <div className={styles.imgContainer}>
+        <div className={styles.imgBox}>
+          <Image
+            src="/housing/image/house_item.png"
+            alt="house_item"
+            // width={389}
+            // height={182}
+            fill
+          />
+          {isHovered && (
+            <>
+              <button className={`${styles.carouselControl} ${styles.prev}`}>
+                <Arrow color="#fff" />
+              </button>
+              <button className={`${styles.carouselControl} ${styles.next}`}>
+                <Arrow color="#fff" />
+              </button>
+            </>
+          )}
+          {isHovered && (
+            <div className={styles.indicators}>
+              {images.map((_, index) => (
+                <button key={index} className={`${styles.indicator}`} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
       <div className={styles.cardInfo}>
         <div className={styles.address}>
           景美站/羅斯六段高樓四房車位 坡平車位
@@ -110,10 +162,9 @@ const ItemCard = (props) => {
             gap="8px"
             padding="8px"
             iconPosition="left"
-            tagColor="#F6F6F6"
+            borderColor="#F6F6F6"
             textStyle={{
               color: '#333',
-              fontFamily: 'Montserrat',
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -133,10 +184,9 @@ const ItemCard = (props) => {
             gap="8px"
             padding="8px"
             iconPosition="left"
-            tagColor="#F6F6F6"
+            borderColor="#F6F6F6"
             textStyle={{
               color: '#333',
-              fontFamily: 'Montserrat',
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -156,10 +206,9 @@ const ItemCard = (props) => {
             gap="8px"
             padding="8px"
             iconPosition="left"
-            tagColor="#F6F6F6"
+            borderColor="#F6F6F6"
             textStyle={{
               color: '#333',
-              fontFamily: 'Montserrat',
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -168,18 +217,21 @@ const ItemCard = (props) => {
           />
         </div>
         <hr />
-        <div className={styles.bottom}>
-          <Tag
-            text={priceStatusInfo.text}
-            textStyle={{ color: '#F6F6F6' }}
-            tagColor={priceStatusInfo.color}
-            iconPosition="right"
-            icon={priceStatusInfo.icon}
-            padding="8px 16px"
-            gap="4px"
-          />
-          <span>31,910/月</span>
-        </div>
+      </div>
+      <div className={styles.bottom}>
+        <Tag
+          text={priceStatusInfo.text}
+          textStyle={{
+            color: '#F6F6F6',
+            fontSize: isHovered ? '16px' : '14px',
+          }}
+          tagColor={priceStatusInfo.color}
+          iconPosition="right"
+          icon={priceStatusInfo.icon}
+          padding="8px 16px"
+          gap="4px"
+        />
+        <span style={{ fontSize: isHovered ? '20px' : '16px' }}>31,910/月</span>
       </div>
     </div>
   );

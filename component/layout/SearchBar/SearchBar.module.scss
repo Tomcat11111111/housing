@@ -10,6 +10,7 @@
   position: -webkit-sticky; /* For Safari */
   position: sticky;
   top: 81px;
+  z-index: 5;
 
   &[data-sticky='sticky'] {
     background-color: white; /* Optional */
@@ -44,7 +45,6 @@
 
 .mapFill {
   width: 100%;
-  background-color: #333;
   border-radius: 8px;
   height: 288px;
 }

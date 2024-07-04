@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import styles from './Carousel.module.scss';
 import Arrow from '../../icon/Arrow/Arrow';
+import styles from './Carousel.module.scss';
 
 const Carousel = (props) => {
   const {
@@ -9,6 +9,9 @@ const Carousel = (props) => {
     indicatorsPosition = 'center',
     isAutoSlide = false,
     isHasArrow = false,
+    isHasIndicator = true,
+    width,
+    height,
   } = props;
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -31,9 +34,9 @@ const Carousel = (props) => {
 
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
-    return () => clearInterval(interval); // Clean up interval on unmount
+    return () => clearInterval(interval);
   }, [currentIndex]);
 
   return (
@@ -50,8 +53,9 @@ const Carousel = (props) => {
               }}
               src={imgSrc}
               alt={`Slide ${index + 1}`}
-              width={1200}
-              height={400}
+              width={width}
+              height={height}
+              // fill
             />
           </div>
         ))}
@@ -72,20 +76,22 @@ const Carousel = (props) => {
           </button>
         </>
       )}
-      <div
-        className={styles.indicators}
-        data-indicatorspostion={indicatorsPosition}
-      >
-        {images.map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.indicator} ${
-              index === currentIndex ? styles.active : ''
-            }`}
-            onClick={() => goToSlide(index)}
-          />
-        ))}
-      </div>
+      {isHasIndicator && (
+        <div
+          className={styles.indicators}
+          data-indicatorspostion={indicatorsPosition}
+        >
+          {images.map((_, index) => (
+            <button
+              key={index}
+              className={`${styles.indicator} ${
+                index === currentIndex ? styles.active : ''
+              }`}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
