@@ -5,7 +5,7 @@ import Tag from '../Tag/Tag';
 import Carousel from '../Carousel/Carousel';
 import styles from './ItemCard.module.scss';
 
-const priceStatusMap = new Map([
+const PRICE_STATUS_MAP = new Map([
   [
     'above',
     {
@@ -53,9 +53,169 @@ const priceStatusMap = new Map([
   ],
 ]);
 
+/*
+買房物件
+{
+  "title": String, //標題、名稱
+  "views": Number, //瀏覽數
+  "updatedAt": Number, //更新動態，看要什麼 日期格式
+  "district": String, //地點
+  "squareMeters": Number, //坪數
+  "totalSquareMeters": Number,// 權狀坪數，之後要搞慮細節頁其他坪數，建物登記
+  "totalFloor": Number // 總樓層
+  "houseAge": Number, //屋齡
+  "layout": {
+    room: Number,
+    living: Number,
+    bath: Number,
+ }, //格局
+ "compare": Number, //價格比較，看是給平均前端做比較，還是後端直接給結論，ex: 0等於平均,1高於平均,2低於平均或是字串
+ "price": Number, //價格
+ "img": jpg, //物件照片(數張),jpg...
+}
+*/
+const BUY_HOUSE_MOCK_LIST = [
+  {
+    title: '景美站/羅斯六段高樓四房車位 坡平車位',
+    views: 1234,
+    updatedAt: 1672531199000,
+    district: '文山區',
+    squareMeters: 120,
+    totalSquareMeters: 150,
+    totalFloor: 12,
+    houseAge: 10,
+    layout: {
+      room: 3,
+      living: 1,
+      bath: 2,
+    },
+    compare: 0,
+    price: 5000000,
+    img: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+  {
+    title: '新生站/臨沂街矮樓 巷子內',
+    views: 5487,
+    updatedAt: 1672617599000,
+    district: '中正區',
+    squareMeters: 80,
+    totalSquareMeters: 95,
+    totalFloor: 20,
+    houseAge: 5,
+    layout: {
+      room: 2,
+      living: 1,
+      bath: 1,
+    },
+    compare: 1,
+    price: 7000000,
+    img: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+  {
+    title: '信義路五段150巷11弄1號1樓',
+    views: 2345,
+    updatedAt: 1672703999000,
+    district: '信義區',
+    squareMeters: 90,
+    totalSquareMeters: 100,
+    totalFloor: 2,
+    houseAge: 20,
+    layout: {
+      room: 4,
+      living: 1,
+      bath: 2,
+    },
+    compare: 2,
+    price: 3000000,
+    img: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+  {
+    title: '近牯嶺街小劇場 明星學區',
+    views: 654,
+    updatedAt: 1672870399000,
+    district: '中正區',
+    squareMeters: 70,
+    totalSquareMeters: 85,
+    totalFloor: 10,
+    houseAge: 7,
+    layout: {
+      room: 1,
+      living: 1,
+      bath: 1,
+    },
+    compare: 0,
+    price: 4000000,
+    img: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+];
+
+/*
+租屋物件
+{
+"title": String, //標題、名稱
+"views": Number, //瀏覽數
+"updatedAt": Number, //更新動態，看要什麼 日期格式
+"district": String, //地點
+"squareMeters": Number, //坪數
+"floor": Number, //樓層
+"totalFloor": Number // 總樓層
+"layout": {
+"room": Number,
+"living": Number,
+"bath": Number,
+ }, //格局
+"compare": Number, //價格比較，看是給平均前端做比較，還是後端直接給結論，ex: 0等於平均,1高於平均,2低於平均或是字串
+"price": Number, //價格
+"img": jpg, //物件照片(數張),jpg...
+"isKeep": Boolean,// 是否收藏
+}
+*/
+
+const getPriceStatusInfo = (price, average) => {
+  if (price > average) return PRICE_STATUS_MAP.get('above');
+  if (price < average) return PRICE_STATUS_MAP.get('below');
+  if (price === average) return PRICE_STATUS_MAP.get('equal');
+};
+
 const ItemCard = (props) => {
-  const { priceStatus } = props;
-  const priceStatusInfo = priceStatusMap.get(priceStatus);
+  const { itemData, averagePrice } = props;
+  const {
+    title,
+    views,
+    updatedAt,
+    district,
+    squareMeters,
+    totalSquareMeters,
+    floor,
+    totalFloor,
+    houseAge,
+    layout,
+    price,
+    images,
+  } = itemData;
+  const { room, living, bath } = layout;
+
+  const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef();
@@ -76,13 +236,6 @@ const ItemCard = (props) => {
       };
     }
   }, [cardRef]);
-
-  const images = [
-    '/housing/image/house_item.png',
-    '/housing/image/house_item.png',
-    '/housing/image/house_item.png',
-    '/housing/image/house_item.png',
-  ];
 
   return (
     <div className={styles.itemCard} ref={cardRef}>
@@ -115,12 +268,10 @@ const ItemCard = (props) => {
         </div>
       </div>
       <div className={styles.cardInfo}>
-        <div className={styles.address}>
-          景美站/羅斯六段高樓四房車位 坡平車位
-        </div>
+        <div className={styles.address}>{title}</div>
         <div className={styles.browse}>
           <Tag
-            text="321人瀏覽"
+            text={`${views}人瀏覽`}
             icon={
               <Image
                 src="/housing/icon/eye.svg"
@@ -147,10 +298,12 @@ const ItemCard = (props) => {
             iconPosition="left"
           />
         </div>
-        <div className={styles.district}>文山區 | 31.12坪 | 15年 | 3F/5F</div>
+        <div
+          className={styles.district}
+        >{`${district} | ${totalSquareMeters}坪 | ${houseAge} | ${floor}F/${totalFloor}F`}</div>
         <div className={styles.icon}>
           <Tag
-            text="3房"
+            text={`${room}房`}
             icon={
               <Image
                 src="/housing/icon/bed.svg"
@@ -172,7 +325,7 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
-            text="2聽"
+            text={`${living}聽`}
             icon={
               <Image
                 src="/housing/icon/couch.svg"
@@ -194,7 +347,7 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
-            text="3衛"
+            text={`${bath}衛`}
             icon={
               <Image
                 src="/housing/icon/tub.svg"

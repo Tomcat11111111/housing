@@ -9,7 +9,13 @@ import useOutSideClose from '../../../utils/hooks/useoutsideClose';
 import styles from './Dropdown.module.scss';
 
 const Dropdown = (props) => {
-  const { placeholder, value, dropdownType, onChange } = props;
+  const {
+    placeholder,
+    isHasNoBorder = false,
+    value,
+    dropdownType,
+    onChange,
+  } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -34,8 +40,8 @@ const Dropdown = (props) => {
         className={styles.dropdownButton}
         data-open={isDropdownOpen ? 'open' : ''}
         data-selected={!!value ? 'selected' : ''}
+        data-no-border={isHasNoBorder ? 'noBorder' : ''}
         onClick={() => {
-          console.log('onClick');
           setIsDropdownOpen((prev) => !prev);
         }}
       >

@@ -7,12 +7,13 @@
   margin-bottom: 16px;
   flex-direction: column;
   gap: 16px;
-  position: -webkit-sticky; /* For Safari */
-  position: sticky;
-  top: 81px;
   z-index: 5;
 
   &[data-sticky='sticky'] {
+    width: 1168px;
+    position: -webkit-sticky; /* For Safari */
+    position: fixed;
+    top: 81px;
     background-color: white; /* Optional */
     z-index: 3; /* Optional */
     margin: 0 16px;

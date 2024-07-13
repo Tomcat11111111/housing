@@ -17,9 +17,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-range": "^1.8.14",
-    "react-slick": "^0.30.2",
-    "sass": "^1.77.5",
-    "slick-carousel": "^1.8.1"
+    "sass": "^1.77.5"
   },
   "devDependencies": {
     "eslint": "^8",

@@ -23,8 +23,8 @@ export default function Home() {
       setHeaderType('default');
     }
 
-    if (window.scrollY > 527) {
-      // 419+108= 527
+    if (window.scrollY > 1069) {
+      // 419+108= 527+542=1069
       setIsSticky(true);
     } else {
       setIsSticky(false);
@@ -86,7 +86,7 @@ export default function Home() {
                   width={30}
                   height={30}
                 />
-                <span>拍賣特區</span>
+                <span>破盤特區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
@@ -101,7 +101,7 @@ export default function Home() {
                   width={30}
                   height={30}
                 />
-                <span>拍賣特區</span>
+                <span>平賣特區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>

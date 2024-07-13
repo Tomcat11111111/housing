@@ -24,4 +24,8 @@
   &[data-selected='selected'] {
     font-weight: 700;
   }
+
+  &[data-no-border='noBorder'] {
+    border: none;
+  }
 }

@@ -52,7 +52,7 @@ const SearchBar = (props) => {
             iconPosition="left"
           />
           <div className={styles.group}>
-            <Dropdown isHasBorder={false} value={county}>
+            <Dropdown isHasNoBorder value={county}>
               <CountySelector
                 value={county}
                 onChange={(county) => setCounty(county)}
@@ -198,7 +198,7 @@ const SearchBar = (props) => {
           <div ref={mapRef} className={styles.mapFill} id="map"></div>
           <div className={styles.searchBar}>
             <Dropdown
-              isHasBorder={false}
+              isHasNoBorder
               value={county}
               dropdownType="county"
               onChange={(key) => setCounty(key)}
@@ -225,21 +225,13 @@ const SearchBar = (props) => {
           </div>
           <div className={styles.dropdownBar}>
             <div className={styles.dropdown}>
-              <Dropdown
-                isHasBorder
-                placeholder="物件類型"
-                dropdownType="checkbox"
-              />
+              <Dropdown placeholder="物件類型" dropdownType="checkbox" />
             </div>
             <div className={styles.dropdown}>
-              <Dropdown isHasBorder placeholder="總售價" dropdownType="price" />
+              <Dropdown placeholder="總售價" dropdownType="price" />
             </div>
             <div className={styles.dropdown}>
-              <Dropdown
-                isHasBorder
-                placeholder="單坪售價"
-                dropdownType="price"
-              />
+              <Dropdown placeholder="單坪售價" dropdownType="price" />
             </div>
           </div>
         </>

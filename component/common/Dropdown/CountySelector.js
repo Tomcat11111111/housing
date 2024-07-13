@@ -4,6 +4,26 @@ import styles from './CountySelector.module.scss';
 const CountySelector = ({ value, onChange, setIsDropdownOpen }) => {
   const selectorRef = useRef(null);
 
+  // TODO: 這邊的資料改為從API傳
+  const DISTRICT_LIST = [
+    {
+      name: '北部',
+      counties: ['台北市', '新北市', '桃園市', '新竹市', '新竹縣', '基隆市'],
+    },
+    {
+      name: '中部',
+      counties: ['台中市', '彰化縣', '南投縣', '苗栗縣', '雲林縣'],
+    },
+    {
+      name: '南部',
+      counties: ['台南市', '高雄市', '嘉義市', '嘉義縣', '屏東縣'],
+    },
+    {
+      name: '東部',
+      counties: ['宜蘭市', '花蓮縣', '台東縣', '澎湖縣', '金門縣', '連江縣'],
+    },
+  ];
+
   useEffect(() => {
     const node = selectorRef.current;
 
@@ -23,48 +43,28 @@ const CountySelector = ({ value, onChange, setIsDropdownOpen }) => {
 
   return (
     <div className={styles.countySelector} ref={selectorRef}>
-      <div>
-        <div className={styles.district}>北部</div>
-        <div className={styles.countyBox}>
-          <span className={styles.county}>台北市</span>
-          <span className={styles.county}>新北市</span>
-          <span className={styles.county}>桃園市</span>
-          <span className={styles.county}>新竹市</span>
-          <span className={styles.county}>新竹縣</span>
-          <span className={styles.county}>基隆市</span>
-        </div>
-      </div>
-      <div>
-        <div className={styles.district}>中部</div>
-        <div className={styles.countyBox}>
-          <span className={styles.county}>台中市</span>
-          <span className={styles.county}>彰化縣</span>
-          <span className={styles.county}>南投縣</span>
-          <span className={styles.county}>苗栗縣</span>
-          <span className={styles.county}>雲林縣</span>
-        </div>
-      </div>
-      <div>
-        <div className={styles.district}>南部</div>
-        <div className={styles.countyBox}>
-          <span className={styles.county}>台南市</span>
-          <span className={styles.county}>高雄市</span>
-          <span className={styles.county}>嘉義市</span>
-          <span className={styles.county}>嘉義縣</span>
-          <span className={styles.county}>屏東縣</span>
-        </div>
-      </div>
-      <div>
-        <div className={styles.district}>東部</div>
-        <div className={styles.countyBox}>
-          <span className={styles.county}>宜蘭市</span>
-          <span className={styles.county}>花蓮縣</span>
-          <span className={styles.county}>台東縣</span>
-          <span className={styles.county}>澎湖縣</span>
-          <span className={styles.county}>金門縣</span>
-          <span className={styles.county}>連江縣</span>
-        </div>
-      </div>
+      {DISTRICT_LIST.map((district) => {
+        return (
+          <>
+            <div className={styles.district} key={`${district.name}_district`}>
+              {district.name}
+            </div>
+            <div className={styles.countyBox}>
+              {district.counties.map((county) => {
+                return (
+                  <span
+                    key={`${county}_county`}
+                    className={styles.county}
+                    data-active={value === county ? 'active' : ''}
+                  >
+                    {county}
+                  </span>
+                );
+              })}
+            </div>
+          </>
+        );
+      })}
     </div>
   );
 };
