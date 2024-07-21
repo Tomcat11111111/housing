@@ -9,7 +9,7 @@
   gap: 16px;
   z-index: 5;
 
-  &[data-sticky='sticky'] {
+  &[data-fixed='fixed'] {
     width: 1168px;
     position: -webkit-sticky; /* For Safari */
     position: fixed;
@@ -19,6 +19,7 @@
     margin: 0 16px;
   }
 }
+
 .stickySearchBar {
   display: flex;
   gap: 16px;

@@ -1,9 +1,7 @@
-import { useRef } from 'react';
-import ItemCard from '../ItemCard/ItemCard';
-import ArrowForward from '../../icon/ArrowForward/ArrowForward';
-import ArrowBack from '../../icon/ArrowBack/ArrowBack';
-import React from 'react';
-import styles from './CardCarouselBox.module.scss';
+'use client';
+import Header from '@components/layout/Header/Header';
+import ItemCard from '@components/common/ItemCard/ItemCard';
+import styles from './Search.module.scss';
 
 const BUY_HOUSE_MOCK_LIST = [
   {
@@ -98,39 +96,91 @@ const BUY_HOUSE_MOCK_LIST = [
       '/housing/image/house_item.png',
     ],
   },
+  {
+    title: '近牯嶺街小劇場 明星學區',
+    views: 654,
+    updatedAt: 1672870399000,
+    district: '中正區',
+    squareMeters: 70,
+    totalSquareMeters: 34,
+    floor: 5,
+    totalFloor: 10,
+    houseAge: 7,
+    layout: {
+      room: 1,
+      living: 1,
+      bath: 1,
+    },
+    price: 4000000,
+    images: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+  {
+    title: '近牯嶺街小劇場 明星學區',
+    views: 654,
+    updatedAt: 1672870399000,
+    district: '中正區',
+    squareMeters: 70,
+    totalSquareMeters: 34,
+    floor: 5,
+    totalFloor: 10,
+    houseAge: 7,
+    layout: {
+      room: 1,
+      living: 1,
+      bath: 1,
+    },
+    price: 4000000,
+    images: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
+  {
+    title: '近牯嶺街小劇場 明星學區',
+    views: 654,
+    updatedAt: 1672870399000,
+    district: '中正區',
+    squareMeters: 70,
+    totalSquareMeters: 34,
+    floor: 5,
+    totalFloor: 10,
+    houseAge: 7,
+    layout: {
+      room: 1,
+      living: 1,
+      bath: 1,
+    },
+    price: 4000000,
+    images: [
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+      '/housing/image/house_item.png',
+    ],
+  },
 ];
 
-const MOCK_AVERAGE_PRICE = 5000000;
-
-const CardCarouselBox = (props) => {
-  const {
-    cardItemList = BUY_HOUSE_MOCK_LIST,
-    averagePrice = MOCK_AVERAGE_PRICE,
-  } = props;
-
-  const sliderRef = useRef();
-
+export default function Search() {
   return (
-    <div className={styles.cardcontainer}>
-      <div
-        className={styles.arrowBack}
-        onClick={() => sliderRef.current.slickPrev()}
-      >
-        <ArrowBack />
-      </div>
-      {cardItemList.map((itemData, index) => (
-        <div className={styles.cardBox} key={index}>
-          <ItemCard itemData={itemData} averagePrice={averagePrice} />
+    <div>
+      <Header headerType="white" />
+      <div className={styles.page}>
+        <div className={styles.sideBar}>側邊欄</div>
+        <div className={styles.list}>
+          {BUY_HOUSE_MOCK_LIST.map((itemData, index) => (
+            <div key={index}>
+              <ItemCard itemData={itemData} index={index} />
+            </div>
+          ))}
         </div>
-      ))}
-      <div
-        className={styles.arrowForward}
-        onClick={() => sliderRef.current.slickNext()}
-      >
-        <ArrowForward />
       </div>
     </div>
   );
-};
-
-export default CardCarouselBox;
+}

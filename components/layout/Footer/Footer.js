@@ -1,7 +1,10 @@
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './Footer.module.scss';
 
 const Footer = () => {
+  const router = useRouter();
+
   return (
     <div className={styles.footer}>
       <div className={styles.footerContent}>
@@ -19,7 +22,13 @@ const Footer = () => {
               <span>關於我們</span>
             </div>
             <ul className={styles.list}>
-              <li>關於平台</li>
+              <li
+                onClick={() => {
+                  router.push('/About');
+                }}
+              >
+                關於平台
+              </li>
               <li>隱私權聲明</li>
               <li>免責聲明</li>
               <li>消費者保護</li>

@@ -1,26 +1,27 @@
 import { useRef, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Button from '../../common/Button/Button';
 import Dropdown from '../../common/Dropdown/Dropdown';
 import Input from '../../common/Input/Input';
-import House from '../../../component/icon/House/House';
-import Arrow from '../../../component/icon/Arrow/Arrow';
-import Remove from '../../../component/icon/Remove/Remove';
-import Search from '../../../component/icon/Search/Search';
+import House from '../../icon/House/House';
+import Arrow from '../../icon/Arrow/Arrow';
+import Remove from '../../icon/Remove/Remove';
+import Search from '../../icon/Search/Search';
 import CountySelector from '../../common/Dropdown/CountySelector';
 import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
-  const { isStickyMode, setIsSticky } = props;
+  const { isFixed } = props;
+
+  const router = useRouter();
+
+  const [isOpen, setIsOpen] = useState(true);
+  const [userToggled, setUserToggled] = useState(false);
+  const timeoutRef = useRef(null);
 
   const mapRef = useRef(null);
   const [county, setCounty] = useState('台北市');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.google && !isStickyMode) {
-      initMap();
-    }
-  }, [isStickyMode]);
 
   const initMap = () => {
     const TWlocation = { lat: 25.033, lng: 121.5654 };
@@ -36,92 +37,44 @@ const SearchBar = (props) => {
     });
   };
 
+  const handleScroll = () => {
+    if (window.scrollY > 1069 && !userToggled && isOpen) {
+      // 419+108= 527+542=1069
+      setIsOpen(false);
+    }
+
+    if (window.scrollY <= 1069 && !userToggled && !isOpen) {
+      setIsOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.google && isOpen) {
+      initMap();
+    }
+  }, [isOpen]);
+
+  const toggleCollapse = () => {
+    setIsOpen(!isOpen);
+    setUserToggled(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setUserToggled(false);
+    }, 3000); // 3秒後重置userToggled
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div className={styles.search} data-sticky={isStickyMode ? 'sticky' : ''}>
-      {isStickyMode ? (
-        <div className={styles.stickySearchBar}>
-          <Button
-            buttonText="買房子"
-            textStyle={{ color: '#FFFFFF' }}
-            buttonStyle={{
-              backgroundColor: '#FF8E26',
-              padding: '8px 32px',
-              gap: '8px',
-            }}
-            icon={<House color="#FFFFFF" />}
-            iconPosition="left"
-          />
-          <div className={styles.group}>
-            <Dropdown isHasNoBorder value={county}>
-              <CountySelector
-                value={county}
-                onChange={(county) => setCounty(county)}
-              />
-            </Dropdown>
-            <div className={styles.searchInput}>
-              <Input
-                iconPosition="left"
-                placeholder="請輸入地點/街道/社區或其他資訊"
-              />
-            </div>
-            <Button
-              buttonText="搜尋"
-              textStyle={{
-                color: '#FFF',
-              }}
-              buttonStyle={{
-                backgroundColor: '#FF8E26',
-                padding: '16px 22px 16px 16px',
-                gap: '8px',
-              }}
-              icon={<Search color="#FFFFFF" />}
-              iconPosition="left"
-            />
-          </div>
-          <Button
-            buttonText="進階篩選"
-            buttonType="transparent"
-            iconPosition="left"
-            icon={
-              <Image
-                src="/housing/icon/setting.svg"
-                alt="setting"
-                width={24}
-                height={24}
-              />
-            }
-            textStyle={{
-              color: '#333',
-              fontSize: '14px',
-              lineHeight: '20px',
-            }}
-            buttonStyle={{
-              border: '1px solid #E9E9E9',
-              opacity: 0.6,
-              padding: '8px 16px 8px 16px',
-              gap: '8px',
-            }}
-            // action={() => setIsSticky(false)}
-          />
-          <Button
-            buttonText="篩選更多"
-            buttonType="transparent"
-            iconPosition="right"
-            icon={<Arrow />}
-            textStyle={{
-              color: '#333',
-              fontSize: '14px',
-              lineHeight: '20px',
-            }}
-            buttonStyle={{
-              border: '1px solid #E9E9E9',
-              opacity: 0.6,
-              padding: '8px 8px 8px 16px',
-              gap: '8px',
-            }}
-          />
-        </div>
-      ) : (
+    <div className={styles.search} data-fixed={isFixed ? 'fixed' : ''}>
+      {isOpen ? (
         <>
           <div className={styles.searchHeader}>
             <div className={styles.tabArea}>
@@ -174,7 +127,7 @@ const SearchBar = (props) => {
                   padding: '8px 16px 8px 16px',
                   gap: '8px',
                 }}
-                // action={() => setIsSticky(true)}
+                action={() => toggleCollapse()}
               />
               <Button
                 buttonText="篩選更多"
@@ -192,6 +145,7 @@ const SearchBar = (props) => {
                   padding: '8px 8px 8px 16px',
                   gap: '8px',
                 }}
+                action={() => router.push('/Search')}
               />
             </div>
           </div>
@@ -233,6 +187,92 @@ const SearchBar = (props) => {
             <div className={styles.dropdown}>
               <Dropdown placeholder="單坪售價" dropdownType="price" />
             </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={styles.stickySearchBar}>
+            <Button
+              buttonText="買房子"
+              textStyle={{ color: '#FFFFFF' }}
+              buttonStyle={{
+                backgroundColor: '#FF8E26',
+                padding: '8px 32px',
+                gap: '8px',
+              }}
+              icon={<House color="#FFFFFF" />}
+              iconPosition="left"
+            />
+            <div className={styles.group}>
+              <Dropdown
+                isHasNoBorder
+                value={county}
+                dropdownType="county"
+                onChange={(key) => setCounty(key)}
+              />
+              <div className={styles.searchInput}>
+                <Input
+                  iconPosition="left"
+                  placeholder="請輸入地點/街道/社區或其他資訊"
+                />
+              </div>
+              <Button
+                buttonText="搜尋"
+                textStyle={{
+                  color: '#FFF',
+                }}
+                buttonStyle={{
+                  backgroundColor: '#FF8E26',
+                  padding: '16px 22px 16px 16px',
+                  gap: '8px',
+                }}
+                icon={<Search color="#FFFFFF" />}
+                iconPosition="left"
+              />
+            </div>
+            <Button
+              buttonText="展開篩選"
+              buttonType="transparent"
+              iconPosition="left"
+              icon={
+                <Image
+                  src="/housing/icon/setting.svg"
+                  alt="setting"
+                  width={24}
+                  height={24}
+                />
+              }
+              textStyle={{
+                color: '#333',
+                fontSize: '14px',
+                lineHeight: '20px',
+              }}
+              buttonStyle={{
+                border: '1px solid #E9E9E9',
+                opacity: 0.6,
+                padding: '8px 16px 8px 16px',
+                gap: '8px',
+              }}
+              action={() => toggleCollapse()}
+            />
+            <Button
+              buttonText="篩選更多"
+              buttonType="transparent"
+              iconPosition="right"
+              icon={<Arrow />}
+              textStyle={{
+                color: '#333',
+                fontSize: '14px',
+                lineHeight: '20px',
+              }}
+              buttonStyle={{
+                border: '1px solid #E9E9E9',
+                opacity: 0.6,
+                padding: '8px 8px 8px 16px',
+                gap: '8px',
+              }}
+              action={() => router.push('/Search')}
+            />
           </div>
         </>
       )}

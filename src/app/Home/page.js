@@ -2,18 +2,19 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
-import Arrow from '../../component/icon/Arrow/Arrow';
-import Button from '../../component/common/Button/Button';
-import Carousel from '../../component/common/Carousel/Carousel';
-import Footer from '../../component/layout/Footer/Footer';
-import Header from '../../component/layout/Header/Header';
-import SearchBar from '../../component/layout/SearchBar/SearchBar';
-import CardCarouselBox from '../../component/common/CardCarouselBox/CardCarouselBox';
+import Arrow from '@icon/Arrow/Arrow';
+import Button from '@common/Button/Button';
+import Carousel from '@common/Carousel/Carousel';
+import Footer from '@layout/Footer/Footer';
+import Header from '@layout/Header/Header';
+import SearchBar from '@layout/SearchBar/SearchBar';
+import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
 import styles from './page.module.scss';
 
 export default function Home() {
-  const [isSticky, setIsSticky] = useState(false);
+  const [isFixed, setIsFixed] = useState(false);
   const [headerType, setHeaderType] = useState('default');
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleScroll = () => {
     //400+19+110
@@ -25,9 +26,11 @@ export default function Home() {
 
     if (window.scrollY > 1069) {
       // 419+108= 527+542=1069
-      setIsSticky(true);
+      setIsFixed(true);
+      setIsOpen(false);
     } else {
-      setIsSticky(false);
+      setIsFixed(false);
+      setIsOpen(true);
     }
   };
 
@@ -108,7 +111,8 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        <SearchBar isStickyMode={isSticky} setIsSticky={setIsSticky} />
+        {isFixed && <div className={styles.filling}></div>}
+        <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
             <span>熱門物件</span>

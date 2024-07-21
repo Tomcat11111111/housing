@@ -1,0 +1,23 @@
+.page {
+  // width: 1200px;
+  // margin: 0 auto;
+  // position: relative;
+  display: flex;
+  gap: 24px;
+  position: relative;
+}
+
+.sideBar {
+  width: 400px;
+  background: #ffffff;
+  height: 100vh;
+  position: sticky;
+  left: 0;
+  top: 0;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}

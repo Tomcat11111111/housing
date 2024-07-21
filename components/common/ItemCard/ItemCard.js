@@ -191,14 +191,14 @@ const BUY_HOUSE_MOCK_LIST = [
 }
 */
 
-const getPriceStatusInfo = (price, average) => {
+const getPriceStatusInfo = (price, average = 0) => {
   if (price > average) return PRICE_STATUS_MAP.get('above');
   if (price < average) return PRICE_STATUS_MAP.get('below');
   if (price === average) return PRICE_STATUS_MAP.get('equal');
 };
 
 const ItemCard = (props) => {
-  const { itemData, averagePrice } = props;
+  const { itemData, averagePrice, index } = props;
   const {
     title,
     views,
@@ -217,7 +217,7 @@ const ItemCard = (props) => {
 
   const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(index === 3 ? true : false);
   const cardRef = useRef();
 
   useEffect(() => {
@@ -229,7 +229,6 @@ const ItemCard = (props) => {
       node.addEventListener('mouseenter', handleMouseEnter);
       node.addEventListener('mouseleave', handleMouseLeave);
 
-      // Cleanup event listeners on unmount
       return () => {
         node.removeEventListener('mouseenter', handleMouseEnter);
         node.removeEventListener('mouseleave', handleMouseLeave);
@@ -371,12 +370,11 @@ const ItemCard = (props) => {
         </div>
         <hr />
       </div>
-      <div className={styles.bottom}>
+      <div className={styles.bottom} data-hover={isHovered ? 'hover' : ''}>
         <Tag
           text={priceStatusInfo.text}
           textStyle={{
             color: '#F6F6F6',
-            fontSize: isHovered ? '16px' : '14px',
           }}
           tagColor={priceStatusInfo.color}
           iconPosition="right"
@@ -384,7 +382,7 @@ const ItemCard = (props) => {
           padding="8px 16px"
           gap="4px"
         />
-        <span style={{ fontSize: isHovered ? '20px' : '16px' }}>31,910/月</span>
+        <span>31,910/月</span>
       </div>
     </div>
   );

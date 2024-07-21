@@ -1,4 +1,3 @@
-import { useRef, useEffect } from 'react';
 import CheckboxChecked from '../../icon/CheckboxChecked/CheckboxChecked';
 import Checkbox from '../../icon/Checkbox/Checkbox';
 import styles from './CheckboxSelector.module.scss';
