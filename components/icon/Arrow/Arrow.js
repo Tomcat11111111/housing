@@ -1,8 +1,8 @@
 import styles from './Arrow.module.scss';
 
-const Arrow = ({ color = '#333333' }) => {
+const Arrow = ({ color = '#333333', direction = 'right' }) => {
   return (
-    <div className={styles.arrow}>
+    <div className={styles.arrow} data-direction={direction}>
       <svg
         width="25"
         height="24"

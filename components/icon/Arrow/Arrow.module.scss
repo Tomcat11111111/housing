@@ -4,4 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &[data-direction='left'] {
+    transform: rotate(180deg);
+  }
 }

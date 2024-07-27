@@ -1,4 +1,4 @@
-const ArrowDropdownDown = ({ color = '#909090' }) => {
+const ArrowDropdownDown = ({ color = '#323232' }) => {
   return (
     <svg
       width="24"

@@ -4,7 +4,7 @@ import ArrowDropdownUp from '../../icon/ArrowDropdownUp/ArrowDropdownUp';
 import Menu from '../Menu/Menu';
 import CustomSlider from '../CustomSlider/CustomSlider';
 import CountySelector from './CountySelector';
-import CheckboxSelector from './CheckboxSelector';
+import DropdownCheckbox from '@common/Dropdown/DropdownCheckbox';
 import useOutSideClose from '../../../utils/hooks/useoutsideClose';
 import styles from './Dropdown.module.scss';
 
@@ -15,6 +15,7 @@ const Dropdown = (props) => {
     value,
     dropdownType,
     onChange,
+    optionList,
   } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -48,21 +49,28 @@ const Dropdown = (props) => {
         <span>{value ?? placeholder}</span>
         {isDropdownOpen ? <ArrowDropdownUp /> : <ArrowDropdownDown />}
       </button>
-      {isDropdownOpen && dropdownType === 'county' && (
-        <CountySelector
-          value={value}
-          onChange={onChange}
-          setIsDropdownOpen={setIsDropdownOpen}
-        />
+      {isDropdownOpen && (
+        <>
+          {dropdownType === 'menu' && (
+            <Menu menuList={optionList} onChange={onChange} />
+          )}
+          {dropdownType === 'county' && (
+            <CountySelector
+              value={value}
+              onChange={onChange}
+              setIsDropdownOpen={setIsDropdownOpen}
+            />
+          )}
+          {dropdownType === 'checkbox' && (
+            <DropdownCheckbox
+              value={value}
+              onChange={onChange}
+              setIsDropdownOpen={setIsDropdownOpen}
+            />
+          )}
+          {dropdownType === 'price' && <CustomSlider />}
+        </>
       )}
-      {isDropdownOpen && dropdownType === 'checkbox' && (
-        <CheckboxSelector
-          value={value}
-          onChange={onChange}
-          setIsDropdownOpen={setIsDropdownOpen}
-        />
-      )}
-      {isDropdownOpen && dropdownType === 'price' && <CustomSlider />}
     </div>
   );
 };

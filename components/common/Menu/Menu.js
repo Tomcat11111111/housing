@@ -1,7 +1,7 @@
 import styles from './Menu.module.scss';
 
 const Menu = (props) => {
-  const { menuList, onListClick } = props;
+  const { menuList, onChange } = props;
 
   return (
     <div className={styles.menuContainer}>
@@ -11,7 +11,7 @@ const Menu = (props) => {
             className={styles.menuItem}
             key={`menuItem-${key}`}
             onClick={() => {
-              onListClick(item, key);
+              onChange(item, key);
             }}
           >
             {item?.text}

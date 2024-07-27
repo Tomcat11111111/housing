@@ -3,6 +3,9 @@ import Arrow from '../../icon/Arrow/Arrow';
 import Image from 'next/image';
 import Tag from '../Tag/Tag';
 import Carousel from '../Carousel/Carousel';
+import TubIcon from '@components/icon/TubIcon/TubIcon';
+import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
+import BedIcon from '@components/icon/BedIcon/BedIcon';
 import styles from './ItemCard.module.scss';
 
 const PRICE_STATUS_MAP = new Map([
@@ -217,7 +220,7 @@ const ItemCard = (props) => {
 
   const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
-  const [isHovered, setIsHovered] = useState(index === 3 ? true : false);
+  const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef();
 
   useEffect(() => {
@@ -303,14 +306,7 @@ const ItemCard = (props) => {
         <div className={styles.icon}>
           <Tag
             text={`${room}房`}
-            icon={
-              <Image
-                src="/housing/icon/bed.svg"
-                alt="bed"
-                width={20}
-                height={20}
-              />
-            }
+            icon={<BedIcon />}
             gap="8px"
             padding="8px"
             iconPosition="left"
@@ -325,14 +321,7 @@ const ItemCard = (props) => {
           />
           <Tag
             text={`${living}聽`}
-            icon={
-              <Image
-                src="/housing/icon/couch.svg"
-                alt="couch"
-                width={20}
-                height={20}
-              />
-            }
+            icon={<CouchIcon />}
             gap="8px"
             padding="8px"
             iconPosition="left"
@@ -347,14 +336,7 @@ const ItemCard = (props) => {
           />
           <Tag
             text={`${bath}衛`}
-            icon={
-              <Image
-                src="/housing/icon/tub.svg"
-                alt="tub"
-                width={20}
-                height={20}
-              />
-            }
+            icon={<TubIcon />}
             gap="8px"
             padding="8px"
             iconPosition="left"

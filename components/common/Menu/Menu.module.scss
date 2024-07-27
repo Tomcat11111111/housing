@@ -1,16 +1,15 @@
 .menuContainer {
-  width: 100%;
   padding: 8px 0;
-  flex-direction: column;
-  gap: 8px;
   position: absolute;
   border-radius: 8px;
   background: #fff;
   box-shadow: 0px 2px 8px 0px rgba(99, 99, 99, 0.2);
   z-index: 2;
+  width: 160px;
 }
 
 .menuItem {
+  cursor: pointer;
   color: #333;
   font-size: 14px;
   font-style: normal;

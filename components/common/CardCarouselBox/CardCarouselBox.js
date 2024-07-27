@@ -100,6 +100,47 @@ const BUY_HOUSE_MOCK_LIST = [
   },
 ];
 
+// axios properties/for-rent
+
+const Arr = [
+  {
+    id: '56b714f9-bfb2-463f-b231-23a1b66d3e08',
+    price: 1200,
+    property: {
+      id: '08aaf98a-b277-4216-afdf-1d5a68ddd6b9',
+      title: 'Spacious Apartment Near Downtown',
+      age: 5,
+      squareMeters: 120,
+      floor: 2,
+      totalFloors: 5,
+      room: 3,
+      livingRoom: 1,
+      bathroom: 2,
+      balcony: 1,
+      status: 'available',
+      views: 0,
+    },
+  },
+  {
+    id: 'd574a13b-b2b6-4b54-bbb5-6733c0859ee3',
+    price: 1200,
+    property: {
+      id: 'c994f2c9-f209-4880-8896-173c64c84cd0',
+      title: 'Spacious Apartment Near Downtown 2',
+      age: 5,
+      squareMeters: 120,
+      floor: 2,
+      totalFloors: 5,
+      room: 3,
+      livingRoom: 1,
+      bathroom: 2,
+      balcony: 1,
+      status: 'available',
+      views: 0,
+    },
+  },
+];
+
 const MOCK_AVERAGE_PRICE = 5000000;
 
 const CardCarouselBox = (props) => {

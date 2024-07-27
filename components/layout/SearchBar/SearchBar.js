@@ -7,8 +7,7 @@ import Input from '../../common/Input/Input';
 import House from '../../icon/House/House';
 import Arrow from '../../icon/Arrow/Arrow';
 import Remove from '../../icon/Remove/Remove';
-import Search from '../../icon/Search/Search';
-import CountySelector from '../../common/Dropdown/CountySelector';
+import SearchIcon from '../../icon/SearchIcon/SearchIcon';
 import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
@@ -173,7 +172,7 @@ const SearchBar = (props) => {
                 padding: '16px 22px 16px 16px',
                 gap: '8px',
               }}
-              icon={<Search color="#FFFFFF" />}
+              icon={<SearchIcon color="#FFFFFF" />}
               iconPosition="left"
             />
           </div>
@@ -226,7 +225,7 @@ const SearchBar = (props) => {
                   padding: '16px 22px 16px 16px',
                   gap: '8px',
                 }}
-                icon={<Search color="#FFFFFF" />}
+                icon={<SearchIcon color="#FFFFFF" />}
                 iconPosition="left"
               />
             </div>
