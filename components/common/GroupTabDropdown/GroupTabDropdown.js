@@ -9,7 +9,7 @@ const ORIGIN_OPTION_LIST = [
   { text: '新建案', value: 'new', icon: House },
 ];
 
-export default function GroupTabDropdown() {
+export default function GroupTabDropdown({ onChange }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('rent');
   const [optionList, setOptionList] = useState(
@@ -62,6 +62,7 @@ export default function GroupTabDropdown() {
                 key={`groupTabDropdownItem_${key}`}
                 onClick={() => {
                   setSelectedTab(item.value);
+                  onChange(item.value);
                   setIsDropdownOpen(false);
                 }}
               >

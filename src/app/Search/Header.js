@@ -24,7 +24,7 @@ const Header = ({ headerType = 'default' }) => {
           height={30}
         />
         <Image src="/housing/icon/icon.svg" alt="icon" width={72} height={20} />
-        <GroupTabDropdown />
+        <GroupTabDropdown onChange={(value) => console.log('value', value)} />
       </div>
       <div className={styles.searchArea}>
         <Dropdown

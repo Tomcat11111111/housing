@@ -1,20 +1,39 @@
 import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import Button from '../../common/Button/Button';
-import Dropdown from '../../common/Dropdown/Dropdown';
-import Input from '../../common/Input/Input';
-import House from '../../icon/House/House';
-import Arrow from '../../icon/Arrow/Arrow';
-import Remove from '../../icon/Remove/Remove';
-import SearchIcon from '../../icon/SearchIcon/SearchIcon';
+import Button from '@common/Button/Button';
+import Dropdown from '@common/Dropdown/Dropdown';
+import Input from '@common/Input/Input';
+import GroupTabDropdown from '@common/GroupTabDropdown/GroupTabDropdown';
+import Arrow from '@icon/Arrow/Arrow';
+import Remove from '@icon/Remove/Remove';
+import SearchIcon from '@icon/SearchIcon/SearchIcon';
+import GroupTab from '@common/GroupTab/GroupTab';
 import styles from './SearchBar.module.scss';
+
+const BUY_ITEM_TYPE_LIST = [
+  { value: '住宅', text: '住宅', isChecked: false },
+  { value: '套房', text: '套房', isChecked: false },
+  { value: '法拍屋', text: '法拍屋', isChecked: false },
+  { value: '車位', text: '車位', isChecked: false },
+  { value: '其他', text: '其他', isChecked: false },
+];
+
+const RENT_ITEM_TYPE_LIST = [
+  { value: '整層住家', text: '整層住家', isChecked: false },
+  { value: '獨立套房', text: '獨立套房', isChecked: false },
+  { value: '分租套房', text: '分租套房', isChecked: false },
+  { value: '雅房', text: '雅房', isChecked: false },
+  { value: '車位', text: '車位', isChecked: false },
+  { value: '其他', text: '其他', isChecked: false },
+];
 
 const SearchBar = (props) => {
   const { isFixed } = props;
 
   const router = useRouter();
 
+  const [selectedTab, setSelectedTab] = useState('rent');
   const [isOpen, setIsOpen] = useState(true);
   const [userToggled, setUserToggled] = useState(false);
   const timeoutRef = useRef(null);
@@ -76,39 +95,7 @@ const SearchBar = (props) => {
       {isOpen ? (
         <>
           <div className={styles.searchHeader}>
-            <div className={styles.tabArea}>
-              <Button
-                buttonText="買房子"
-                textStyle={{ color: '#FFFFFF' }}
-                buttonStyle={{
-                  backgroundColor: '#FF8E26',
-                  padding: '8px 32px',
-                  gap: '8px',
-                }}
-                icon={<House color="#FFFFFF" />}
-                iconPosition="left"
-              />
-              <Button
-                buttonText="新建案"
-                textStyle={{ color: '#CCCCCC' }}
-                buttonStyle={{
-                  padding: '8px 32px',
-                  gap: '8px',
-                }}
-                icon={<House color="#CCCCCC" />}
-                iconPosition="left"
-              />
-              <Button
-                buttonText="租房子"
-                textStyle={{ color: '#CCCCCC' }}
-                buttonStyle={{
-                  padding: '8px 32px',
-                  gap: '8px',
-                }}
-                icon={<House color="#CCCCCC" />}
-                iconPosition="left"
-              />
-            </div>
+            <GroupTab onChange={(value) => setSelectedTab(value)} />
             <div className={styles.buttonArea}>
               <Button
                 buttonText="縮小篩選"
@@ -177,31 +164,46 @@ const SearchBar = (props) => {
             />
           </div>
           <div className={styles.dropdownBar}>
-            <div className={styles.dropdown}>
-              <Dropdown placeholder="物件類型" dropdownType="checkbox" />
-            </div>
-            <div className={styles.dropdown}>
-              <Dropdown placeholder="總售價" dropdownType="price" />
-            </div>
-            <div className={styles.dropdown}>
-              <Dropdown placeholder="單坪售價" dropdownType="price" />
-            </div>
+            {selectedTab === 'rent' && (
+              <>
+                <div className={styles.dropdown}>
+                  <Dropdown
+                    placeholder="物件類型"
+                    dropdownType="checkbox"
+                    optionList={RENT_ITEM_TYPE_LIST}
+                  />
+                </div>
+                <div className={styles.dropdown}>
+                  <Dropdown placeholder="租金" dropdownType="price" />
+                </div>
+                <div className={styles.dropdown}>
+                  <Dropdown placeholder="格局" dropdownType="layout" />
+                </div>
+              </>
+            )}
+            {selectedTab === 'buy' && (
+              <>
+                <div className={styles.dropdown}>
+                  <Dropdown
+                    placeholder="物件類型"
+                    dropdownType="checkbox"
+                    optionList={BUY_ITEM_TYPE_LIST}
+                  />
+                </div>
+                <div className={styles.dropdown}>
+                  <Dropdown placeholder="總售價" dropdownType="price" />
+                </div>
+                <div className={styles.dropdown}>
+                  <Dropdown placeholder="單坪售價" dropdownType="price" />
+                </div>
+              </>
+            )}
           </div>
         </>
       ) : (
         <>
           <div className={styles.stickySearchBar}>
-            <Button
-              buttonText="買房子"
-              textStyle={{ color: '#FFFFFF' }}
-              buttonStyle={{
-                backgroundColor: '#FF8E26',
-                padding: '8px 32px',
-                gap: '8px',
-              }}
-              icon={<House color="#FFFFFF" />}
-              iconPosition="left"
-            />
+            <GroupTabDropdown onChange={(value) => setSelectedTab(value)} />
             <div className={styles.group}>
               <Dropdown
                 isHasNoBorder

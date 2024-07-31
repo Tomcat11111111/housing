@@ -1,0 +1,11 @@
+.groupTabContainer {
+  display: flex;
+}
+
+.groupTabItem {
+  display: flex;
+  color: #cccccc;
+  padding: 8px 32px;
+  gap: 8px;
+  cursor: pointer;
+}

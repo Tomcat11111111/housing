@@ -5,7 +5,7 @@
 .groupTabDropdown {
   &[data-isopen='open'] {
     position: relative;
-    z-index: 1;
+    z-index: 3;
   }
 }
 
@@ -19,10 +19,11 @@
   align-items: flex-start;
   gap: 8px;
   position: absolute;
-  top: 5px;
+  top: -8px;
   width: 154px;
   display: none;
-  left: 140px;
+  left: -10px;
+  z-index: 2;
 
   &[data-isopen='open'] {
     display: inline-flex;

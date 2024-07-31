@@ -5,6 +5,11 @@ import Menu from '../Menu/Menu';
 import CustomSlider from '../CustomSlider/CustomSlider';
 import CountySelector from './CountySelector';
 import DropdownCheckbox from '@common/Dropdown/DropdownCheckbox';
+import Counter from '@common/Counter/Counter';
+import BedIcon from '@icon/BedIcon/BedIcon';
+import CouchIcon from '@icon/CouchIcon/CouchIcon';
+import TubIcon from '@icon/TubIcon/TubIcon';
+import GrassIcon from '@icon/GrassIcon/GrassIcon';
 import useOutSideClose from '../../../utils/hooks/useoutsideClose';
 import styles from './Dropdown.module.scss';
 
@@ -66,9 +71,34 @@ const Dropdown = (props) => {
               value={value}
               onChange={onChange}
               setIsDropdownOpen={setIsDropdownOpen}
+              optionList={optionList}
             />
           )}
-          {dropdownType === 'price' && <CustomSlider />}
+          {dropdownType === 'price' && (
+            <div className={styles.dropdownContentContainer}>
+              <div className={styles.priceSelector}>
+                <CustomSlider />
+              </div>
+            </div>
+          )}
+          {dropdownType === 'layout' && (
+            <div className={styles.dropdownContentContainer}>
+              <div className={styles.counterGroup}>
+                <div className={styles.counter}>
+                  <Counter text="房" Icon={BedIcon} />
+                </div>
+                <div className={styles.counter}>
+                  <Counter text="廳" Icon={CouchIcon} />
+                </div>
+                <div className={styles.counter}>
+                  <Counter text="衛" Icon={TubIcon} />
+                </div>
+                <div className={styles.counter}>
+                  <Counter text="陽台" Icon={GrassIcon} />
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
