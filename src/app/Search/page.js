@@ -869,7 +869,7 @@ export default function Search() {
           </div>
           <div className={styles.cardList}>
             {BUY_HOUSE_MOCK_LIST.map((itemData, index) => (
-              <div key={index}>
+              <div className={styles.cardContainer} key={index}>
                 <ItemCard itemData={itemData} index={index} />
               </div>
             ))}

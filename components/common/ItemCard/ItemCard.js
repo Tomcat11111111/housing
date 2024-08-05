@@ -3,9 +3,10 @@ import Arrow from '../../icon/Arrow/Arrow';
 import Image from 'next/image';
 import Tag from '../Tag/Tag';
 import Carousel from '../Carousel/Carousel';
-import TubIcon from '@components/icon/TubIcon/TubIcon';
-import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
-import BedIcon from '@components/icon/BedIcon/BedIcon';
+import TubIcon from '@icon/TubIcon/TubIcon';
+import CouchIcon from '@icon/CouchIcon/CouchIcon';
+import BedIcon from '@icon/BedIcon/BedIcon';
+import BookmarkIcon from '@icon/BookmarkIcon/BookmarkIcon';
 import styles from './ItemCard.module.scss';
 
 const PRICE_STATUS_MAP = new Map([
@@ -56,27 +57,6 @@ const PRICE_STATUS_MAP = new Map([
   ],
 ]);
 
-/*
-買房物件
-{
-  "title": String, //標題、名稱
-  "views": Number, //瀏覽數
-  "updatedAt": Number, //更新動態，看要什麼 日期格式
-  "district": String, //地點
-  "squareMeters": Number, //坪數
-  "totalSquareMeters": Number,// 權狀坪數，之後要搞慮細節頁其他坪數，建物登記
-  "totalFloor": Number // 總樓層
-  "houseAge": Number, //屋齡
-  "layout": {
-    room: Number,
-    living: Number,
-    bath: Number,
- }, //格局
- "compare": Number, //價格比較，看是給平均前端做比較，還是後端直接給結論，ex: 0等於平均,1高於平均,2低於平均或是字串
- "price": Number, //價格
- "img": jpg, //物件照片(數張),jpg...
-}
-*/
 const BUY_HOUSE_MOCK_LIST = [
   {
     title: '景美站/羅斯六段高樓四房車位 坡平車位',
@@ -172,28 +152,6 @@ const BUY_HOUSE_MOCK_LIST = [
   },
 ];
 
-/*
-租屋物件
-{
-"title": String, //標題、名稱
-"views": Number, //瀏覽數
-"updatedAt": Number, //更新動態，看要什麼 日期格式
-"district": String, //地點
-"squareMeters": Number, //坪數
-"floor": Number, //樓層
-"totalFloor": Number // 總樓層
-"layout": {
-"room": Number,
-"living": Number,
-"bath": Number,
- }, //格局
-"compare": Number, //價格比較，看是給平均前端做比較，還是後端直接給結論，ex: 0等於平均,1高於平均,2低於平均或是字串
-"price": Number, //價格
-"img": jpg, //物件照片(數張),jpg...
-"isKeep": Boolean,// 是否收藏
-}
-*/
-
 const getPriceStatusInfo = (price, average = 0) => {
   if (price > average) return PRICE_STATUS_MAP.get('above');
   if (price < average) return PRICE_STATUS_MAP.get('below');
@@ -250,6 +208,10 @@ const ItemCard = (props) => {
             // height={182}
             fill
           />
+          <div className={styles.tagArea}>
+            <Tag text="新建案" />
+            <Tag text="拍賣" />
+          </div>
           {isHovered && (
             <>
               <button className={`${styles.carouselControl} ${styles.prev}`}>
@@ -265,6 +227,11 @@ const ItemCard = (props) => {
               {images.map((_, index) => (
                 <button key={index} className={`${styles.indicator}`} />
               ))}
+            </div>
+          )}
+          {isHovered && (
+            <div className={styles.bookmark}>
+              <BookmarkIcon />
             </div>
           )}
         </div>
