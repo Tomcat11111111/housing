@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Header from './Header';
 import Button from '@components/common/Button/Button';
@@ -604,6 +604,26 @@ export default function Search() {
     setFunction(newCheckboxList);
   };
 
+  const cardListRef = useRef(null);
+  const [cardWidth, setCardWidth] = useState();
+
+  useEffect(() => {
+    const calculateCardNum = () => {
+      const cardListWidth = cardListRef.current?.offsetWidth;
+      const cardNum = Math.floor((cardListWidth + 16) / 286);
+
+      setCardWidth((cardListWidth - (cardNum - 1) * 16) / cardNum);
+    };
+
+    window.addEventListener('resize', calculateCardNum);
+
+    calculateCardNum();
+
+    return () => {
+      window.removeEventListener('resize', calculateCardNum);
+    };
+  }, [isSideBarOpen]);
+
   return (
     <div>
       <div className={styles.header}>
@@ -867,10 +887,16 @@ export default function Search() {
               />
             </div>
           </div>
-          <div className={styles.cardList}>
+          <div className={styles.cardList} ref={cardListRef}>
             {BUY_HOUSE_MOCK_LIST.map((itemData, index) => (
-              <div className={styles.cardContainer} key={index}>
-                <ItemCard itemData={itemData} index={index} />
+              <div
+                className={styles.cardContainer}
+                style={{
+                  width: `${cardWidth}px`,
+                }}
+                key={index}
+              >
+                {cardWidth && <ItemCard itemData={itemData} index={index} />}
               </div>
             ))}
           </div>

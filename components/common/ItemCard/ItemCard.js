@@ -209,8 +209,18 @@ const ItemCard = (props) => {
             fill
           />
           <div className={styles.tagArea}>
-            <Tag text="新建案" />
-            <Tag text="拍賣" />
+            <Tag
+              textStyle={{ color: '#FFFFFF' }}
+              tagColor="#386CFC"
+              text="新建案"
+              padding="6px 8px"
+            />
+            <Tag
+              textStyle={{ color: '#FFFFFF' }}
+              tagColor="#386CFC"
+              text="拍賣"
+              padding="6px 8px"
+            />
           </div>
           {isHovered && (
             <>
@@ -225,7 +235,7 @@ const ItemCard = (props) => {
           {isHovered && (
             <div className={styles.indicators}>
               {images.map((_, index) => (
-                <button key={index} className={`${styles.indicator}`} />
+                <button key={index} className={styles.indicator} />
               ))}
             </div>
           )}

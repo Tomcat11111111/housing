@@ -107,37 +107,4 @@
 
 .cardContainer {
   min-width: 270px;
-
-  // 側邊欄 400
-  // gap 16
-  // padding 48
-  // 270*n + 16*(n-1) + 448
-  flex: 1 1 calc(100% - 48px); // 48兩邊padding
-  max-width: calc(100% - 48px);
-
-  // 270 + 448 = 718
-  // @media screen and (max-width: 718px) {
-  // }
-
-  // 270 * 2 + 16 + 448 = 1004
-  @media screen and (min-width: 1004px) {
-    flex: 1 1 calc(50% - 64px); // 48兩邊padding + gap
-    max-width: calc(50% - 64px);
-  }
-
-  // 270 * 3 + 16 * 2 + 448 = 1290
-  @media screen and (min-width: 1290px) {
-    flex: 1 1 calc(33.3333% - 480px);
-    max-width: calc(33.3333% - 480px);
-  }
-
-  // 270 * 4 + 16 * 3 + 448 = 1576px
-  @media screen and (min-width: 1576px) {
-    flex: 1 1 calc(25% - 480px);
-    max-width: calc(25% - 480px);
-  }
-
-  // TODO
-  // 再去算，把沒有把一行撐滿的排除
-  // 如果這樣處理的話，是不是能再CSS中去接父層容器寬度，就可以做在元件上
 }
