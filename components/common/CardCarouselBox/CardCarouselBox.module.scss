@@ -1,0 +1,26 @@
+.cardcontainer {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  justify-content: space-between;
+}
+
+.arrowForward {
+  cursor: pointer;
+  position: absolute;
+  right: -20px;
+  top: 152px;
+  z-index: 2;
+}
+
+.cardBox {
+  padding: 0 8px;
+}
+
+.arrowBack {
+  cursor: pointer;
+  position: absolute;
+  left: -20px;
+  top: 152px;
+  z-index: 2;
+}

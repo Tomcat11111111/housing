@@ -1,0 +1,25 @@
+const Menu = ({ color = 'white' }) => {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="menu" clip-path="url(#clip0_788_21959)">
+        <path
+          id="Vector"
+          d="M4 24H28V21.3333H4V24ZM4 17.3333H28V14.6667H4V17.3333ZM4 8V10.6667H28V8H4Z"
+          fill="#666666"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_788_21959">
+          <rect width="32" height="32" fill={color} />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+export default Menu;

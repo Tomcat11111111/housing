@@ -1,0 +1,121 @@
+.basic {
+  background-color: #f6f6f6;
+  position: relative;
+}
+
+.headerContainer {
+  height: 68px;
+}
+
+// Page
+
+.page {
+  width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.carouselContainer {
+  margin-bottom: 19px;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.pageCardArea {
+  gap: 16px;
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.pageCard {
+  cursor: pointer;
+  display: flex;
+  border-radius: 16px;
+  border: 1px solid #e9e9e9;
+  background: #fff;
+  width: 349px;
+  padding: 16px 16px 16px 24px;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.cardLeft {
+  width: 301px;
+  margin-right: 24px;
+
+  > div {
+    margin-bottom: 8px;
+  }
+
+  > p {
+    color: #909090;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px; /* 150% */
+    width: 190px;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px; /* 160% */
+  letter-spacing: 0.8px;
+
+  > span {
+    margin-left: 8px;
+  }
+}
+
+// 撐住searchBar變短的空間
+.filling {
+  height: 492px;
+}
+
+// 推薦區域
+
+.recommendArea {
+  margin-bottom: 38px;
+}
+
+.recommendTitle {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+
+  > span {
+    color: #333;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 0.8px;
+    margin: 0 8px;
+  }
+}
+
+.cardcontainer {
+  display: flex;
+  gap: 16px;
+  position: relative;
+}
+
+.arrowBack {
+  cursor: pointer;
+  position: absolute;
+  left: -28px;
+  top: 152px;
+}
+
+.arrowForward {
+  cursor: pointer;
+  position: absolute;
+  right: -28px;
+  top: 152px;
+  z-index: 2;
+}

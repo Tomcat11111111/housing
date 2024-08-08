@@ -1,0 +1,39 @@
+.groupTabDropdownContainer {
+  position: relative;
+}
+
+.groupTabDropdown {
+  &[data-isopen='open'] {
+    position: relative;
+    z-index: 3;
+  }
+}
+
+.groupTabDropdownContent {
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0px 2px 8px 0px rgba(99, 99, 99, 0.2);
+  padding: 72px 8px 8px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  position: absolute;
+  top: -8px;
+  width: 154px;
+  display: none;
+  left: -10px;
+  z-index: 2;
+
+  &[data-isopen='open'] {
+    display: inline-flex;
+  }
+}
+
+.groupTabDropdownItem {
+  display: flex;
+  color: #cccccc;
+  padding: 16px 32px;
+  gap: 8px;
+  cursor: pointer;
+}

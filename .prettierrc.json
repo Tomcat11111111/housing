@@ -1,0 +1,17 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "importOrder": [
+    "^(^react$|@react|react)",
+    "<THIRD_PARTY_MODULES>",
+    "^@/components/(.*)$",
+    "^@/store/(.*)$",
+    "^@/utils/(.*)$",
+    "^~/(.*)$",
+    "^[./.{js, jsx, ts, tsx}]",
+    "^[./.{scss}]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

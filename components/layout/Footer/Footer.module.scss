@@ -1,0 +1,65 @@
+.footer {
+  background: #333;
+  padding: 48px 0;
+}
+
+.linkArea {
+  display: flex;
+  gap: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #ccc;
+
+  > div {
+    width: 100%;
+  }
+}
+
+.listTitle {
+  display: flex;
+  color: #e9e9e9;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 30px; /* 150% */
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+  justify-content: center;
+
+  > span {
+    margin-left: 4px;
+  }
+}
+
+.linkIcon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list {
+  color: #ccc;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  margin-top: 16px;
+  flex-direction: column;
+  gap: 16px;
+  display: flex;
+  text-align: center;
+}
+
+.footerContent {
+  width: 747px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.companyInfo {
+  color: #ccc;
+  text-align: center;
+}

@@ -1,0 +1,14 @@
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+
+  &[data-checked='checked'] {
+    color: #ff8e26;
+  }
+}
+
+.checkbox {
+  cursor: pointer;
+}
