@@ -1,14 +1,19 @@
 'use client';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Script from 'next/script';
-import Arrow from '@icon/Arrow/Arrow';
+
+import { useEffect, useState } from 'react';
+
 import Button from '@common/Button/Button';
+import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
 import Carousel from '@common/Carousel/Carousel';
+import Arrow from '@icon/Arrow/Arrow';
 import Footer from '@layout/Footer/Footer';
 import Header from '@layout/Header/Header';
 import SearchBar from '@layout/SearchBar/SearchBar';
-import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import Image from 'next/image';
+import Script from 'next/script';
+
 import styles from './page.module.scss';
 
 export default function Home() {
@@ -47,6 +52,21 @@ export default function Home() {
     '/housing/image/banner_example_2.png',
     '/housing/image/banner_example_3.png',
   ];
+
+  const getRecommendationsApi = async () => {
+    const response = await axios.get(
+      'https://jzj-api.zeabur.app/properties/recommendations'
+    );
+    return response.data;
+  };
+
+  //TODO: 卡片接 API 資料
+  const { data: recommendationsList } = useQuery({
+    queryKey: ['getRecommendationsList'],
+    queryFn: getRecommendationsApi,
+  });
+
+  console.log('recommendationsList', recommendationsList);
 
   return (
     <main className={styles.basic}>

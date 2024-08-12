@@ -12,6 +12,7 @@
     "deploy": "npm run build && npm run export && gh-pages -d out"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.51.21",
     "axios": "^1.7.3",
     "cz-conventional-changelog": "^3.3.0",
     "dayjs": "^1.11.11",
@@ -22,11 +23,11 @@
     "ramda": "^0.30.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-query": "^3.39.3",
     "react-range": "^1.8.14",
     "sass": "^1.77.5"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
