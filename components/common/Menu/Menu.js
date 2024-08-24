@@ -1,7 +1,7 @@
 import styles from './Menu.module.scss';
 
 const Menu = (props) => {
-  const { menuList, onChange } = props;
+  const { menuList, onChange, setIsDropdownOpen } = props;
 
   return (
     <div className={styles.menuContainer}>
@@ -11,10 +11,11 @@ const Menu = (props) => {
             className={styles.menuItem}
             key={`menuItem-${key}`}
             onClick={() => {
-              onChange(item, key);
+              onChange(item.id);
+              setIsDropdownOpen(false);
             }}
           >
-            {item?.text}
+            {item?.displayName}
           </div>
         );
       })}

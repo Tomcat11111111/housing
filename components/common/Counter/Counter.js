@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import styles from './Counter.module.scss';
 
-export default function Counter({ text, Icon }) {
-  const [count, setCount] = useState(0);
+export default function Counter({ text, Icon, count = 0, setCount }) {
   const [isHovered, setIsHovered] = useState(false);
   const counterRef = useRef();
 

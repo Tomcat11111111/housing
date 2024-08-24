@@ -1,37 +1,39 @@
 import { useState } from 'react';
-import Image from 'next/image';
+
 import BurgerMenu from '@components/common/BurgerMenu/BurgerMenu';
 import Button from '@components/common/Button/Button';
 import Dropdown from '@components/common/Dropdown/Dropdown';
-import Input from '@components/common/Input/Input';
-import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
 import GroupTabDropdown from '@components/common/GroupTabDropdown/GroupTabDropdown';
-import styles from './Header.module.scss';
+import Input from '@components/common/Input/Input';
+import Logo from '@components/common/Logo/Logo';
+import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
+import Image from 'next/image';
 
-const Header = ({ headerType = 'default' }) => {
-  const [county, setCounty] = useState('台北市');
+import styles from './HeaderWithSearch.module.scss';
 
+//TODO: 此元件可再整理過
+const HeaderWithSearch = ({
+  headerType = 'default',
+  city,
+  onCityChange = () => {},
+  padding = '0 24px',
+}) => {
   return (
-    <div
+    <header
       className={styles.header}
       data-header={headerType === 'white' ? 'white' : ''}
+      style={{ padding }}
     >
       <div className={styles.iconArea}>
-        <Image
-          src="/housing/icon/ellipse.svg"
-          alt="ellipse"
-          width={30}
-          height={30}
-        />
-        <Image src="/housing/icon/icon.svg" alt="icon" width={72} height={20} />
+        <Logo />
         <GroupTabDropdown onChange={(value) => console.log('value', value)} />
       </div>
       <div className={styles.searchArea}>
         <Dropdown
           isHasNoBorder
-          value={county}
+          value={city}
           dropdownType="county"
-          onChange={(key) => setCounty(key)}
+          onChange={(key) => onCityChange(key)}
         />
         <div className={styles.searchInput}>
           <Input
@@ -58,8 +60,8 @@ const Header = ({ headerType = 'default' }) => {
           <BurgerMenu />
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 
-export default Header;
+export default HeaderWithSearch;

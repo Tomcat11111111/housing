@@ -1,4 +1,4 @@
-.countySelector {
+.citySelector {
   display: flex;
   width: 472px;
   flex-direction: column;
@@ -13,19 +13,19 @@
   top: 65px;
 }
 
-.district {
+.region {
   color: #333;
   font-size: 16px;
   font-weight: 700;
 }
 
-.countyBox {
+.cityBox {
   display: flex;
   flex-direction: row;
   gap: 28px;
 }
 
-.county {
+.city {
   cursor: pointer;
   color: #333;
   font-size: 16px;

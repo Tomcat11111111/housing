@@ -1,13 +1,9 @@
-import CheckboxIcon from '@components/icon/CheckboxIcon/CheckboxIcon';
 import CheckboxChecked from '@components/icon/CheckboxChecked/CheckboxChecked';
+import CheckboxIcon from '@components/icon/CheckboxIcon/CheckboxIcon';
+
 import styles from './Checkbox.module.scss';
 
-export default function Checkbox({
-  text,
-  value,
-  isChecked,
-  onChange = () => {},
-}) {
+export default function Checkbox({ text, id, isChecked, onChange = () => {} }) {
   return (
     <div
       className={styles.checkboxContainer}
@@ -17,7 +13,7 @@ export default function Checkbox({
       <div
         className={styles.checkbox}
         onClick={() => {
-          onChange(value, isChecked);
+          onChange(id, isChecked);
         }}
       >
         {isChecked ? (
