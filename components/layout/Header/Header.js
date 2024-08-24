@@ -1,7 +1,9 @@
+import Logo from '@components/common/Logo/Logo';
 import Image from 'next/image';
-import Account from '../../icon/Account/Account';
+
 import BurgerMenu from '../../common/BurgerMenu/BurgerMenu';
 import Button from '../../common/Button/Button';
+import Account from '../../icon/Account/Account';
 import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
@@ -12,18 +14,7 @@ const Header = ({ headerType = 'default' }) => {
     >
       <div className={styles.headerContent}>
         <div className={styles.iconArea}>
-          <Image
-            src="/housing/icon/ellipse.svg"
-            alt="ellipse"
-            width={30}
-            height={30}
-          />
-          <Image
-            src="/housing/icon/icon.svg"
-            alt="icon"
-            width={72}
-            height={20}
-          />
+          <Logo />
         </div>
         {headerType === 'white' && (
           <div className={styles.linkArea}>

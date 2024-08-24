@@ -5,491 +5,53 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@components/common/Button/Button';
 import Dropdown from '@components/common/Dropdown/Dropdown';
 import ItemCard from '@components/common/ItemCard/ItemCard';
+import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import Image from 'next/image';
 
-import Header from './Header';
 import styles from './Search.module.scss';
-import Slider from './Slider';
-
-const BUY_HOUSE_MOCK_LIST = [
-  {
-    title: '景美站/羅斯六段高樓含車位 坡平車位',
-    views: 1234,
-    updatedAt: 1672531199000,
-    district: '文山區',
-    squareMeters: 120,
-    totalSquareMeters: 150,
-    floor: 7,
-    totalFloor: 12,
-    houseAge: 10,
-    layout: {
-      room: 3,
-      living: 1,
-      bath: 2,
-    },
-    price: 5000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '新生站/臨沂街矮樓 巷子內',
-    views: 5487,
-    updatedAt: 1672617599000,
-    district: '中正區',
-    squareMeters: 80,
-    totalSquareMeters: 95,
-    floor: 15,
-    totalFloor: 20,
-    houseAge: 5,
-    layout: {
-      room: 2,
-      living: 1,
-      bath: 1,
-    },
-    price: 7000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '信義路五段150巷11弄1號1樓',
-    views: 2345,
-    updatedAt: 1672703999000,
-    district: '信義區',
-    squareMeters: 90,
-    totalSquareMeters: 45,
-    floor: 2 + 1,
-    totalFloor: 2,
-    houseAge: 20,
-    layout: {
-      room: 4,
-      living: 1,
-      bath: 2,
-    },
-    price: 3000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '景美站/羅斯六段高樓含車位 坡平車位',
-    views: 1234,
-    updatedAt: 1672531199000,
-    district: '文山區',
-    squareMeters: 120,
-    totalSquareMeters: 150,
-    floor: 7,
-    totalFloor: 12,
-    houseAge: 10,
-    layout: {
-      room: 3,
-      living: 1,
-      bath: 2,
-    },
-    price: 5000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '新生站/臨沂街矮樓 巷子內',
-    views: 5487,
-    updatedAt: 1672617599000,
-    district: '中正區',
-    squareMeters: 80,
-    totalSquareMeters: 95,
-    floor: 15,
-    totalFloor: 20,
-    houseAge: 5,
-    layout: {
-      room: 2,
-      living: 1,
-      bath: 1,
-    },
-    price: 7000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '信義路五段150巷11弄1號1樓',
-    views: 2345,
-    updatedAt: 1672703999000,
-    district: '信義區',
-    squareMeters: 90,
-    totalSquareMeters: 45,
-    floor: 2 + 1,
-    totalFloor: 2,
-    houseAge: 20,
-    layout: {
-      room: 4,
-      living: 1,
-      bath: 2,
-    },
-    price: 3000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 34,
-    floor: 5,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    price: 4000000,
-    images: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-];
+import Sidebar from './Sidebar';
 
 const FILTER_DROPDOWN_LIST = [
-  { value: '預設', text: '預設' },
-  { value: '金額 大到小', text: '金額 大到小' },
-  { value: '金額 小到大', text: '金額 小到大' },
-  { value: '坪數 大到小', text: '坪數 大到小' },
-  { value: '坪數 小到大', text: '坪數 小到大' },
-  { value: '刊登時間 新到舊', text: '刊登時間 新到舊' },
-  { value: '刊登時間 舊到新', text: '刊登時間 舊到新' },
+  { value: '預設', displayName: '預設' },
+  { value: '金額 大到小', displayName: '金額 大到小' },
+  { value: '金額 小到大', displayName: '金額 小到大' },
+  { value: '坪數 大到小', displayName: '坪數 大到小' },
+  { value: '坪數 小到大', displayName: '坪數 小到大' },
+  { value: '刊登時間 新到舊', displayName: '刊登時間 新到舊' },
+  { value: '刊登時間 舊到新', displayName: '刊登時間 舊到新' },
 ];
 
+const defaultFilterParams = {
+  cityId: 1,
+  districtId: 1,
+  limit: 10,
+  // categoryIds: [],
+  // minMonthlyRent: 0,
+  // maxMonthlyRent: 0,
+  // room: 0,
+  // livingRoom: 0,
+  // bathroom: 0,
+  // balcony: 0,
+  // featureIds: [],
+  // minFloor: 0,
+  // maxFloor: 0,
+  // shapeIds: [],
+  // minSquareMeters: 0,
+  // maxSquareMeters: 0,
+  // decorLevelIds: [],
+  // materialIds: [],
+  // ruleIds: [],
+};
+
 export default function Search() {
+  const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('預設');
+  const [cardWidth, setCardWidth] = useState();
 
   const cardListRef = useRef(null);
-  const [cardWidth, setCardWidth] = useState();
 
   useEffect(() => {
     const calculateCardNum = () => {
@@ -508,13 +70,70 @@ export default function Search() {
     };
   }, [isSideBarOpen]);
 
+  const getRentPropertiesApi = async (data) => {
+    try {
+      const reponse = await axios.get(
+        'https://jzj-api.zeabur.app/properties/for-rent',
+        {
+          params: { ...data.meta },
+        }
+      );
+
+      return reponse.data;
+    } catch (error) {
+      console.log(error.message ?? 'Get RentProperties failed');
+    }
+  };
+
+  const formatCardData = (reponse) => {
+    const { total = 0, data = [] } = reponse;
+    const formatData = data.map((item) => ({
+      ...item.property,
+      price: item.price,
+    }));
+
+    return {
+      total: total,
+      list: formatData,
+    };
+  };
+
+  const { data: queryResult, isFetching } = useQuery({
+    queryKey: ['getRentPropertiesApi', filterParams],
+    queryFn: getRentPropertiesApi,
+    select: formatCardData,
+    meta: filterParams,
+    initialData: {
+      total: 0,
+      list: [],
+    },
+  });
+
+  // console.log('🚀 ~ filterParams:', filterParams);
+  // console.log('🚀 ~ queryResult:', queryResult);
+
   return (
     <div>
       <div className={styles.header}>
-        <Header headerType="white" />
+        <HeaderWithSearch
+          headerType="white"
+          city={filterParams.cityId}
+          onCityChange={(value) =>
+            setFilterParams({ ...filterParams, cityId: value })
+          }
+        />
       </div>
       <div className={styles.page}>
-        {isSideBarOpen && <Slider isSideBarOpen={isSideBarOpen} setIsSideBarOpen={setIsSideBarOpen} />}
+        {isSideBarOpen && (
+          <Sidebar
+            isSideBarOpen={isSideBarOpen}
+            setIsSideBarOpen={setIsSideBarOpen}
+            total={queryResult?.total}
+            city={filterParams.cityId}
+            originFilterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        )}
         <div className={styles.listContainer}>
           <div className={styles.buttonArea}>
             {!isSideBarOpen && (
@@ -555,17 +174,28 @@ export default function Search() {
             </div>
           </div>
           <div className={styles.cardList} ref={cardListRef}>
-            {BUY_HOUSE_MOCK_LIST.map((itemData, index) => (
-              <div
-                className={styles.cardContainer}
-                style={{
-                  width: `${cardWidth}px`,
-                }}
-                key={index}
-              >
-                {cardWidth && <ItemCard itemData={itemData} index={index} />}
-              </div>
-            ))}
+            {!isFetching &&
+              queryResult.list.length > 0 &&
+              queryResult?.list.map((itemData, index) => (
+                <div
+                  className={styles.cardContainer}
+                  style={{
+                    width: `${cardWidth}px`,
+                  }}
+                  key={index}
+                >
+                  {cardWidth && (
+                    <ItemCard
+                      itemData={itemData}
+                      index={index}
+                      averagePrice={12000}
+                    />
+                  )}
+                </div>
+              ))}
+            {!isFetching && queryResult.list.length === 0 && (
+              <div className={styles.noResult}>沒有資料</div>
+            )}
           </div>
         </div>
       </div>

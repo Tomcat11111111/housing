@@ -1,12 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Arrow from '../../icon/Arrow/Arrow';
-import Image from 'next/image';
-import Tag from '../Tag/Tag';
-import Carousel from '../Carousel/Carousel';
-import TubIcon from '@icon/TubIcon/TubIcon';
-import CouchIcon from '@icon/CouchIcon/CouchIcon';
+import React, { useEffect, useRef, useState } from 'react';
+
+import Bookmark from '@common/Bookmark/Bookmark';
+import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
 import BedIcon from '@icon/BedIcon/BedIcon';
-import BookmarkIcon from '@icon/BookmarkIcon/BookmarkIcon';
+import CouchIcon from '@icon/CouchIcon/CouchIcon';
+import TubIcon from '@icon/TubIcon/TubIcon';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import Arrow from '../../icon/Arrow/Arrow';
+import Carousel from '../Carousel/Carousel';
+import Tag from '../Tag/Tag';
 import styles from './ItemCard.module.scss';
 
 const PRICE_STATUS_MAP = new Map([
@@ -57,101 +61,6 @@ const PRICE_STATUS_MAP = new Map([
   ],
 ]);
 
-const BUY_HOUSE_MOCK_LIST = [
-  {
-    title: '景美站/羅斯六段高樓四房車位 坡平車位',
-    views: 1234,
-    updatedAt: 1672531199000,
-    district: '文山區',
-    squareMeters: 120,
-    totalSquareMeters: 150,
-    totalFloor: 12,
-    houseAge: 10,
-    layout: {
-      room: 3,
-      living: 1,
-      bath: 2,
-    },
-    compare: 0,
-    price: 5000000,
-    img: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '新生站/臨沂街矮樓 巷子內',
-    views: 5487,
-    updatedAt: 1672617599000,
-    district: '中正區',
-    squareMeters: 80,
-    totalSquareMeters: 95,
-    totalFloor: 20,
-    houseAge: 5,
-    layout: {
-      room: 2,
-      living: 1,
-      bath: 1,
-    },
-    compare: 1,
-    price: 7000000,
-    img: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '信義路五段150巷11弄1號1樓',
-    views: 2345,
-    updatedAt: 1672703999000,
-    district: '信義區',
-    squareMeters: 90,
-    totalSquareMeters: 100,
-    totalFloor: 2,
-    houseAge: 20,
-    layout: {
-      room: 4,
-      living: 1,
-      bath: 2,
-    },
-    compare: 2,
-    price: 3000000,
-    img: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-  {
-    title: '近牯嶺街小劇場 明星學區',
-    views: 654,
-    updatedAt: 1672870399000,
-    district: '中正區',
-    squareMeters: 70,
-    totalSquareMeters: 85,
-    totalFloor: 10,
-    houseAge: 7,
-    layout: {
-      room: 1,
-      living: 1,
-      bath: 1,
-    },
-    compare: 0,
-    price: 4000000,
-    img: [
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-      '/housing/image/house_item.png',
-    ],
-  },
-];
-
 const getPriceStatusInfo = (price, average = 0) => {
   if (price > average) return PRICE_STATUS_MAP.get('above');
   if (price < average) return PRICE_STATUS_MAP.get('below');
@@ -160,26 +69,42 @@ const getPriceStatusInfo = (price, average = 0) => {
 
 const ItemCard = (props) => {
   const { itemData, averagePrice, index } = props;
+
   const {
+    id,
     title,
-    views,
-    updatedAt,
-    district,
+    views = 0,
+    updatedAt = '',
+    district = '',
     squareMeters,
-    totalSquareMeters,
     floor,
-    totalFloor,
-    houseAge,
-    layout,
-    price,
-    images,
+    totalFloors,
+    age,
+    room,
+    bathroom,
+    livingRoom,
+    balcony,
+    price = null,
+    images = [],
   } = itemData;
-  const { room, living, bath } = layout;
+
+  const router = useRouter();
 
   const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
   const [isHovered, setIsHovered] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false); // TODO:接api的值，後續值更新時要去打api
   const cardRef = useRef();
+
+  const getPropertyInfo = () => {
+    let result = '';
+    if (district) result += `${district} | `;
+    if (squareMeters) result += `${squareMeters}坪 | `;
+    if (age) result += `${age} | `;
+    if (floor) result += `${floor}F/${totalFloors}F`;
+
+    return result;
+  };
 
   useEffect(() => {
     const handleMouseEnter = () => setIsHovered(true);
@@ -198,7 +123,13 @@ const ItemCard = (props) => {
   }, [cardRef]);
 
   return (
-    <div className={styles.itemCard} ref={cardRef}>
+    <div
+      className={styles.itemCard}
+      ref={cardRef}
+      onClick={() => {
+        if (id) router.push(`/Detail?id=${id}`);
+      }}
+    >
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
@@ -241,7 +172,10 @@ const ItemCard = (props) => {
           )}
           {isHovered && (
             <div className={styles.bookmark}>
-              <BookmarkIcon />
+              <Bookmark
+                isBookmarked={isBookmarked}
+                setIsBookmarked={setIsBookmarked}
+              />
             </div>
           )}
         </div>
@@ -277,12 +211,10 @@ const ItemCard = (props) => {
             iconPosition="left"
           />
         </div>
-        <div
-          className={styles.district}
-        >{`${district} | ${totalSquareMeters}坪 | ${houseAge} | ${floor}F/${totalFloor}F`}</div>
+        <div className={styles.propertyInfo}>{getPropertyInfo()}</div>
         <div className={styles.icon}>
           <Tag
-            text={`${room}房`}
+            text={room}
             icon={<BedIcon />}
             gap="8px"
             padding="8px"
@@ -297,7 +229,7 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
-            text={`${living}聽`}
+            text={livingRoom}
             icon={<CouchIcon />}
             gap="8px"
             padding="8px"
@@ -312,8 +244,23 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
-            text={`${bath}衛`}
+            text={bathroom}
             icon={<TubIcon />}
+            gap="8px"
+            padding="8px"
+            iconPosition="left"
+            borderColor="#F6F6F6"
+            textStyle={{
+              color: '#333',
+              fontSize: '12px',
+              fontWeight: 700,
+              lineHeight: '18px',
+              letterSpacing: '4px',
+            }}
+          />
+          <Tag
+            text={balcony}
+            icon={<GrassIcon />}
             gap="8px"
             padding="8px"
             iconPosition="left"
@@ -331,17 +278,17 @@ const ItemCard = (props) => {
       </div>
       <div className={styles.bottom} data-hover={isHovered ? 'hover' : ''}>
         <Tag
-          text={priceStatusInfo.text}
+          text={priceStatusInfo?.text}
           textStyle={{
             color: '#F6F6F6',
           }}
-          tagColor={priceStatusInfo.color}
+          tagColor={priceStatusInfo?.color}
           iconPosition="right"
-          icon={priceStatusInfo.icon}
+          icon={priceStatusInfo?.icon}
           padding="8px 16px"
           gap="4px"
         />
-        <span>31,910/月</span>
+        {price && <span>{price.toLocaleString()}/月</span>}
       </div>
     </div>
   );

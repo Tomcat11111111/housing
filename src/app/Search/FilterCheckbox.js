@@ -1,7 +1,12 @@
 import Checkbox from '@components/common/Checkbox/Checkbox';
+
 import styles from './FilterCheckbox.module.scss';
 
-export default function FilterCheckbox({ optionList, onChange }) {
+export default function FilterCheckbox({
+  optionList = [],
+  selectedOptions,
+  onChange,
+}) {
   const isEven = (num) => num % 2 === 0;
 
   return (
@@ -14,9 +19,9 @@ export default function FilterCheckbox({ optionList, onChange }) {
             data-position={isEven(key) ? 'left' : 'right'}
           >
             <Checkbox
-              text={item.text}
-              value={item.value}
-              isChecked={item.isChecked}
+              text={item.displayName}
+              id={item.id}
+              isChecked={selectedOptions.includes(item.id)}
               key={`checkbox_${key}`}
               onChange={onChange}
             />

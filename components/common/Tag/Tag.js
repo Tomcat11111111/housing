@@ -23,7 +23,7 @@ const Tag = (props) => {
       }}
     >
       {iconPosition === 'left' ? icon : null}
-      <span style={textStyle}>{text}</span>
+      {text && <span style={textStyle}>{text}</span>}
       {iconPosition === 'right' ? icon : null}
     </div>
   );

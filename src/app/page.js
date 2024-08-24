@@ -17,9 +17,23 @@ import Script from 'next/script';
 import styles from './page.module.scss';
 
 export default function Home() {
-  const [isFixed, setIsFixed] = useState(false);
   const [headerType, setHeaderType] = useState('default');
+  const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
+  // function throttle(callback, delay) {
+  //   let timerID = null;
+  //   const throttledFunction = function (...args) {
+  //     if (timerID) return;
+
+  //     timerID = setTimeout(() => {
+  //       callback.apply(this, args);
+  //       timerID = null;
+  //     }, delay);
+  //   };
+
+  //   return throttledFunction;
+  // }
 
   const handleScroll = () => {
     //400+19+110
@@ -29,8 +43,10 @@ export default function Home() {
       setHeaderType('default');
     }
 
+    // 419+108= 527+542=1069
+    // let fixedHeight = isOpen ? 1069 : 633;
+
     if (window.scrollY > 1069) {
-      // 419+108= 527+542=1069
       setIsFixed(true);
       setIsOpen(false);
     } else {
@@ -55,18 +71,16 @@ export default function Home() {
 
   const getRecommendationsApi = async () => {
     const response = await axios.get(
-      'https://jzj-api.zeabur.app/properties/recommendations'
+      'https://jzj-api.zeabur.app/recommendations/7a01f65e-7fc3-47b7-983e-3ec2fcad4cff' // 先寫死熱門物件
     );
     return response.data;
   };
 
-  //TODO: 卡片接 API 資料
-  const { data: recommendationsList } = useQuery({
-    queryKey: ['getRecommendationsList'],
+  const { data: recommendationsData } = useQuery({
+    queryKey: ['getRecommendationsData'],
     queryFn: getRecommendationsApi,
+    initialData: [],
   });
-
-  console.log('recommendationsList', recommendationsList);
 
   return (
     <main className={styles.basic}>
@@ -131,11 +145,12 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        {isFixed && <div className={styles.filling}></div>}
+        {/* {isFixed && <div style={{ height: isOpen ? '524px' : '88px' }}></div>} */}
+        {isFixed && <div style={{ height: '524px' }}></div>}
         <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
-            <span>熱門物件</span>
+            <span>{recommendationsData?.title}</span>
             <Button
               buttonText="瀏覽更多"
               buttonType="transparent"
@@ -154,11 +169,11 @@ export default function Home() {
               }}
             />
           </div>
-          <CardCarouselBox />
+          <CardCarouselBox cardItemList={recommendationsData?.properties} />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
-            <span>熱門物件</span>
+            <span>{recommendationsData?.title}</span>
             <Button
               buttonText="瀏覽更多"
               buttonType="transparent"
@@ -177,7 +192,7 @@ export default function Home() {
               }}
             />
           </div>
-          <CardCarouselBox />
+          <CardCarouselBox cardItemList={recommendationsData?.properties} />
         </div>
       </div>
       <Footer />

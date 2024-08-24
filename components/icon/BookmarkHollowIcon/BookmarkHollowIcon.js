@@ -1,4 +1,4 @@
-export default function BookmarkIcon({ color = '#909090' }) {
+export default function BookmarkHollowIcon({ color = '#909090' }) {
   return (
     <svg
       width="30"

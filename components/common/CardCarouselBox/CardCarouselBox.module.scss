@@ -1,8 +1,12 @@
-.cardcontainer {
+.cardCarouselBox {
+  position: relative;
+}
+
+.cardContainer {
   display: flex;
   gap: 16px;
-  position: relative;
   justify-content: space-between;
+  width: 100%;
 }
 
 .arrowForward {
@@ -14,7 +18,7 @@
 }
 
 .cardBox {
-  padding: 0 8px;
+  width: 25%;
 }
 
 .arrowBack {
