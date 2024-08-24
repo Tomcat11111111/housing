@@ -13,21 +13,21 @@ import axios from 'axios';
 import styles from './Detail.module.scss';
 
 export default function Detail() {
-  const url = new URL(window.location.href);
-  const [propertyId, setPropertyId] = useState(url.searchParams.get('id'));
-  console.log('🚀 ~ Detail ~ propertyId:', propertyId);
+  // const url = new URL(window.location.href);
+  // const [propertyId, setPropertyId] = useState(url.searchParams.get('id'));
+  // console.log('🚀 ~ Detail ~ propertyId:', propertyId);
 
   const [cityId, setCityId] = useState(1);
 
   const getDetailApi = async () => {
     const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/for-rent/${propertyId}`
+      `https://jzj-api.zeabur.app/properties/for-rent/`
     );
     return response.data;
   };
 
   const { data } = useQuery({
-    queryKey: ['detail', propertyId],
+    queryKey: ['detail'],
     queryFn: getDetailApi,
   });
 
