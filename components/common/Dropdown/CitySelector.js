@@ -23,7 +23,7 @@ const CitySelector = ({
                     className={styles.city}
                     data-active={value === city.id ? 'active' : ''}
                     onClick={() => {
-                      onChange(city.id);
+                      onChange(city);
                       setIsDropdownOpen(false);
                     }}
                   >
