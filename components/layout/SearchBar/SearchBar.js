@@ -18,7 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { find, propEq } from 'ramda';
+import { find, join, map, propEq } from 'ramda';
 
 import styles from './SearchBar.module.scss';
 
@@ -61,12 +61,12 @@ const SearchBar = (props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [userToggled, setUserToggled] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [rentMax, setRentMax] = useState(20000);
-  const [rentMin, setRentMin] = useState(12000);
-  const [singleMax, setSingleMax] = useState(70);
-  const [singleMin, setSingleMin] = useState(50);
-  const [squareMax, setSquareMax] = useState(25);
-  const [squareMin, setSquareMin] = useState(15);
+  const [rentMax, setRentMax] = useState(120100);
+  const [rentMin, setRentMin] = useState(4000);
+  const [singleMax, setSingleMax] = useState(205);
+  const [singleMin, setSingleMin] = useState(15);
+  const [squareMax, setSquareMax] = useState(151);
+  const [squareMin, setSquareMin] = useState(0);
   const [roomCount, setRoomCount] = useState(0);
   const [livingRoomCount, setLivingRoomCount] = useState(0);
   const [bathroomCount, setBathroomCount] = useState(0);
@@ -75,7 +75,7 @@ const SearchBar = (props) => {
   const timeoutRef = useRef(null);
 
   const mapRef = useRef(null);
-  const [city, setCity] = useState(1);
+  const [city, setCity] = useState({ id: 1, displayName: '台北市' });
 
   const initMap = () => {
     const TWlocation = { lat: 25.033, lng: 121.5654 };
@@ -148,6 +148,50 @@ const SearchBar = (props) => {
     };
   }, []);
 
+  const getCategoriesDropdownDisplayName = () => {
+    const displayNameList = map(
+      (categoryId) =>
+        find(propEq(categoryId, 'id'))(categoriesOptions)?.displayName,
+      categories
+    );
+
+    return join(' / ', displayNameList);
+  };
+
+  const getRangeDisplay = ({ isMoney, unit, max, min, rangeMax, rangeMin }) => {
+    let displayResult = '';
+    const maxDisplay =
+      max > rangeMax
+        ? '不限'
+        : isMoney
+          ? `$ ${max.toLocaleString()}`
+          : `${max}`;
+    const minDisplay =
+      min < rangeMin
+        ? '不限'
+        : isMoney
+          ? `$ ${min.toLocaleString()}`
+          : `${min}`;
+
+    if (minDisplay === '不限' && maxDisplay === '不限') return '';
+
+    displayResult += `${minDisplay} ~ ${maxDisplay}`;
+
+    if (unit) displayResult += ` ${unit}`;
+
+    return displayResult;
+  };
+
+  const getLayoutDisplay = () => {
+    const layoutInfo = [];
+    if (roomCount > 0) layoutInfo.push(`${roomCount} 房`);
+    if (livingRoomCount > 0) layoutInfo.push(`${livingRoomCount} 廳`);
+    if (bathroomCount > 0) layoutInfo.push(`${bathroomCount} 衛`);
+    if (balconyCount > 0) layoutInfo.push(`${balconyCount} 陽台`);
+
+    return layoutInfo.length > 0 ? layoutInfo.join(' / ') : '';
+  };
+
   return (
     <div className={styles.search} data-fixed={isFixed ? 'fixed' : ''}>
       {isOpen ? (
@@ -198,11 +242,13 @@ const SearchBar = (props) => {
             <div className={styles.cityDropdown}>
               <Dropdown
                 isHasNoBorder
-                value={city}
+                value={city?.id}
                 dropdownType="city"
-                onChange={(key) => setCity(key)}
+                onChange={(city) => {
+                  setCity(city);
+                }}
                 optionList={citiesOptions}
-                displayName={find(propEq(city, 'id'))(citiesOptions)}
+                displayName={city?.displayName}
               />
             </div>
             <div className={styles.searchInput}>
@@ -223,6 +269,7 @@ const SearchBar = (props) => {
               }}
               icon={<SearchIcon color="#FFFFFF" />}
               iconPosition="left"
+              action={() => router.push('/Search')}
             />
           </div>
           <div className={styles.dropdownBar}>
@@ -242,10 +289,20 @@ const SearchBar = (props) => {
                       );
                     }}
                     optionList={categoriesOptions}
+                    displayName={getCategoriesDropdownDisplayName()}
                   />
                 </div>
                 <div className={styles.dropdown}>
-                  <Dropdown placeholder="租金" onChange={(values) => {}}>
+                  <Dropdown
+                    placeholder="租金"
+                    displayName={getRangeDisplay({
+                      isMoney: true,
+                      max: rentMax,
+                      min: rentMin,
+                      rangeMax: 120000,
+                      rangeMin: 5000,
+                    })}
+                  >
                     <div className={styles.rangeContainer}>
                       <RangeSlider
                         rangeMax={120000}
@@ -263,7 +320,7 @@ const SearchBar = (props) => {
                   </Dropdown>
                 </div>
                 <div className={styles.dropdown}>
-                  <Dropdown placeholder="格局">
+                  <Dropdown placeholder="格局" displayName={getLayoutDisplay()}>
                     <div className={styles.dropdownContentContainer}>
                       <div className={styles.counterGroup}>
                         <div className={styles.counter}>
@@ -320,11 +377,21 @@ const SearchBar = (props) => {
                       );
                     }}
                     optionList={categoriesOptions}
-                    // TODO: 這邊應該要接不一樣的API
+                    displayName={getCategoriesDropdownDisplayName()}
                   />
                 </div>
                 <div className={styles.dropdown}>
-                  <Dropdown placeholder="單坪售價">
+                  <Dropdown
+                    placeholder="單坪售價"
+                    displayName={getRangeDisplay({
+                      isMoney: true,
+                      max: singleMax,
+                      min: singleMin,
+                      rangeMax: 200,
+                      rangeMin: 20,
+                      unit: '萬/坪',
+                    })}
+                  >
                     <div className={styles.rangeContainer}>
                       <RangeSlider
                         rangeMax={200}
@@ -342,7 +409,17 @@ const SearchBar = (props) => {
                   </Dropdown>
                 </div>
                 <div className={styles.dropdown}>
-                  <Dropdown placeholder="權狀坪數">
+                  <Dropdown
+                    placeholder="權狀坪數"
+                    displayName={getRangeDisplay({
+                      isMoney: true,
+                      max: squareMax,
+                      min: squareMin,
+                      rangeMax: 150,
+                      rangeMin: 1,
+                      unit: '坪',
+                    })}
+                  >
                     <div className={styles.rangeContainer}>
                       <RangeSlider
                         rangeMax={150}
@@ -375,9 +452,7 @@ const SearchBar = (props) => {
                   value={city}
                   onChange={(key) => setCity(key)}
                   optionList={citiesOptions}
-                  displayName={
-                    find(propEq(city, 'id'))(citiesOptions)?.displayName
-                  }
+                  displayName={city?.displayName}
                 />
               </div>
               <div className={styles.searchInput}>
@@ -398,6 +473,7 @@ const SearchBar = (props) => {
                 }}
                 icon={<SearchIcon color="#FFFFFF" />}
                 iconPosition="left"
+                action={() => router.push('/Search')}
               />
             </div>
             <Button
