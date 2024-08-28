@@ -26,10 +26,10 @@ export default function Detail() {
     return response.data;
   };
 
-  const { data } = useQuery({
-    queryKey: ['detail'],
-    queryFn: getDetailApi,
-  });
+  // const { data } = useQuery({
+  //   queryKey: ['detail'],
+  //   queryFn: getDetailApi,
+  // });
 
   // console.log('🚀 ~ data:', data);
   return (
