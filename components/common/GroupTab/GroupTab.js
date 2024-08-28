@@ -1,20 +1,17 @@
 import { useState } from 'react';
-import House from '@icon/House/House';
+
 import Button from '@common/Button/Button';
+
 import styles from './GroupTab.module.scss';
 
-const ORIGIN_OPTION_LIST = [
-  { text: '租房子', value: 'rent', icon: House },
-  { text: '買房子', value: 'buy', icon: House },
-  { text: '新建案', value: 'new', icon: House },
-];
-
-export default function GroupTabDropdown({ onChange }) {
-  const [selectedTab, setSelectedTab] = useState('rent');
-
+export default function GroupTabDropdown({
+  selectedTab,
+  tabOptions,
+  onChange,
+}) {
   return (
     <div className={styles.groupTabContainer}>
-      {ORIGIN_OPTION_LIST.map((item, key) => {
+      {tabOptions.map((item, key) => {
         const ItemIcon = item.icon;
         const isSelectedTab = item.value === selectedTab;
 
@@ -31,7 +28,6 @@ export default function GroupTabDropdown({ onChange }) {
             icon={<ItemIcon color={isSelectedTab ? '#FFFFFF' : '#CCCCCC'} />}
             iconPosition="left"
             action={() => {
-              setSelectedTab(item.value);
               onChange(item.value);
             }}
           />

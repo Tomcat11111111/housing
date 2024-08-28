@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Button from '@common/Button/Button';
 import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
@@ -20,47 +20,73 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const [isUserCollapsed, setIsUserCollapsed] = useState(false);
 
-  // function throttle(callback, delay) {
-  //   let timerID = null;
-  //   const throttledFunction = function (...args) {
-  //     if (timerID) return;
+  // const handleScroll = () => {
+  //   //400+19+110
+  //   if (window.scrollY > 529) {
+  //     setHeaderType('white');
+  //   } else {
+  //     setHeaderType('default');
+  //   }
 
-  //     timerID = setTimeout(() => {
-  //       callback.apply(this, args);
-  //       timerID = null;
-  //     }, delay);
+  //   // 419+108= 527+542=1069
+  //   const fixedHeight = isOpen ? 1069 : 633;
+  //   console.log('🚀 ~ handleScroll ~ fixedHeight:', fixedHeight);
+
+  //   if (window.scrollY > fixedHeight) {
+  //     // 元件下方，isFixed:true，isOpen:false
+  //     setIsFixed(true);
+
+  //     setIsOpen(false);
+  //   } else {
+  //     // 元件上方，isFixed:false，isOpen:true
+  //     setIsFixed(false);
+
+  //     setIsOpen(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   console.log('🚀 ~ handleScroll ~ isOpen:', isOpen);
+
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
   //   };
+  // }, []);
 
-  //   return throttledFunction;
-  // }
-
-  const handleScroll = () => {
-    //400+19+110
+  const handleScroll = useCallback(() => {
+    // Adjusting based on scroll position
     if (window.scrollY > 529) {
       setHeaderType('white');
     } else {
       setHeaderType('default');
     }
 
-    // 419+108= 527+542=1069
-    // let fixedHeight = isOpen ? 1069 : 633;
+    const fixedHeight = isOpen ? 1069 : 633;
+    console.log('🚀 ~ handleScroll ~ fixedHeight:', fixedHeight);
 
-    if (window.scrollY > 1069) {
-      setIsFixed(true);
-      setIsOpen(false);
+    if (window.scrollY > fixedHeight) {
+      // fixed區域
+      if (!isFixed) setIsFixed(true);
+      if (isOpen) setIsOpen(false);
+      setIsUserCollapsed(false);
     } else {
-      setIsFixed(false);
-      setIsOpen(true);
+      // 不fixed區域
+      if (isFixed) setIsFixed(false);
+      if (!isUserCollapsed) setIsOpen(true);
+
+      // if (!isOpen) setIsOpen(true);
     }
-  };
+  }, [isOpen]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   const images = [
     '/housing/image/house.png',
@@ -71,7 +97,7 @@ export default function Home() {
 
   const getRecommendationsApi = async () => {
     const response = await axios.get(
-      'https://jzj-api.zeabur.app/recommendations/7a01f65e-7fc3-47b7-983e-3ec2fcad4cff' // 先寫死熱門物件
+      'https://jzj-api.zeabur.app/recommendations/7a01f65e-7fc3-47b7-983e-3ec2fcad4cff' // 先寫死熱門物件ID
     );
     return response.data;
   };
@@ -145,9 +171,14 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        {/* {isFixed && <div style={{ height: isOpen ? '524px' : '88px' }}></div>} */}
-        {isFixed && <div style={{ height: '524px' }}></div>}
-        <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
+        {isFixed && <div style={{ height: isOpen ? '524px' : '88px' }}></div>}
+        {/* {isFixed && <div style={{ height: '524px' }}></div>} */}
+        <SearchBar
+          isFixed={isFixed}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setIsUserCollapsed={setIsUserCollapsed}
+        />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
             <span>{recommendationsData?.title}</span>

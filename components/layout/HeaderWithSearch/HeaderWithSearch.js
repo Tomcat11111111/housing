@@ -17,6 +17,9 @@ const HeaderWithSearch = ({
   city,
   onCityChange = () => {},
   padding = '0 24px',
+  selectedTab,
+  tabOptions,
+  onChange,
 }) => {
   return (
     <header
@@ -26,7 +29,11 @@ const HeaderWithSearch = ({
     >
       <div className={styles.iconArea}>
         <Logo />
-        <GroupTabDropdown onChange={(value) => console.log('value', value)} />
+        <GroupTabDropdown
+          selectedTab={selectedTab}
+          tabOptions={tabOptions}
+          onChange={(value) => onChange(value)}
+        />
       </div>
       <div className={styles.searchArea}>
         <Dropdown

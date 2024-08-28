@@ -24,7 +24,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-range": "^1.8.14",
-    "sass": "^1.77.5"
+    "sass": "^1.77.5",
+    "urijs": "^1.19.11"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
