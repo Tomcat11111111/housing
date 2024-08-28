@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Button from '@common/Button/Button';
 import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
+import House from '@components/icon/House/House';
 import Arrow from '@icon/Arrow/Arrow';
 import Footer from '@layout/Footer/Footer';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
@@ -12,12 +13,19 @@ import axios from 'axios';
 
 import styles from './Detail.module.scss';
 
+const ORIGIN_OPTION_LIST = [
+  { text: '租房子', value: 'rent', icon: House },
+  { text: '買房子', value: 'buy', icon: House },
+  { text: '新建案', value: 'new', icon: House },
+];
+
 export default function Detail() {
   // const url = new URL(window.location.href);
   // const [propertyId, setPropertyId] = useState(url.searchParams.get('id'));
   // console.log('🚀 ~ Detail ~ propertyId:', propertyId);
 
   const [cityId, setCityId] = useState(1);
+  const [selectedTab, setSelectedTab] = useState('rent');
 
   const getDetailApi = async () => {
     const response = await axios.get(
@@ -40,6 +48,9 @@ export default function Detail() {
           city={cityId}
           onCityChange={(value) => setCityId(value)}
           padding="0 172px"
+          selectedTab={selectedTab}
+          tabOptions={ORIGIN_OPTION_LIST}
+          onChange={(value) => setSelectedTab(value)}
         />
       </div>
       <div className={styles.body}>
