@@ -31,7 +31,7 @@ export default function Detail() {
     queryFn: getDetailApi,
   });
 
-  console.log('🚀 ~ data:', data);
+  // console.log('🚀 ~ data:', data);
   return (
     <>
       <div className={styles.header}>
