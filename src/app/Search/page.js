@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@components/common/Button/Button';
 import Dropdown from '@components/common/Dropdown/Dropdown';
 import ItemCard from '@components/common/ItemCard/ItemCard';
+import House from '@components/icon/House/House';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -21,6 +22,12 @@ const FILTER_DROPDOWN_LIST = [
   { value: '坪數 小到大', displayName: '坪數 小到大' },
   { value: '刊登時間 新到舊', displayName: '刊登時間 新到舊' },
   { value: '刊登時間 舊到新', displayName: '刊登時間 舊到新' },
+];
+
+const ORIGIN_OPTION_LIST = [
+  { text: '租房子', value: 'rent', icon: House },
+  { text: '買房子', value: 'buy', icon: House },
+  { text: '新建案', value: 'new', icon: House },
 ];
 
 const defaultFilterParams = {
@@ -46,6 +53,7 @@ const defaultFilterParams = {
 };
 
 export default function Search() {
+  const [selectedTab, setSelectedTab] = useState('rent');
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('預設');
@@ -121,6 +129,9 @@ export default function Search() {
           onCityChange={(value) =>
             setFilterParams({ ...filterParams, cityId: value })
           }
+          selectedTab={selectedTab}
+          tabOptions={ORIGIN_OPTION_LIST}
+          onChange={(value) => setSelectedTab(value)}
         />
       </div>
       <div className={styles.page}>

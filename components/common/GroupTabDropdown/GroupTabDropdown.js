@@ -1,30 +1,26 @@
 import { useEffect, useState } from 'react';
+
 import Button from '@common/Button/Button';
-import House from '@components/icon/House/House';
+
 import styles from './GroupTabDropdown.module.scss';
 
-const ORIGIN_OPTION_LIST = [
-  { text: '租房子', value: 'rent', icon: House },
-  { text: '買房子', value: 'buy', icon: House },
-  { text: '新建案', value: 'new', icon: House },
-];
-
-export default function GroupTabDropdown({ onChange }) {
+export default function GroupTabDropdown({
+  selectedTab,
+  tabOptions = [],
+  onChange,
+}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('rent');
   const [optionList, setOptionList] = useState(
-    ORIGIN_OPTION_LIST.filter((item) => item.value !== selectedTab)
+    tabOptions.filter((item) => item.value !== selectedTab)
   );
 
   useEffect(() => {
-    setOptionList(
-      ORIGIN_OPTION_LIST.filter((item) => item.value !== selectedTab)
-    );
+    setOptionList(tabOptions.filter((item) => item.value !== selectedTab));
   }, [selectedTab]);
 
-  const SelectedTabIcon = ORIGIN_OPTION_LIST.find(
+  const SelectedTabIcon = tabOptions.find(
     (item) => item.value === selectedTab
-  ).icon;
+  )?.icon;
 
   return (
     <div className={styles.groupTabDropdownContainer}>
@@ -34,7 +30,7 @@ export default function GroupTabDropdown({ onChange }) {
       >
         <Button
           buttonText={
-            ORIGIN_OPTION_LIST.find((item) => item.value === selectedTab).text
+            tabOptions.find((item) => item.value === selectedTab)?.text
           }
           textStyle={{
             color: '#FFF',
@@ -61,7 +57,6 @@ export default function GroupTabDropdown({ onChange }) {
                 className={styles.groupTabDropdownItem}
                 key={`groupTabDropdownItem_${key}`}
                 onClick={() => {
-                  setSelectedTab(item.value);
                   onChange(item.value);
                   setIsDropdownOpen(false);
                 }}

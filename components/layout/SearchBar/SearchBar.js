@@ -12,6 +12,7 @@ import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
 import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
 import TubIcon from '@components/icon/TubIcon/TubIcon';
 import Arrow from '@icon/Arrow/Arrow';
+import House from '@icon/House/House';
 import Remove from '@icon/Remove/Remove';
 import SearchIcon from '@icon/SearchIcon/SearchIcon';
 import { useQuery } from '@tanstack/react-query';
@@ -19,11 +20,18 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { find, join, map, propEq } from 'ramda';
+import URI from 'urijs';
 
 import styles from './SearchBar.module.scss';
 
+const ORIGIN_OPTION_LIST = [
+  { text: '租房子', value: 'rent', icon: House },
+  { text: '買房子', value: 'buy', icon: House },
+  { text: '新建案', value: 'new', icon: House },
+];
+
 const SearchBar = (props) => {
-  const { isFixed } = props;
+  const { isFixed, isOpen, setIsOpen, setIsUserCollapsed } = props;
 
   const router = useRouter();
 
@@ -57,9 +65,8 @@ const SearchBar = (props) => {
     initialData: [],
   });
 
+  // 篩選條件 state
   const [selectedTab, setSelectedTab] = useState('rent');
-  const [isOpen, setIsOpen] = useState(true);
-  const [userToggled, setUserToggled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [rentMax, setRentMax] = useState(120100);
   const [rentMin, setRentMin] = useState(4000);
@@ -71,11 +78,10 @@ const SearchBar = (props) => {
   const [livingRoomCount, setLivingRoomCount] = useState(0);
   const [bathroomCount, setBathroomCount] = useState(0);
   const [balconyCount, setBalconyCount] = useState(0);
-
-  const timeoutRef = useRef(null);
+  const [city, setCity] = useState({ id: 1, displayName: '台北市' });
+  const [input, setInput] = useState('');
 
   const mapRef = useRef(null);
-  const [city, setCity] = useState({ id: 1, displayName: '台北市' });
 
   const initMap = () => {
     const TWlocation = { lat: 25.033, lng: 121.5654 };
@@ -91,33 +97,27 @@ const SearchBar = (props) => {
     });
   };
 
-  const handleScroll = () => {
-    if (window.scrollY > 1069 && !userToggled && isOpen) {
-      // 419+108= 527+542=1069
-      setIsOpen(false);
-    }
-
-    if (window.scrollY <= 1069 && !userToggled && !isOpen) {
-      setIsOpen(true);
-    }
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev);
+    setIsUserCollapsed(true); // Disable auto collapse when user interacts
   };
+
+  // const handleScroll = () => {
+  //   if (window.scrollY > 1069 && isOpen) {
+  //     // 419+108= 527+542=1069
+  //     setIsOpen(false);
+  //   }
+
+  //   if (window.scrollY <= 1069 && !isOpen) {
+  //     setIsOpen(true);
+  //   }
+  // };
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.google && isOpen) {
       initMap();
     }
   }, [isOpen]);
-
-  const toggleCollapse = () => {
-    setIsOpen(!isOpen);
-    setUserToggled(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setUserToggled(false);
-    }, 3000); // 3秒後重置userToggled
-  };
 
   const getCategoriesApi = async () => {
     const response = await axios.get('https://jzj-api.zeabur.app/categories');
@@ -141,12 +141,12 @@ const SearchBar = (props) => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
   const getCategoriesDropdownDisplayName = () => {
     const displayNameList = map(
@@ -192,12 +192,46 @@ const SearchBar = (props) => {
     return layoutInfo.length > 0 ? layoutInfo.join(' / ') : '';
   };
 
+  const onSearch = () => {
+    let pageSearchUrl = URI('/Search').query({
+      selectedTab,
+      id: city.id,
+      displayName: city.displayName,
+      categories,
+    });
+
+    // 租
+    if (selectedTab === 'rent') {
+      if (balconyCount > 1) pageSearchUrl.addQuery({ balconyCount });
+      if (bathroomCount > 1) pageSearchUrl.addQuery({ bathroomCount });
+      if (livingRoomCount > 1) pageSearchUrl.addQuery({ livingRoomCount });
+      if (roomCount > 1) pageSearchUrl.addQuery({ roomCount });
+      if (livingRoomCount > 1) pageSearchUrl.addQuery({ livingRoomCount });
+      if (rentMin >= 5000) pageSearchUrl.addQuery({ rentMin });
+      if (rentMax <= 120000) pageSearchUrl.addQuery({ rentMax });
+    }
+
+    // 買
+    if (selectedTab === 'buy') {
+      if (singleMin >= 20) pageSearchUrl.addQuery({ singleMin });
+      if (singleMax <= 200) pageSearchUrl.addQuery({ singleMax });
+      if (squareMin >= 1) pageSearchUrl.addQuery({ squareMin });
+      if (squareMax <= 150) pageSearchUrl.addQuery({ squareMax });
+    }
+
+    router.push(pageSearchUrl.toString());
+  };
+
   return (
     <div className={styles.search} data-fixed={isFixed ? 'fixed' : ''}>
       {isOpen ? (
         <>
           <div className={styles.searchHeader}>
-            <GroupTab onChange={(value) => setSelectedTab(value)} />
+            <GroupTab
+              selectedTab={selectedTab}
+              tabOptions={ORIGIN_OPTION_LIST}
+              onChange={(value) => setSelectedTab(value)}
+            />
             <div className={styles.buttonArea}>
               <Button
                 buttonText="縮小篩選"
@@ -215,7 +249,9 @@ const SearchBar = (props) => {
                   padding: '8px 16px 8px 16px',
                   gap: '8px',
                 }}
-                action={() => toggleCollapse()}
+                action={() => {
+                  toggleOpen();
+                }}
               />
               <Button
                 buttonText="篩選更多"
@@ -269,7 +305,7 @@ const SearchBar = (props) => {
               }}
               icon={<SearchIcon color="#FFFFFF" />}
               iconPosition="left"
-              action={() => router.push('/Search')}
+              action={() => onSearch()}
             />
           </div>
           <div className={styles.dropdownBar}>
@@ -443,7 +479,11 @@ const SearchBar = (props) => {
       ) : (
         <>
           <div className={styles.stickySearchBar}>
-            <GroupTabDropdown onChange={(value) => setSelectedTab(value)} />
+            <GroupTabDropdown
+              selectedTab={selectedTab}
+              tabOptions={ORIGIN_OPTION_LIST}
+              onChange={(value) => setSelectedTab(value)}
+            />
             <div className={styles.group}>
               <div className={styles.cityDropdown}>
                 <Dropdown
@@ -473,7 +513,7 @@ const SearchBar = (props) => {
                 }}
                 icon={<SearchIcon color="#FFFFFF" />}
                 iconPosition="left"
-                action={() => router.push('/Search')}
+                action={() => onSearch()}
               />
             </div>
             <Button
@@ -499,7 +539,12 @@ const SearchBar = (props) => {
                 padding: '8px 16px 8px 16px',
                 gap: '8px',
               }}
-              action={() => toggleCollapse()}
+              action={() => {
+                toggleOpen();
+
+                window.scrollTo({ top: 527 });
+                // if (window.scrollY > 527) window.scrollTo({ top: 527 });
+              }}
             />
             <Button
               buttonText="篩選更多"
