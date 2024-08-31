@@ -13,12 +13,12 @@ export default function GroupTabDropdown({
     <div className={styles.groupTabContainer}>
       {tabOptions.map((item, key) => {
         const ItemIcon = item.icon;
-        const isSelectedTab = item.value === selectedTab;
+        const isSelectedTab = item.id === selectedTab;
 
         return (
           <Button
             key={`groupTabDropdownItem_${key}`}
-            buttonText={item.text}
+            buttonText={item.displayName}
             textStyle={{ color: isSelectedTab ? '#FFFFFF' : '#CCCCCC' }}
             buttonStyle={{
               backgroundColor: isSelectedTab ? '#FF8E26' : '',
@@ -28,7 +28,7 @@ export default function GroupTabDropdown({
             icon={<ItemIcon color={isSelectedTab ? '#FFFFFF' : '#CCCCCC'} />}
             iconPosition="left"
             action={() => {
-              onChange(item.value);
+              onChange(item.id);
             }}
           />
         );

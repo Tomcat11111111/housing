@@ -75,6 +75,17 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
         </p>
       </>,
     ],
+    [
+      'year',
+      <>
+        <p className={styles.price}>
+          <span>{showMin}</span>年
+        </p>
+        <p className={styles.price}>
+          <span>{showMax}</span>年
+        </p>
+      </>,
+    ],
   ]);
 
   return <div className={styles.unitBox}>{sliderUnitMap.get(type)}</div>;

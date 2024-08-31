@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '@components/common/Button/Button';
 import Counter from '@components/common/Counter/Counter';
@@ -12,6 +12,7 @@ import Reload from '@components/icon/Reload/Reload';
 import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
 import TubIcon from '@components/icon/TubIcon/TubIcon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { find, propEq } from 'ramda';
 
 import FilterCheckbox from './FilterCheckbox';
 import FilterGroup from './FilterGroup';
@@ -36,6 +37,7 @@ export default function Sidebar({
   setIsSideBarOpen,
   total,
   city,
+  selectedTab,
 }) {
   const queryClient = useQueryClient();
   // const {} = originfilterParams;
@@ -54,7 +56,22 @@ export default function Sidebar({
   const [livingRoomCount, setLivingRoomCount] = useState(0);
   const [bathroomCount, setBathroomCount] = useState(0);
   const [balconyCount, setBalconyCount] = useState(0);
-  const [rent, setRent] = useState([200, 500]);
+  const [rentMax, setRentMax] = useState(120100);
+  const [rentMin, setRentMin] = useState(4000);
+  const [floorMax, setFloorMax] = useState(20);
+  const [floorMin, setFloorMin] = useState(1);
+  const [totalMax, setTotalMax] = useState(5000);
+  const [totalMin, setTotalMin] = useState(200);
+  const [squareMax, setSquareMax] = useState(150);
+  const [squareMin, setSquareMin] = useState(1);
+  const [singleMax, setSingleMax] = useState(205);
+  const [singleMin, setSingleMin] = useState(15);
+  const [yearMax, setYearMax] = useState(60);
+  const [yearMin, setYearMin] = useState(0);
+  const [facing, setfacing] = useState([]);
+  const [live, setLive] = useState([]);
+  const [source, setSource] = useState([]);
+  const [parking, setParking] = useState([]);
 
   const checkBoxValueChange = (id, checked, selectedOptions, setFunction) => {
     if (!checked) {
@@ -67,10 +84,10 @@ export default function Sidebar({
   };
 
   const { data: cityDistrictOptions } = useQuery({
-    queryKey: ['getCityDistrictApi', city],
+    queryKey: ['getCityDistrictApi', city.id],
     queryFn: getCityDistrictApi,
     meta: {
-      city,
+      city: city.id,
     },
     initialData: [],
   });
@@ -137,7 +154,7 @@ export default function Sidebar({
 
   const getFilterParams = () => {
     const tempParams = {
-      districtId: district,
+      districtIds: district,
     };
 
     if (categories.length > 0) {
@@ -212,16 +229,6 @@ export default function Sidebar({
           <span className={styles.searchNumber}>{total}</span>
           <div className={styles.result}>個結果</div>
         </div>
-        <div class="slidecontainer">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value="50"
-            class="slider"
-            id="myRange"
-          />
-        </div>
         <Button
           buttonText="收起 篩選器"
           buttonStyle={{
@@ -240,9 +247,10 @@ export default function Sidebar({
           <div className={styles.filterDropdownGroup}>
             <div className={styles.filterDropdown}>
               <Dropdown
-                optionList={[{ displayName: '按鄉鎮', value: '按鄉鎮' }]}
+                optionList={[{ displayName: '按鄉鎮', id: '按鄉鎮' }]}
                 dropdownType="menu"
                 value="按鄉鎮"
+                displayName="按鄉鎮"
                 onChange={() => {}}
               />
             </div>
@@ -252,6 +260,9 @@ export default function Sidebar({
                 value={district}
                 dropdownType="menu"
                 onChange={(value) => setDistrict(value)}
+                displayName={
+                  find(propEq(district, 'id'))(cityDistrictOptions)?.displayName
+                }
               />
             </div>
           </div>
@@ -265,18 +276,56 @@ export default function Sidebar({
             }}
           />
         </FilterGroup>
-        <FilterGroup title="單月租金">
-          <div>
-            <RangeSlider
-              min={500}
-              max={1000}
-              step={100}
-              values={rent}
-              setValues={setRent}
-              type="money"
-            />
-          </div>
-        </FilterGroup>
+        {selectedTab === 'rent' && (
+          <FilterGroup title="單月租金">
+            <div>
+              <RangeSlider
+                rangeMax={120000}
+                rangeMin={5000}
+                step={1000}
+                min={rentMin}
+                max={rentMax}
+                onChange={(values) => {
+                  setRentMin(values[0]);
+                  setRentMax(values[1]);
+                }}
+                type="money"
+              />
+            </div>
+          </FilterGroup>
+        )}
+        {selectedTab === 'buy' && (
+          <>
+            <FilterGroup title="總售價">
+              <RangeSlider
+                rangeMax={5000}
+                rangeMin={200}
+                step={25}
+                min={totalMin}
+                max={totalMax}
+                onChange={(values) => {
+                  setTotalMin(values[0]);
+                  setTotalMax(values[1]);
+                }}
+                type="totalPrice"
+              />
+            </FilterGroup>
+            <FilterGroup title="單坪售價">
+              <RangeSlider
+                rangeMax={205}
+                rangeMin={15}
+                step={5}
+                min={singleMin}
+                max={singleMax}
+                onChange={(values) => {
+                  setSingleMin(values[0]);
+                  setSingleMax(values[1]);
+                }}
+                type="perSquare"
+              />
+            </FilterGroup>
+          </>
+        )}
         <FilterGroup title="物件格局" filterType="layout">
           <div className={styles.counterGroup}>
             <div className={styles.counter}>
@@ -313,18 +362,49 @@ export default function Sidebar({
             </div>
           </div>
         </FilterGroup>
-        <FilterGroup title="物件特色">
-          <FilterCheckbox
-            optionList={featuresOptions}
-            selectedOptions={features}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(id, isChecked, features, setFeatures);
-            }}
-          />
-        </FilterGroup>
+        {selectedTab === 'rent' && (
+          <FilterGroup title="物件特色">
+            <FilterCheckbox
+              optionList={featuresOptions}
+              selectedOptions={features}
+              onChange={(id, isChecked) => {
+                checkBoxValueChange(id, isChecked, features, setFeatures);
+              }}
+            />
+          </FilterGroup>
+        )}
         <FilterGroup title="物件樓層">
-          <div>{/* <RangeSlider /> */}</div>
+          <div>
+            <RangeSlider
+              rangeMax={20}
+              rangeMin={1}
+              step={1}
+              min={floorMin}
+              max={floorMax}
+              onChange={(values) => {
+                setFloorMin(values[0]);
+                setFloorMax(values[1]);
+              }}
+              type="floor"
+            />
+          </div>
         </FilterGroup>
+        {selectedTab === 'buy' && (
+          <FilterGroup title="權狀坪數">
+            <RangeSlider
+              rangeMax={150}
+              rangeMin={1}
+              step={1}
+              min={squareMin}
+              max={squareMax}
+              onChange={(values) => {
+                setSquareMin(values[0]);
+                setSquareMax(values[1]);
+              }}
+              type="square"
+            />
+          </FilterGroup>
+        )}
         <FilterGroup title="物件型態">
           <FilterCheckbox
             optionList={shapesOptions}
@@ -334,23 +414,54 @@ export default function Sidebar({
             }}
           />
         </FilterGroup>
-        <FilterGroup title="租金內含">
-          <FilterCheckbox
-            optionList={IncludedInRentOptions}
-            selectedOptions={includedInRents}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(
-                id,
-                isChecked,
-                includedInRents,
-                setIncludedInRents
-              );
-            }}
-          />
-        </FilterGroup>
-        <FilterGroup title="物件坪數">
-          <div>{/* <RangeSlider /> */}</div>
-        </FilterGroup>
+        {selectedTab === 'buy' && (
+          <FilterGroup title="物件屋齡">
+            <RangeSlider
+              rangeMax={60}
+              rangeMin={0}
+              step={1}
+              min={yearMin}
+              max={yearMax}
+              onChange={(values) => {
+                setYearMin(values[0]);
+                setYearMax(values[1]);
+              }}
+              type="year"
+            />
+          </FilterGroup>
+        )}
+        {selectedTab === 'rent' && (
+          <FilterGroup title="租金內含">
+            <FilterCheckbox
+              optionList={IncludedInRentOptions}
+              selectedOptions={includedInRents}
+              onChange={(id, isChecked) => {
+                checkBoxValueChange(
+                  id,
+                  isChecked,
+                  includedInRents,
+                  setIncludedInRents
+                );
+              }}
+            />
+          </FilterGroup>
+        )}
+        {selectedTab === 'rent' && (
+          <FilterGroup title="物件坪數">
+            <RangeSlider
+              rangeMax={150}
+              rangeMin={1}
+              step={1}
+              min={squareMin}
+              max={squareMax}
+              onChange={(values) => {
+                setSquareMin(values[0]);
+                setSquareMax(values[1]);
+              }}
+              type="square"
+            />
+          </FilterGroup>
+        )}
         <FilterGroup title="裝潢程度">
           <FilterCheckbox
             optionList={decorLevelsOptions}
@@ -360,42 +471,86 @@ export default function Sidebar({
             }}
           />
         </FilterGroup>
-        <FilterGroup title="提供設備">
-          <FilterCheckbox
-            optionList={equipmentOptions}
-            selectedOptions={equipments}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(id, isChecked, equipments, setEquipments);
-            }}
-          />
-        </FilterGroup>
-        <FilterGroup title="提供家具">
-          <FilterCheckbox
-            optionList={furnitureOptions}
-            selectedOptions={furnitures}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(id, isChecked, furnitures, setFurnitures);
-            }}
-          />
-        </FilterGroup>
-        <FilterGroup title="隔間材質">
-          <FilterCheckbox
-            optionList={materialsOptions}
-            selectedOptions={materials}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(id, isChecked, materials, setMaterials);
-            }}
-          />
-        </FilterGroup>
-        <FilterGroup title="租屋規則">
-          <FilterCheckbox
-            optionList={rulesOptions}
-            selectedOptions={rules}
-            onChange={(id, isChecked) => {
-              checkBoxValueChange(id, isChecked, rules, setRules);
-            }}
-          />
-        </FilterGroup>
+        {selectedTab === 'rent' && (
+          <>
+            <FilterGroup title="提供設備">
+              <FilterCheckbox
+                optionList={equipmentOptions}
+                selectedOptions={equipments}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, equipments, setEquipments);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="提供家具">
+              <FilterCheckbox
+                optionList={furnitureOptions}
+                selectedOptions={furnitures}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, furnitures, setFurnitures);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="隔間材質">
+              <FilterCheckbox
+                optionList={materialsOptions}
+                selectedOptions={materials}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, materials, setMaterials);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="租屋規則">
+              <FilterCheckbox
+                optionList={rulesOptions}
+                selectedOptions={rules}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, rules, setRules);
+                }}
+              />
+            </FilterGroup>
+          </>
+        )}
+        {selectedTab === 'buy' && (
+          <>
+            <FilterGroup title="物件朝向">
+              <FilterCheckbox
+                optionList={equipmentOptions}
+                selectedOptions={equipments}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, equipments, setEquipments);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="生活機能">
+              <FilterCheckbox
+                optionList={furnitureOptions}
+                selectedOptions={furnitures}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, furnitures, setFurnitures);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="物件來源">
+              <FilterCheckbox
+                optionList={materialsOptions}
+                selectedOptions={materials}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, materials, setMaterials);
+                }}
+              />
+            </FilterGroup>
+            <FilterGroup title="車位形式">
+              <FilterCheckbox
+                optionList={rulesOptions}
+                selectedOptions={rules}
+                onChange={(id, isChecked) => {
+                  checkBoxValueChange(id, isChecked, rules, setRules);
+                }}
+              />
+            </FilterGroup>
+          </>
+        )}
       </div>
       <div className={styles.sideBarFooter}>
         <Button

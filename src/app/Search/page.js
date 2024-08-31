@@ -10,91 +10,106 @@ import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { find, propEq, sort } from 'ramda';
 
 import styles from './Search.module.scss';
 import Sidebar from './Sidebar';
 
 const FILTER_DROPDOWN_LIST = [
-  { value: '預設', displayName: '預設' },
-  { value: '金額 大到小', displayName: '金額 大到小' },
-  { value: '金額 小到大', displayName: '金額 小到大' },
-  { value: '坪數 大到小', displayName: '坪數 大到小' },
-  { value: '坪數 小到大', displayName: '坪數 小到大' },
-  { value: '刊登時間 新到舊', displayName: '刊登時間 新到舊' },
-  { value: '刊登時間 舊到新', displayName: '刊登時間 舊到新' },
+  { id: '', displayName: '預設' },
+  { id: '-price', displayName: '金額 大到小' },
+  { id: '+price', displayName: '金額 小到大' },
+  { id: '-squareMeters', displayName: '坪數 大到小' },
+  { id: '+squareMeters', displayName: '坪數 小到大' },
+  { id: '-createdAt', displayName: '刊登時間 新到舊' },
+  { id: '+createdAt', displayName: '刊登時間 舊到新' },
 ];
 
 const ORIGIN_OPTION_LIST = [
-  { text: '租房子', value: 'rent', icon: House },
-  { text: '買房子', value: 'buy', icon: House },
-  { text: '新建案', value: 'new', icon: House },
+  { displayName: '租房子', id: 'rent', icon: House },
+  { displayName: '買房子', id: 'buy', icon: House },
+  { displayName: '新建案', id: 'new', icon: House },
 ];
 
+const getOriginFilterParams = (searchParams, setFilterParams) => {
+  let tempParams = {};
+  if (searchParams.get('selectedTab')) {
+    tempParams.selectedTab = searchParams.get('selectedTab');
+  }
+
+  setFilterParams((prev) => ({
+    ...prev,
+    ...tempParams,
+  }));
+};
+
 const defaultFilterParams = {
-  cityId: 1,
+  city: { id: 1, displayName: '台北市' },
+  cityIds: 2,
   districtId: 1,
   limit: 10,
-  // categoryIds: [],
-  // minMonthlyRent: 0,
-  // maxMonthlyRent: 0,
-  // room: 0,
-  // livingRoom: 0,
-  // bathroom: 0,
-  // balcony: 0,
-  // featureIds: [],
-  // minFloor: 0,
-  // maxFloor: 0,
-  // shapeIds: [],
-  // minSquareMeters: 0,
-  // maxSquareMeters: 0,
-  // decorLevelIds: [],
-  // materialIds: [],
-  // ruleIds: [],
+  categoryIds: [],
+  minMonthlyRent: 0,
+  maxMonthlyRent: 0,
+  room: 0,
+  livingRoom: 0,
+  bathroom: 0,
+  balcony: 0,
+  featureIds: [],
+  minFloor: 0,
+  maxFloor: 0,
+  shapeIds: [],
+  minSquareMeters: 0,
+  maxSquareMeters: 0,
+  decorLevelIds: [],
+  materialIds: [],
+  ruleIds: [],
 };
 
 export default function Search() {
+  const searchParams = useSearchParams();
+
   const [selectedTab, setSelectedTab] = useState('rent');
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
-  const [filterOption, setFilterOption] = useState('預設');
-  const [cardWidth, setCardWidth] = useState();
+  const [filterOption, setFilterOption] = useState('');
+  const [cardWidth, setCardWidth] = useState(null);
 
   const cardListRef = useRef(null);
 
-  useEffect(() => {
-    const calculateCardNum = () => {
-      const cardListWidth = cardListRef.current?.offsetWidth;
-      const cardNum = Math.floor((cardListWidth + 16) / 286);
+  const calculateCardNum = () => {
+    const cardListWidth = cardListRef.current?.offsetWidth;
+    const cardNum = Math.floor((cardListWidth + 16) / 286);
 
-      setCardWidth((cardListWidth - (cardNum - 1) * 16) / cardNum);
-    };
+    setCardWidth((cardListWidth - (cardNum - 1) * 16) / cardNum);
+  };
+
+  useEffect(() => {
+    calculateCardNum();
 
     window.addEventListener('resize', calculateCardNum);
-
-    calculateCardNum();
 
     return () => {
       window.removeEventListener('resize', calculateCardNum);
     };
-  }, [isSideBarOpen]);
+  });
 
   const getRentPropertiesApi = async (data) => {
     try {
       const reponse = await axios.get(
         'https://jzj-api.zeabur.app/properties/for-rent',
         {
-          params: { ...data.meta },
+          params: { ...data.meta, sort: filterOption },
         }
       );
 
       return reponse.data;
-    } catch (error) {
-      console.log(error.message ?? 'Get RentProperties failed');
-    }
+    } catch (error) {}
   };
 
   const formatCardData = (reponse) => {
-    const { total = 0, data = [] } = reponse;
+    const { total, data = [] } = reponse;
     const formatData = data.map((item) => ({
       ...item.property,
       price: item.price,
@@ -107,7 +122,7 @@ export default function Search() {
   };
 
   const { data: queryResult, isFetching } = useQuery({
-    queryKey: ['getRentPropertiesApi', filterParams],
+    queryKey: ['getRentPropertiesApi', filterParams, filterOption],
     queryFn: getRentPropertiesApi,
     select: formatCardData,
     meta: filterParams,
@@ -117,18 +132,20 @@ export default function Search() {
     },
   });
 
-  // console.log('🚀 ~ filterParams:', filterParams);
-  // console.log('🚀 ~ queryResult:', queryResult);
+  useEffect(() => {
+    getOriginFilterParams(searchParams, setFilterParams);
+  }, [searchParams]);
 
   return (
     <div>
       <div className={styles.header}>
         <HeaderWithSearch
           headerType="white"
-          city={filterParams.cityId}
-          onCityChange={(value) =>
-            setFilterParams({ ...filterParams, cityId: value })
-          }
+          city={filterParams.city}
+          onCityChange={(city) => {
+            console.log('city', city);
+            setFilterParams({ ...filterParams, city: city, cityIds: city.id });
+          }}
           selectedTab={selectedTab}
           tabOptions={ORIGIN_OPTION_LIST}
           onChange={(value) => setSelectedTab(value)}
@@ -140,9 +157,10 @@ export default function Search() {
             isSideBarOpen={isSideBarOpen}
             setIsSideBarOpen={setIsSideBarOpen}
             total={queryResult?.total}
-            city={filterParams.cityId}
+            city={filterParams.city}
             originFilterParams={filterParams}
             setFilterParams={setFilterParams}
+            selectedTab={selectedTab}
           />
         )}
         <div className={styles.listContainer}>
@@ -180,7 +198,11 @@ export default function Search() {
                 dropdownType="menu"
                 optionList={FILTER_DROPDOWN_LIST}
                 value={filterOption}
-                onChange={(item) => setFilterOption(item.value)}
+                onChange={(id) => setFilterOption(id)}
+                displayName={
+                  find(propEq(filterOption, 'id'))(FILTER_DROPDOWN_LIST)
+                    ?.displayName
+                }
               />
             </div>
           </div>

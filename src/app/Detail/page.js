@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import Button from '@common/Button/Button';
 import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
@@ -10,38 +10,42 @@ import Footer from '@layout/Footer/Footer';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 
 import styles from './Detail.module.scss';
 
 const ORIGIN_OPTION_LIST = [
-  { text: '租房子', value: 'rent', icon: House },
-  { text: '買房子', value: 'buy', icon: House },
-  { text: '新建案', value: 'new', icon: House },
+  { displayName: '租房子', id: 'rent', icon: House },
+  { displayName: '買房子', id: 'buy', icon: House },
+  { displayName: '新建案', id: 'new', icon: House },
 ];
 
 export default function Detail() {
-  // const url = new URL(window.location.href);
-  // const [propertyId, setPropertyId] = useState(url.searchParams.get('id'));
-  // console.log('🚀 ~ Detail ~ propertyId:', propertyId);
+  const searchParams = useSearchParams();
 
+  const [propertyId, setPropertyId] = useState('');
   const [cityId, setCityId] = useState(1);
   const [selectedTab, setSelectedTab] = useState('rent');
 
   const getDetailApi = async () => {
     const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/for-rent/`
+      `https://jzj-api.zeabur.app/properties/for-rent/${propertyId}`
     );
     return response.data;
   };
 
-  // const { data } = useQuery({
-  //   queryKey: ['detail'],
-  //   queryFn: getDetailApi,
-  // });
+  const { data: propertyData } = useQuery({
+    queryKey: ['detail'],
+    queryFn: getDetailApi,
+    enabled: !!propertyId,
+  });
 
-  // console.log('🚀 ~ data:', data);
+  useEffect(() => {
+    setPropertyId(searchParams.get('id'));
+  }, [searchParams]);
+
   return (
-    <>
+    <Suspense>
       <div className={styles.header}>
         <HeaderWithSearch
           headerType="white"
@@ -119,6 +123,6 @@ export default function Detail() {
         </section>
       </div>
       <Footer />
-    </>
+    </Suspense>
   );
 }

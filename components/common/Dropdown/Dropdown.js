@@ -19,7 +19,6 @@ const Dropdown = (props) => {
     optionList = [],
     displayName = '',
   } = props;
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);

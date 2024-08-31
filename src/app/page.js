@@ -32,7 +32,6 @@ export default function Home() {
 
   //   // 419+108= 527+542=1069
   //   const fixedHeight = isOpen ? 1069 : 633;
-  //   console.log('🚀 ~ handleScroll ~ fixedHeight:', fixedHeight);
 
   //   if (window.scrollY > fixedHeight) {
   //     // 元件下方，isFixed:true，isOpen:false
@@ -48,7 +47,6 @@ export default function Home() {
   // };
 
   // useEffect(() => {
-  //   console.log('🚀 ~ handleScroll ~ isOpen:', isOpen);
 
   //   window.addEventListener('scroll', handleScroll);
   //   return () => {
@@ -65,7 +63,6 @@ export default function Home() {
     }
 
     const fixedHeight = isOpen ? 1069 : 633;
-    console.log('🚀 ~ handleScroll ~ fixedHeight:', fixedHeight);
 
     if (window.scrollY > fixedHeight) {
       // fixed區域
