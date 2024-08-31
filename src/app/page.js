@@ -20,39 +20,6 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const [isUserCollapsed, setIsUserCollapsed] = useState(false);
-
-  // const handleScroll = () => {
-  //   //400+19+110
-  //   if (window.scrollY > 529) {
-  //     setHeaderType('white');
-  //   } else {
-  //     setHeaderType('default');
-  //   }
-
-  //   // 419+108= 527+542=1069
-  //   const fixedHeight = isOpen ? 1069 : 633;
-
-  //   if (window.scrollY > fixedHeight) {
-  //     // 元件下方，isFixed:true，isOpen:false
-  //     setIsFixed(true);
-
-  //     setIsOpen(false);
-  //   } else {
-  //     // 元件上方，isFixed:false，isOpen:true
-  //     setIsFixed(false);
-
-  //     setIsOpen(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
 
   const handleScroll = useCallback(() => {
     // Adjusting based on scroll position
@@ -62,19 +29,14 @@ export default function Home() {
       setHeaderType('default');
     }
 
-    const fixedHeight = isOpen ? 1069 : 633;
-
-    if (window.scrollY > fixedHeight) {
+    if (window.scrollY > 1069) {
       // fixed區域
       if (!isFixed) setIsFixed(true);
       if (isOpen) setIsOpen(false);
-      setIsUserCollapsed(false);
     } else {
       // 不fixed區域
       if (isFixed) setIsFixed(false);
-      if (!isUserCollapsed) setIsOpen(true);
-
-      // if (!isOpen) setIsOpen(true);
+      if (!isOpen) setIsOpen(true);
     }
   }, [isOpen]);
 
@@ -94,14 +56,25 @@ export default function Home() {
 
   const getRecommendationsApi = async () => {
     const response = await axios.get(
-      'https://jzj-api.zeabur.app/recommendations/7a01f65e-7fc3-47b7-983e-3ec2fcad4cff' // 先寫死熱門物件ID
+      'https://jzj-api.zeabur.app/properties/for-rent?limit=4&offset=0&sort=-views' // 先寫租的
     );
     return response.data;
   };
 
-  const { data: recommendationsData } = useQuery({
+  const formatCardData = (reponse) => {
+    const { data = [] } = reponse;
+    const formatData = data.map((item) => ({
+      ...item.property,
+      price: item.price,
+    }));
+
+    return formatData;
+  };
+
+  const { data: recommendationsList } = useQuery({
     queryKey: ['getRecommendationsData'],
     queryFn: getRecommendationsApi,
+    select: formatCardData,
     initialData: [],
   });
 
@@ -168,17 +141,11 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        {isFixed && <div style={{ height: isOpen ? '524px' : '88px' }}></div>}
-        {/* {isFixed && <div style={{ height: '524px' }}></div>} */}
-        <SearchBar
-          isFixed={isFixed}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          setIsUserCollapsed={setIsUserCollapsed}
-        />
+        {isFixed && <div style={{ height: '524px' }}></div>}
+        <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
-            <span>{recommendationsData?.title}</span>
+            <span>熱門物件</span>
             <Button
               buttonText="瀏覽更多"
               buttonType="transparent"
@@ -197,11 +164,11 @@ export default function Home() {
               }}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsData?.properties} />
+          <CardCarouselBox cardItemList={recommendationsList} />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
-            <span>{recommendationsData?.title}</span>
+            <span>熱門物件</span>
             <Button
               buttonText="瀏覽更多"
               buttonType="transparent"
@@ -220,7 +187,7 @@ export default function Home() {
               }}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsData?.properties} />
+          <CardCarouselBox cardItemList={recommendationsList} />
         </div>
       </div>
       <Footer />

@@ -31,7 +31,7 @@ const ORIGIN_OPTION_LIST = [
 ];
 
 const SearchBar = (props) => {
-  const { isFixed, isOpen, setIsOpen, setIsUserCollapsed } = props;
+  const { isFixed, isOpen, setIsOpen } = props;
 
   const router = useRouter();
 
@@ -99,7 +99,6 @@ const SearchBar = (props) => {
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev);
-    setIsUserCollapsed(true); // Disable auto collapse when user interacts
   };
 
   // const handleScroll = () => {
@@ -249,9 +248,7 @@ const SearchBar = (props) => {
                   padding: '8px 16px 8px 16px',
                   gap: '8px',
                 }}
-                action={() => {
-                  toggleOpen();
-                }}
+                action={() => setIsOpen((prev) => !prev)}
               /> */}
               <Button
                 buttonText="篩選更多"
@@ -540,10 +537,8 @@ const SearchBar = (props) => {
                 gap: '8px',
               }}
               action={() => {
-                toggleOpen();
-
+                setIsOpen((prev) => !prev);
                 window.scrollTo({ top: 527 });
-                // if (window.scrollY > 527) window.scrollTo({ top: 527 });
               }}
             />
             <Button

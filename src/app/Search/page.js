@@ -46,7 +46,7 @@ const getOriginFilterParams = (searchParams, setFilterParams) => {
 
 const defaultFilterParams = {
   city: { id: 1, displayName: '台北市' },
-  cityIds: 2,
+  cityIds: 1,
   districtId: 1,
   limit: 10,
   categoryIds: [],
@@ -142,10 +142,9 @@ export default function Search() {
         <HeaderWithSearch
           headerType="white"
           city={filterParams.city}
-          onCityChange={(city) => {
-            console.log('city', city);
-            setFilterParams({ ...filterParams, city: city, cityIds: city.id });
-          }}
+          onCityChange={(city) =>
+            setFilterParams({ ...filterParams, city: city, cityIds: city.id })
+          }
           selectedTab={selectedTab}
           tabOptions={ORIGIN_OPTION_LIST}
           onChange={(value) => setSelectedTab(value)}

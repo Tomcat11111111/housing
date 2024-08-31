@@ -18,6 +18,9 @@ import FilterCheckbox from './FilterCheckbox';
 import FilterGroup from './FilterGroup';
 import styles from './Sidebar.module.scss';
 import {
+  DIRECTION_OPTIONS,
+  PARKING_SPACE_OPTIONS,
+  SOURCE_OPTIONS,
   getCategoriesApi,
   getCityDistrictApi,
   getDecorLevelsApi,
@@ -28,6 +31,7 @@ import {
   getMaterialsApi,
   getRulesApi,
   getShapesApi,
+  getSurroundingsApi,
 } from './SidebarHelper';
 
 export default function Sidebar({
@@ -68,10 +72,10 @@ export default function Sidebar({
   const [singleMin, setSingleMin] = useState(15);
   const [yearMax, setYearMax] = useState(60);
   const [yearMin, setYearMin] = useState(0);
-  const [facing, setfacing] = useState([]);
-  const [live, setLive] = useState([]);
-  const [source, setSource] = useState([]);
-  const [parking, setParking] = useState([]);
+  const [directions, setDirections] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [parkingSpaces, setParkingSpaces] = useState([]);
+  const [surroundings, setSurroundings] = useState([]);
 
   const checkBoxValueChange = (id, checked, selectedOptions, setFunction) => {
     if (!checked) {
@@ -107,6 +111,7 @@ export default function Sidebar({
   // 物件特色
   const { data: featuresOptions } = useQuery({
     queryKey: ['getFeaturesApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getFeaturesApi,
   });
 
@@ -117,8 +122,9 @@ export default function Sidebar({
   });
 
   // 租金內含
-  const { data: IncludedInRentOptions } = useQuery({
+  const { data: includedInRentOptions } = useQuery({
     queryKey: ['getIncludedInRentApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getIncludedInRentApi,
   });
 
@@ -131,25 +137,36 @@ export default function Sidebar({
   // 提供設備
   const { data: equipmentOptions } = useQuery({
     queryKey: ['getEquipmentApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getEquipmentApi,
   });
 
   // 提供家具
   const { data: furnitureOptions } = useQuery({
     queryKey: ['getFurnitureApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getFurnitureApi,
   });
 
   // 隔間材質
   const { data: materialsOptions } = useQuery({
     queryKey: ['getMaterialsApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getMaterialsApi,
   });
 
   // 租屋規則
   const { data: rulesOptions } = useQuery({
     queryKey: ['getRulesApi'],
+    enabled: selectedTab === 'rent',
     queryFn: getRulesApi,
+  });
+
+  // 生活機能
+  const { data: surroundingsOptions } = useQuery({
+    queryKey: ['getSurroundingsApi'],
+    enabled: selectedTab === 'buy',
+    queryFn: getSurroundingsApi,
   });
 
   const getFilterParams = () => {
@@ -207,6 +224,22 @@ export default function Sidebar({
 
     if (balconyCount > 0) {
       tempParams.balcony = balconyCount;
+    }
+
+    if (directions.length > 0) {
+      tempParams.directions = directions;
+    }
+
+    if (sources.length > 0) {
+      tempParams.sources = sources;
+    }
+
+    if (parkingSpaces.length > 0) {
+      tempParams.parkingSpaces = parkingSpaces;
+    }
+
+    if (surroundings.length > 0) {
+      tempParams.surroundingIds = surroundings;
     }
 
     setFilterParams((prev) => ({
@@ -433,7 +466,7 @@ export default function Sidebar({
         {selectedTab === 'rent' && (
           <FilterGroup title="租金內含">
             <FilterCheckbox
-              optionList={IncludedInRentOptions}
+              optionList={includedInRentOptions}
               selectedOptions={includedInRents}
               onChange={(id, isChecked) => {
                 checkBoxValueChange(
@@ -515,37 +548,47 @@ export default function Sidebar({
           <>
             <FilterGroup title="物件朝向">
               <FilterCheckbox
-                optionList={equipmentOptions}
-                selectedOptions={equipments}
+                optionList={DIRECTION_OPTIONS}
+                selectedOptions={directions}
                 onChange={(id, isChecked) => {
-                  checkBoxValueChange(id, isChecked, equipments, setEquipments);
+                  checkBoxValueChange(id, isChecked, directions, setDirections);
                 }}
               />
             </FilterGroup>
             <FilterGroup title="生活機能">
               <FilterCheckbox
-                optionList={furnitureOptions}
-                selectedOptions={furnitures}
+                optionList={surroundingsOptions}
+                selectedOptions={surroundings}
                 onChange={(id, isChecked) => {
-                  checkBoxValueChange(id, isChecked, furnitures, setFurnitures);
+                  checkBoxValueChange(
+                    id,
+                    isChecked,
+                    surroundings,
+                    setSurroundings
+                  );
                 }}
               />
             </FilterGroup>
             <FilterGroup title="物件來源">
               <FilterCheckbox
-                optionList={materialsOptions}
-                selectedOptions={materials}
+                optionList={SOURCE_OPTIONS}
+                selectedOptions={sources}
                 onChange={(id, isChecked) => {
-                  checkBoxValueChange(id, isChecked, materials, setMaterials);
+                  checkBoxValueChange(id, isChecked, sources, setSources);
                 }}
               />
             </FilterGroup>
             <FilterGroup title="車位形式">
               <FilterCheckbox
-                optionList={rulesOptions}
-                selectedOptions={rules}
+                optionList={PARKING_SPACE_OPTIONS}
+                selectedOptions={parkingSpaces}
                 onChange={(id, isChecked) => {
-                  checkBoxValueChange(id, isChecked, rules, setRules);
+                  checkBoxValueChange(
+                    id,
+                    isChecked,
+                    parkingSpaces,
+                    setParkingSpaces
+                  );
                 }}
               />
             </FilterGroup>
