@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-
 import styles from './CitySelector.module.scss';
 
 const CitySelector = ({

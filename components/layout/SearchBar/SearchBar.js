@@ -25,9 +25,9 @@ import URI from 'urijs';
 import styles from './SearchBar.module.scss';
 
 const ORIGIN_OPTION_LIST = [
-  { text: '租房子', value: 'rent', icon: House },
-  { text: '買房子', value: 'buy', icon: House },
-  { text: '新建案', value: 'new', icon: House },
+  { displayName: '租房子', id: 'rent', icon: House },
+  { displayName: '買房子', id: 'buy', icon: House },
+  { displayName: '新建案', id: 'new', icon: House },
 ];
 
 const SearchBar = (props) => {
@@ -233,7 +233,7 @@ const SearchBar = (props) => {
               onChange={(value) => setSelectedTab(value)}
             />
             <div className={styles.buttonArea}>
-              <Button
+              {/* <Button
                 buttonText="縮小篩選"
                 buttonType="transparent"
                 iconPosition="left"
@@ -252,7 +252,7 @@ const SearchBar = (props) => {
                 action={() => {
                   toggleOpen();
                 }}
-              />
+              /> */}
               <Button
                 buttonText="篩選更多"
                 buttonType="transparent"

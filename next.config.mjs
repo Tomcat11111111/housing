@@ -4,6 +4,9 @@ const nextConfig = {
   assetPrefix: '/housing/',
   images: { unoptimized: true },
   reactStrictMode: true,
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 export default nextConfig;

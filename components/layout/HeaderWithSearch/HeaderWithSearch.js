@@ -7,6 +7,8 @@ import GroupTabDropdown from '@components/common/GroupTabDropdown/GroupTabDropdo
 import Input from '@components/common/Input/Input';
 import Logo from '@components/common/Logo/Logo';
 import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import Image from 'next/image';
 
 import styles from './HeaderWithSearch.module.scss';
@@ -21,6 +23,36 @@ const HeaderWithSearch = ({
   tabOptions,
   onChange,
 }) => {
+  const getCitiesApi = async () => {
+    const regionData = [];
+    const response = await axios.get(
+      'https://jzj-api.zeabur.app/locations/cities'
+    );
+
+    response.data.forEach((city) => {
+      const regionGroup = regionData.find(
+        (region) => region.name === city.region
+      );
+
+      if (regionGroup) {
+        regionGroup.cities.push(city);
+      } else {
+        regionData.push({
+          name: city.region,
+          cities: [city],
+        });
+      }
+    });
+
+    return regionData;
+  };
+
+  const { data: citiesOptions } = useQuery({
+    queryKey: ['getCitiesApi'],
+    queryFn: getCitiesApi,
+    initialData: [],
+  });
+
   return (
     <header
       className={styles.header}
@@ -38,9 +70,11 @@ const HeaderWithSearch = ({
       <div className={styles.searchArea}>
         <Dropdown
           isHasNoBorder
-          value={city}
-          dropdownType="county"
+          value={city.id}
+          dropdownType="city"
+          optionList={citiesOptions}
           onChange={(key) => onCityChange(key)}
+          displayName={city.displayName}
         />
         <div className={styles.searchInput}>
           <Input

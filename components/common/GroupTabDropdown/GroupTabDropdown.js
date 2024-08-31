@@ -11,15 +11,15 @@ export default function GroupTabDropdown({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [optionList, setOptionList] = useState(
-    tabOptions.filter((item) => item.value !== selectedTab)
+    tabOptions.filter((item) => item.id !== selectedTab)
   );
 
   useEffect(() => {
-    setOptionList(tabOptions.filter((item) => item.value !== selectedTab));
+    setOptionList(tabOptions.filter((item) => item.id !== selectedTab));
   }, [selectedTab]);
 
   const SelectedTabIcon = tabOptions.find(
-    (item) => item.value === selectedTab
+    (item) => item.id === selectedTab
   )?.icon;
 
   return (
@@ -30,7 +30,7 @@ export default function GroupTabDropdown({
       >
         <Button
           buttonText={
-            tabOptions.find((item) => item.value === selectedTab)?.text
+            tabOptions.find((item) => item.id === selectedTab)?.displayName
           }
           textStyle={{
             color: '#FFF',
@@ -57,12 +57,12 @@ export default function GroupTabDropdown({
                 className={styles.groupTabDropdownItem}
                 key={`groupTabDropdownItem_${key}`}
                 onClick={() => {
-                  onChange(item.value);
+                  onChange(item.id);
                   setIsDropdownOpen(false);
                 }}
               >
                 <ItemIcon color="#CCCCCC" />
-                <p>{item.text}</p>
+                <p>{item.displayName}</p>
               </div>
             );
           })}
