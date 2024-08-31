@@ -12,17 +12,17 @@ const CardCarouselBox = (props) => {
   // const sliderRef = useRef();
 
   return (
-    <div className={styles.cardCarouselBox}>
-      <div
-        className={styles.arrowBack}
-        //TODO: 補上carousel操作
-        // onClick={() => sliderRef.current.slickPrev()}
-      >
-        <ArrowBack />
-      </div>
-      <div className={styles.cardContainer}>
-        {cardItemList.length > 0 &&
-          cardItemList.map((itemData, index) => (
+    cardItemList.length > 0 && (
+      <div className={styles.cardCarouselBox}>
+        <div
+          className={styles.arrowBack}
+          //TODO: 補上carousel操作
+          // onClick={() => sliderRef.current.slickPrev()}
+        >
+          <ArrowBack />
+        </div>
+        <div className={styles.cardContainer}>
+          {cardItemList.map((itemData, index) => (
             <div className={styles.cardBox} key={index}>
               <ItemCard
                 itemData={itemData}
@@ -31,14 +31,15 @@ const CardCarouselBox = (props) => {
               />
             </div>
           ))}
+        </div>
+        <div
+          className={styles.arrowForward}
+          // onClick={() => sliderRef.current.slickNext()}
+        >
+          <ArrowForward />
+        </div>
       </div>
-      <div
-        className={styles.arrowForward}
-        // onClick={() => sliderRef.current.slickNext()}
-      >
-        <ArrowForward />
-      </div>
-    </div>
+    )
   );
 };
 
