@@ -5,12 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@components/common/Button/Button';
 import Dropdown from '@components/common/Dropdown/Dropdown';
 import ItemCard from '@components/common/ItemCard/ItemCard';
-import House from '@components/icon/House/House';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { find, propEq, sort } from 'ramda';
 
 import styles from './Search.module.scss';
@@ -26,14 +25,9 @@ const FILTER_DROPDOWN_LIST = [
   { id: '+createdAt', displayName: '刊登時間 舊到新' },
 ];
 
-const ORIGIN_OPTION_LIST = [
-  { displayName: '租房子', id: 'rent', icon: House },
-  { displayName: '買房子', id: 'buy', icon: House },
-  { displayName: '新建案', id: 'new', icon: House },
-];
-
 const getOriginFilterParams = (searchParams, setFilterParams) => {
   let tempParams = {};
+  console.log('🚀 ~ getOriginFilterParams ~ searchParams:', searchParams);
   if (searchParams.get('selectedTab')) {
     tempParams.selectedTab = searchParams.get('selectedTab');
   }
@@ -69,6 +63,18 @@ const defaultFilterParams = {
 
 export default function Search() {
   const searchParams = useSearchParams();
+
+  // console.log('🚀 ~ Search ~ searchParams:', searchParams);
+  // console.log(searchParams.get('selectedTab'));
+  // console.log(searchParams.getAll('selectedTab'));
+  // searchParams.keys().map((item) => {
+  //   console.log('🚀 ~ console.log ~ item:', item);
+  // });
+
+  // Display the keys
+  // for (const key of searchParams.keys()) {
+  //   console.log(key);
+  // }
 
   const [selectedTab, setSelectedTab] = useState('rent');
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
@@ -147,7 +153,6 @@ export default function Search() {
             setFilterParams({ ...filterParams, city: city, cityIds: city.id })
           }
           selectedTab={selectedTab}
-          tabOptions={ORIGIN_OPTION_LIST}
           onChange={(value) => setSelectedTab(value)}
           input={input}
           setInput={setInput}

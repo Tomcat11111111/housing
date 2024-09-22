@@ -2,26 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 
 import Button from '@common/Button/Button';
 import useOutSideClose from '@utils/hooks/useoutsideClose';
+import { ORIGIN_OPTION_LIST } from '@utils/tools';
 
 import styles from './GroupTabDropdown.module.scss';
 
-export default function GroupTabDropdown({
-  selectedTab,
-  tabOptions = [],
-  onChange,
-}) {
+export default function GroupTabDropdown({ selectedTab, onChange }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [optionList, setOptionList] = useState(
-    tabOptions.filter((item) => item.id !== selectedTab)
+    ORIGIN_OPTION_LIST.filter((item) => item.id !== selectedTab)
   );
 
   const groupTabRef = useRef(null);
 
   useEffect(() => {
-    setOptionList(tabOptions.filter((item) => item.id !== selectedTab));
+    setOptionList(ORIGIN_OPTION_LIST.filter((item) => item.id !== selectedTab));
   }, [selectedTab]);
 
-  const SelectedTabIcon = tabOptions.find(
+  const SelectedTabIcon = ORIGIN_OPTION_LIST.find(
     (item) => item.id === selectedTab
   )?.icon;
 
@@ -37,7 +34,8 @@ export default function GroupTabDropdown({
       >
         <Button
           buttonText={
-            tabOptions.find((item) => item.id === selectedTab)?.displayName
+            ORIGIN_OPTION_LIST.find((item) => item.id === selectedTab)
+              ?.displayName
           }
           textStyle={{
             color: '#FFF',
