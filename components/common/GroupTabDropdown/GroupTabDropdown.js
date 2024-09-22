@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Button from '@common/Button/Button';
+import useOutSideClose from '@utils/hooks/useoutsideClose';
 
 import styles from './GroupTabDropdown.module.scss';
 
@@ -14,6 +15,8 @@ export default function GroupTabDropdown({
     tabOptions.filter((item) => item.id !== selectedTab)
   );
 
+  const groupTabRef = useRef(null);
+
   useEffect(() => {
     setOptionList(tabOptions.filter((item) => item.id !== selectedTab));
   }, [selectedTab]);
@@ -22,8 +25,12 @@ export default function GroupTabDropdown({
     (item) => item.id === selectedTab
   )?.icon;
 
+  useOutSideClose(groupTabRef, () => {
+    setIsDropdownOpen(false);
+  });
+
   return (
-    <div className={styles.groupTabDropdownContainer}>
+    <div className={styles.groupTabDropdownContainer} ref={groupTabRef}>
       <div
         className={styles.groupTabDropdown}
         data-isopen={isDropdownOpen ? 'open' : ''}

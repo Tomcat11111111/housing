@@ -5,6 +5,7 @@ import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
 import BedIcon from '@icon/BedIcon/BedIcon';
 import CouchIcon from '@icon/CouchIcon/CouchIcon';
 import TubIcon from '@icon/TubIcon/TubIcon';
+import { getPriceStatusInfo } from '@utils/tools';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -12,60 +13,6 @@ import Arrow from '../../icon/Arrow/Arrow';
 import Carousel from '../Carousel/Carousel';
 import Tag from '../Tag/Tag';
 import styles from './ItemCard.module.scss';
-
-const PRICE_STATUS_MAP = new Map([
-  [
-    'above',
-    {
-      text: '略高於平均',
-      color: '#E85454',
-      icon: (
-        <Image
-          src="/housing/icon/trending_up.svg"
-          alt="trending_up"
-          width={20}
-          height={20}
-        />
-      ),
-    },
-  ],
-  [
-    'below',
-    {
-      text: '略低於平均',
-      color: '#52C32A',
-      icon: (
-        <Image
-          src="/housing/icon/trending_down.svg"
-          alt="trending_down"
-          width={20}
-          height={20}
-        />
-      ),
-    },
-  ],
-  [
-    'equal',
-    {
-      text: '等於平均',
-      color: '#FAAF1D',
-      icon: (
-        <Image
-          src="/housing/icon/trending_flat.svg"
-          alt="trending_flat"
-          width={20}
-          height={20}
-        />
-      ),
-    },
-  ],
-]);
-
-const getPriceStatusInfo = (price, average = 0) => {
-  if (price > average) return PRICE_STATUS_MAP.get('above');
-  if (price < average) return PRICE_STATUS_MAP.get('below');
-  if (price === average) return PRICE_STATUS_MAP.get('equal');
-};
 
 const ItemCard = (props) => {
   const { itemData, averagePrice, index } = props;

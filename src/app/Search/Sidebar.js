@@ -20,8 +20,9 @@ import styles from './Sidebar.module.scss';
 import {
   DIRECTION_OPTIONS,
   PARKING_SPACE_OPTIONS,
+  RENTAL_CATEGORIES,
+  SALES_CATEGORIES,
   SOURCE_OPTIONS,
-  getCategoriesApi,
   getCityDistrictApi,
   getDecorLevelsApi,
   getEquipmentApi,
@@ -35,7 +36,7 @@ import {
 } from './SidebarHelper';
 
 export default function Sidebar({
-  originfilterParams,
+  originFilterParams,
   setFilterParams,
   isSideBarOpen,
   setIsSideBarOpen,
@@ -101,12 +102,6 @@ export default function Sidebar({
       setDistrict(cityDistrictOptions[0].id);
     }
   }, [cityDistrictOptions]);
-
-  // 物件類型
-  const { data: categoriesOptions } = useQuery({
-    queryKey: ['getCategoriesApi'],
-    queryFn: getCategoriesApi,
-  });
 
   // 物件特色
   const { data: featuresOptions } = useQuery({
@@ -175,7 +170,7 @@ export default function Sidebar({
     };
 
     if (categories.length > 0) {
-      tempParams.categoryIds = categories;
+      tempParams.category = categories;
     }
 
     if (features.length > 0) {
@@ -302,7 +297,9 @@ export default function Sidebar({
         </FilterGroup>
         <FilterGroup title="物件類型">
           <FilterCheckbox
-            optionList={categoriesOptions}
+            optionList={
+              selectedTab === 'rent' ? RENTAL_CATEGORIES : SALES_CATEGORIES
+            }
             selectedOptions={categories}
             onChange={(id, isChecked) => {
               checkBoxValueChange(id, isChecked, categories, setCategories);

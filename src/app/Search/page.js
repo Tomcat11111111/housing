@@ -75,6 +75,7 @@ export default function Search() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
+  const [input, setInput] = useState('');
 
   const cardListRef = useRef(null);
 
@@ -100,7 +101,7 @@ export default function Search() {
       const reponse = await axios.get(
         'https://jzj-api.zeabur.app/properties/for-rent',
         {
-          params: { ...data.meta, sort: filterOption },
+          params: data.meta,
         }
       );
 
@@ -122,10 +123,10 @@ export default function Search() {
   };
 
   const { data: queryResult, isFetching } = useQuery({
-    queryKey: ['getRentPropertiesApi', filterParams, filterOption],
+    queryKey: ['getRentPropertiesApi', filterOption],
     queryFn: getRentPropertiesApi,
     select: formatCardData,
-    meta: filterParams,
+    meta: { ...filterParams, address: input, sort: filterOption },
     initialData: {
       total: 0,
       list: [],
@@ -148,20 +149,23 @@ export default function Search() {
           selectedTab={selectedTab}
           tabOptions={ORIGIN_OPTION_LIST}
           onChange={(value) => setSelectedTab(value)}
+          input={input}
+          setInput={setInput}
+          search={() => {}}
         />
       </div>
       <div className={styles.page}>
-        {isSideBarOpen && (
-          <Sidebar
-            isSideBarOpen={isSideBarOpen}
-            setIsSideBarOpen={setIsSideBarOpen}
-            total={queryResult?.total}
-            city={filterParams.city}
-            originFilterParams={filterParams}
-            setFilterParams={setFilterParams}
-            selectedTab={selectedTab}
-          />
-        )}
+        {/* {isSideBarOpen && ( */}
+        <Sidebar
+          isSideBarOpen={isSideBarOpen}
+          setIsSideBarOpen={setIsSideBarOpen}
+          total={queryResult?.total}
+          city={filterParams.city}
+          originFilterParams={filterParams}
+          setFilterParams={setFilterParams}
+          selectedTab={selectedTab}
+        />
+        {/* )} */}
         <div className={styles.listContainer}>
           <div className={styles.buttonArea}>
             {!isSideBarOpen && (
