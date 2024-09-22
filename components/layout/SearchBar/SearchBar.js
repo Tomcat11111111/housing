@@ -12,10 +12,10 @@ import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
 import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
 import TubIcon from '@components/icon/TubIcon/TubIcon';
 import Arrow from '@icon/Arrow/Arrow';
-import House from '@icon/House/House';
 import Remove from '@icon/Remove/Remove';
 import SearchIcon from '@icon/SearchIcon/SearchIcon';
 import { useQuery } from '@tanstack/react-query';
+import { RENTAL_CATEGORIES, SALES_CATEGORIES } from '@utils/tools';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -23,12 +23,6 @@ import { find, join, map, propEq } from 'ramda';
 import URI from 'urijs';
 
 import styles from './SearchBar.module.scss';
-
-const ORIGIN_OPTION_LIST = [
-  { displayName: '租房子', id: 'rent', icon: House },
-  { displayName: '買房子', id: 'buy', icon: House },
-  { displayName: '新建案', id: 'new', icon: House },
-];
 
 const SearchBar = (props) => {
   const { isFixed, isOpen, setIsOpen } = props;
@@ -118,19 +112,6 @@ const SearchBar = (props) => {
   //   }
   // }, [isOpen]);
 
-  // TODO:替換成前端
-  const getCategoriesApi = async () => {
-    const response = await axios.get('https://jzj-api.zeabur.app/categories');
-    return response.data;
-  };
-
-  // 物件類型
-  const { data: categoriesOptions } = useQuery({
-    queryKey: ['getCategoriesApi'],
-    queryFn: getCategoriesApi,
-    enabled: isOpen,
-  });
-
   const checkBoxValueChange = (id, checked, selectedOptions, setFunction) => {
     if (!checked) {
       // Add the option to the selected options array
@@ -147,6 +128,9 @@ const SearchBar = (props) => {
   //     window.removeEventListener('scroll', handleScroll);
   //   };
   // }, []);
+
+  const categoriesOptions =
+    selectedTab === 'rent' ? RENTAL_CATEGORIES : SALES_CATEGORIES;
 
   const getCategoriesDropdownDisplayName = () => {
     const displayNameList = map(
@@ -229,7 +213,6 @@ const SearchBar = (props) => {
           <div className={styles.searchHeader}>
             <GroupTab
               selectedTab={selectedTab}
-              tabOptions={ORIGIN_OPTION_LIST}
               onChange={(value) => setSelectedTab(value)}
             />
             <div className={styles.buttonArea}>
@@ -479,7 +462,6 @@ const SearchBar = (props) => {
           <div className={styles.stickySearchBar}>
             <GroupTabDropdown
               selectedTab={selectedTab}
-              tabOptions={ORIGIN_OPTION_LIST}
               onChange={(value) => setSelectedTab(value)}
             />
             <div className={styles.group}>

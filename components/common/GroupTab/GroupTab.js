@@ -1,17 +1,12 @@
-import { useState } from 'react';
-
 import Button from '@common/Button/Button';
+import { ORIGIN_OPTION_LIST } from '@utils/tools';
 
 import styles from './GroupTab.module.scss';
 
-export default function GroupTabDropdown({
-  selectedTab,
-  tabOptions,
-  onChange,
-}) {
+export default function GroupTabDropdown({ selectedTab, onChange }) {
   return (
     <div className={styles.groupTabContainer}>
-      {tabOptions.map((item, key) => {
+      {ORIGIN_OPTION_LIST.map((item, key) => {
         const ItemIcon = item.icon;
         const isSelectedTab = item.id === selectedTab;
 

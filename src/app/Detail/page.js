@@ -9,7 +9,6 @@ import Tag from '@components/common/Tag/Tag';
 import Account from '@components/icon/Account/Account';
 import ArrowDropdownUp from '@components/icon/ArrowDropdownUp/ArrowDropdownUp';
 import Fire from '@components/icon/Fire/Fire';
-import House from '@components/icon/House/House';
 import Mail from '@components/icon/Mail/Mail';
 import Person from '@components/icon/Person/Person';
 import Phone from '@components/icon/Phone/Phone';
@@ -29,12 +28,6 @@ import { useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 
 import styles from './Detail.module.scss';
-
-const ORIGIN_OPTION_LIST = [
-  { displayName: '租房子', id: 'rent', icon: House },
-  { displayName: '買房子', id: 'buy', icon: House },
-  { displayName: '新建案', id: 'new', icon: House },
-];
 
 export default function Detail() {
   const searchParams = useSearchParams();
@@ -166,7 +159,6 @@ export default function Detail() {
           onCityChange={(value) => setCityId(value)}
           padding="0 172px"
           selectedTab={selectedTab}
-          tabOptions={ORIGIN_OPTION_LIST}
           onChange={(value) => setSelectedTab(value)}
         />
       </div>
@@ -232,7 +224,7 @@ export default function Detail() {
                 buttonText="收藏"
                 buttonType="transparent"
                 iconPosition="left"
-                icon={<BookmarkHollowIcon />}
+                icon={<BookmarkHollowIcon color="#333333" />}
                 textStyle={{
                   color: '#333',
                   fontSize: '14px',

@@ -12,17 +12,19 @@ import Reload from '@components/icon/Reload/Reload';
 import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
 import TubIcon from '@components/icon/TubIcon/TubIcon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { find, propEq } from 'ramda';
-
-import FilterCheckbox from './FilterCheckbox';
-import FilterGroup from './FilterGroup';
-import styles from './Sidebar.module.scss';
 import {
   DIRECTION_OPTIONS,
   PARKING_SPACE_OPTIONS,
   RENTAL_CATEGORIES,
   SALES_CATEGORIES,
   SOURCE_OPTIONS,
+} from '@utils/tools';
+import { find, propEq } from 'ramda';
+
+import FilterCheckbox from './FilterCheckbox';
+import FilterGroup from './FilterGroup';
+import styles from './Sidebar.module.scss';
+import {
   getCityDistrictApi,
   getDecorLevelsApi,
   getEquipmentApi,

@@ -12,6 +12,7 @@ import SearchBar from '@layout/SearchBar/SearchBar';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 
 import styles from './page.module.scss';
@@ -20,6 +21,8 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
+  const router = useRouter();
 
   const handleScroll = useCallback(() => {
     // Adjusting based on scroll position
@@ -162,6 +165,7 @@ export default function Home() {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
+              action={() => router.push('/Search')}
             />
           </div>
           <CardCarouselBox cardItemList={recommendationsList} />
@@ -185,6 +189,7 @@ export default function Home() {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
+              action={() => router.push('/Search')}
             />
           </div>
           <CardCarouselBox cardItemList={recommendationsList} />
