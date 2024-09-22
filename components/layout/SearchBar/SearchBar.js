@@ -83,19 +83,19 @@ const SearchBar = (props) => {
 
   const mapRef = useRef(null);
 
-  const initMap = () => {
-    const TWlocation = { lat: 25.033, lng: 121.5654 };
+  // const initMap = () => {
+  //   const TWlocation = { lat: 25.033, lng: 121.5654 };
 
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: 25.033, lng: 121.5654 },
-      zoom: 10,
-    });
+  //   const map = new window.google.maps.Map(mapRef.current, {
+  //     center: { lat: 25.033, lng: 121.5654 },
+  //     zoom: 10,
+  //   });
 
-    const markerTW = new google.maps.Marker({
-      position: TWlocation,
-      map: map,
-    });
-  };
+  //   const markerTW = new google.maps.Marker({
+  //     position: TWlocation,
+  //     map: map,
+  //   });
+  // };
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev);
@@ -112,12 +112,13 @@ const SearchBar = (props) => {
   //   }
   // };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.google && isOpen) {
-      initMap();
-    }
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined' && window.google && isOpen) {
+  //     initMap();
+  //   }
+  // }, [isOpen]);
 
+  // TODO:替換成前端
   const getCategoriesApi = async () => {
     const response = await axios.get('https://jzj-api.zeabur.app/categories');
     return response.data;
@@ -270,7 +271,7 @@ const SearchBar = (props) => {
               />
             </div>
           </div>
-          <div ref={mapRef} className={styles.mapFill} id="map"></div>
+          {/* <div ref={mapRef} className={styles.mapFill} id="map"></div> */}
           <div className={styles.searchBar}>
             <div className={styles.cityDropdown}>
               <Dropdown

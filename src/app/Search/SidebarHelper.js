@@ -1,9 +1,26 @@
 import axios from 'axios';
 
-export const getCategoriesApi = async () => {
-  const response = await axios.get('https://jzj-api.zeabur.app/categories');
-  return response.data;
-};
+export const SALES_CATEGORIES = [
+  { id: 'residential', displayName: '住宅' },
+  { id: 'suite', displayName: '套房' },
+  { id: 'parking_spot', displayName: '車位' },
+  { id: 'foreclosed_home', displayName: '法拍屋' },
+  { id: 'other', displayName: '其他' },
+];
+
+export const RENTAL_CATEGORIES = [
+  // {id: 'shared_suite', value: 'new', displayName: '分租套房'}
+  { id: 'shared_suite', displayName: '分租套房' },
+  { id: 'entire_home', displayName: '整層住家' },
+  { id: 'private_study', displayName: '獨立書房' },
+  { id: 'private_room', displayName: '雅房' },
+  { id: 'storefront', displayName: '店面' },
+  { id: 'live_work_space', displayName: '住辦' },
+  { id: 'factory_space', displayName: '廠房' },
+  { id: 'commercial_space', displayName: '商用' },
+  { id: 'parking_spot', displayName: '車位' },
+  { id: 'other', displayName: '其他' },
+];
 
 export const getFeaturesApi = async () => {
   const response = await axios.get('https://jzj-api.zeabur.app/features');

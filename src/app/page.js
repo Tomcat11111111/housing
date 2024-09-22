@@ -191,10 +191,10 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-      <Script
+      {/* <Script
         src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM&callback=initMap`}
         strategy="beforeInteractive"
-      />
+      /> */}
     </main>
   );
 }

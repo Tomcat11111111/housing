@@ -3,6 +3,7 @@
 }
 
 .groupTabDropdown {
+  width: 138px;
   &[data-isopen='open'] {
     position: relative;
     z-index: 3;

@@ -22,6 +22,8 @@ const HeaderWithSearch = ({
   selectedTab,
   tabOptions,
   onChange,
+  input,
+  setInput,
 }) => {
   const getCitiesApi = async () => {
     const regionData = [];
@@ -80,6 +82,8 @@ const HeaderWithSearch = ({
           <Input
             iconPosition="left"
             placeholder="請輸入地點/街道/社區或其他資訊"
+            input={input}
+            onChange={(value) => setInput(value)}
           />
         </div>
         <Button
