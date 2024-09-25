@@ -11,9 +11,10 @@ import BedIcon from '@components/icon/BedIcon/BedIcon';
 import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
 import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
 import TubIcon from '@components/icon/TubIcon/TubIcon';
-import Arrow from '@icon/Arrow/Arrow';
 import Remove from '@icon/Remove/Remove';
 import SearchIcon from '@icon/SearchIcon/SearchIcon';
+import SmallArrow from '@icon/SmallArrow/SmallArrow';
+import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
 import { RENTAL_CATEGORIES, SALES_CATEGORIES } from '@utils/tools';
 import axios from 'axios';
@@ -26,6 +27,10 @@ import styles from './SearchBar.module.scss';
 
 const SearchBar = (props) => {
   const { isFixed, isOpen, setIsOpen } = props;
+
+  const { selectedTab, setSelectedTab, setSearchBarParams, searchBarParams } =
+    useSearchStore();
+  console.log('🚀 ~ SearchBar ~ searchBarParams:', searchBarParams);
 
   const router = useRouter();
 
@@ -60,7 +65,6 @@ const SearchBar = (props) => {
   });
 
   // 篩選條件 state
-  const [selectedTab, setSelectedTab] = useState('rent');
   const [categories, setCategories] = useState([]);
   const [rentMax, setRentMax] = useState(120100);
   const [rentMin, setRentMin] = useState(4000);
@@ -74,6 +78,7 @@ const SearchBar = (props) => {
   const [balconyCount, setBalconyCount] = useState(0);
   const [city, setCity] = useState({ id: 1, displayName: '台北市' });
   const [input, setInput] = useState('');
+  console.log('🚀 ~ SearchBar ~ input:', input);
 
   const mapRef = useRef(null);
 
@@ -177,33 +182,41 @@ const SearchBar = (props) => {
   };
 
   const onSearch = () => {
-    let pageSearchUrl = URI('/Search').query({
-      selectedTab,
-      id: city.id,
-      displayName: city.displayName,
-      categories,
-    });
+    let tempSearchParams = {};
+    tempSearchParams = {
+      cityId: city.id,
+      city: city,
+      input: input,
+    };
 
-    // 租
+    if (categories.length > 0) {
+      tempSearchParams.categories = categories;
+    }
     if (selectedTab === 'rent') {
-      if (balconyCount > 1) pageSearchUrl.addQuery({ balconyCount });
-      if (bathroomCount > 1) pageSearchUrl.addQuery({ bathroomCount });
-      if (livingRoomCount > 1) pageSearchUrl.addQuery({ livingRoomCount });
-      if (roomCount > 1) pageSearchUrl.addQuery({ roomCount });
-      if (livingRoomCount > 1) pageSearchUrl.addQuery({ livingRoomCount });
-      if (rentMin >= 5000) pageSearchUrl.addQuery({ rentMin });
-      if (rentMax <= 120000) pageSearchUrl.addQuery({ rentMax });
+      // 租
+      if (balconyCount > 1) tempSearchParams.balconyCount = balconyCount;
+      if (bathroomCount > 1) tempSearchParams.bathroomCount = bathroomCount;
+      if (livingRoomCount > 1) {
+        tempSearchParams.livingRoomCount = livingRoomCount;
+      }
+      if (roomCount > 1) tempSearchParams.roomCount = roomCount;
+      if (livingRoomCount > 1) {
+        tempSearchParams.livingRoomCount = livingRoomCount;
+      }
+      if (rentMin >= 5000) tempSearchParams.rentMin = rentMin;
+      if (rentMax <= 120000) tempSearchParams.rentMax = rentMax;
     }
 
     // 買
     if (selectedTab === 'buy') {
-      if (singleMin >= 20) pageSearchUrl.addQuery({ singleMin });
-      if (singleMax <= 200) pageSearchUrl.addQuery({ singleMax });
-      if (squareMin >= 1) pageSearchUrl.addQuery({ squareMin });
-      if (squareMax <= 150) pageSearchUrl.addQuery({ squareMax });
+      if (singleMin >= 20) tempSearchParams.singleMin = singleMin;
+      if (singleMax <= 200) tempSearchParams.singleMax = singleMax;
+      if (squareMin >= 1) tempSearchParams.squareMin = squareMin;
+      if (squareMax <= 150) tempSearchParams.squareMax = squareMax;
     }
 
-    router.push(pageSearchUrl.toString());
+    setSearchBarParams(tempSearchParams);
+    // router.push('/Search');
   };
 
   return (
@@ -238,7 +251,7 @@ const SearchBar = (props) => {
                 buttonText="篩選更多"
                 buttonType="transparent"
                 iconPosition="right"
-                icon={<Arrow />}
+                icon={<SmallArrow />}
                 textStyle={{
                   color: '#333',
                   fontSize: '14px',
@@ -280,7 +293,7 @@ const SearchBar = (props) => {
                 color: '#FFF',
               }}
               buttonStyle={{
-                backgroundColor: '#FF8E26',
+                backgroundColor: '#0936D8',
                 padding: '16px 22px 16px 16px',
                 gap: '8px',
               }}
@@ -479,6 +492,11 @@ const SearchBar = (props) => {
                 <Input
                   iconPosition="left"
                   placeholder="請輸入地點/街道/社區或其他資訊"
+                  input={input}
+                  onChange={(value) => {
+                    console.log('🚀 ~ SearchBar ~ value:', value);
+                    setInput(value);
+                  }}
                 />
               </div>
               <Button
@@ -487,7 +505,7 @@ const SearchBar = (props) => {
                   color: '#FFF',
                 }}
                 buttonStyle={{
-                  backgroundColor: '#FF8E26',
+                  backgroundColor: '#0936D8',
                   padding: '16px 22px 16px 16px',
                   gap: '8px',
                 }}
@@ -528,7 +546,7 @@ const SearchBar = (props) => {
               buttonText="篩選更多"
               buttonType="transparent"
               iconPosition="right"
-              icon={<Arrow />}
+              icon={<SmallArrow />}
               textStyle={{
                 color: '#333',
                 fontSize: '14px',

@@ -16,7 +16,7 @@ export default function GroupTabDropdown({ selectedTab, onChange }) {
             buttonText={item.displayName}
             textStyle={{ color: isSelectedTab ? '#FFFFFF' : '#CCCCCC' }}
             buttonStyle={{
-              backgroundColor: isSelectedTab ? '#FF8E26' : '',
+              backgroundColor: isSelectedTab ? '#0936D8' : '',
               padding: '8px 32px',
               gap: '8px',
             }}

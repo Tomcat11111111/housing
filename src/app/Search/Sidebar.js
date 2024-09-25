@@ -612,7 +612,7 @@ export default function Sidebar({
             width: '200px',
             borderRadius: '8px',
             padding: '16px',
-            background: '#FF8E26',
+            background: '#0936D8',
             boxShadow: '0px 2px 8px 0px rgba(99, 99, 99, 0.20)',
             justifyContent: 'center',
             gap: '8px',

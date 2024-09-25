@@ -8,20 +8,18 @@ export default function Checkbox({ text, id, isChecked, onChange = () => {} }) {
     <div
       className={styles.checkboxContainer}
       data-checked={isChecked ? 'checked' : ''}
+      onClick={() => {
+        onChange(id, isChecked);
+      }}
     >
       <p>{text}</p>
-      <div
-        className={styles.checkbox}
-        onClick={() => {
-          onChange(id, isChecked);
-        }}
-      >
+      <>
         {isChecked ? (
-          <CheckboxChecked color="#FF8E26" />
+          <CheckboxChecked color="#333333" />
         ) : (
-          <CheckboxIcon color="#CCCCCC" />
+          <CheckboxIcon color="#909090" />
         )}
-      </div>
+      </>
     </div>
   );
 }

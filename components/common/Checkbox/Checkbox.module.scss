@@ -3,12 +3,12 @@
   align-items: center;
   justify-content: space-between;
   font-size: 16px;
+  color: #909090;
+  cursor: pointer;
+  user-select: none;
 
   &[data-checked='checked'] {
-    color: #ff8e26;
+    color: #333333;
+    font-weight: 700;
   }
-}
-
-.checkbox {
-  cursor: pointer;
 }

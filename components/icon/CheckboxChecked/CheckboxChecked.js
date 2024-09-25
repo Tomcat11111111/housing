@@ -1,4 +1,4 @@
-const CheckboxChecked = () => {
+const CheckboxChecked = ({ color = '#333333' }) => {
   return (
     <div>
       <svg
@@ -12,7 +12,7 @@ const CheckboxChecked = () => {
           <path
             id="Vector"
             d="M21 3H3V21H21V3ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"
-            fill="#FF8E26"
+            fill={color}
           />
         </g>
         <defs>

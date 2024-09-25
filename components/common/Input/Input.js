@@ -7,8 +7,8 @@ const Input = (props) => {
     placeholder,
     isReadonly,
     inputWidth,
-    input,
-    onChange,
+    input = '',
+    onChange = () => {},
   } = props;
 
   return (
@@ -21,7 +21,9 @@ const Input = (props) => {
         style={{ width: inputWidth ? inputWidth : '100%' }}
         value={input}
         onChange={(e) => {
-          onChange(e.target.value);
+          console.log('🚀 ~ Input ~ e.target.value:', e.target.value);
+
+          onChange(input + e.target.value);
         }}
       />
       {iconPosition === 'right' ? icon : null}

@@ -1,4 +1,5 @@
-{"plugins": [
+{
+  "plugins": [
     "@trivago/prettier-plugin-sort-imports"
   ],
   "trailingComma": "es5",
@@ -8,6 +9,7 @@
     "^(^react$|@react|react)",
     "<THIRD_PARTY_MODULES>",
     "^@/components/(.*)$",
+    "^@/components/icon/(.*)$",
     "^@/store/(.*)$",
     "^@/utils/(.*)$",
     "^~/(.*)$",

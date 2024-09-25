@@ -7,6 +7,7 @@ import Logo from '@components/common/Logo/Logo';
 import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import Image from 'next/image';
 
 import styles from './HeaderWithSearch.module.scss';
 
@@ -57,7 +58,7 @@ const HeaderWithSearch = ({
       style={{ padding }}
     >
       <div className={styles.iconArea}>
-        <Logo />
+        <Logo size="small" />
         <GroupTabDropdown
           selectedTab={selectedTab}
           onChange={(value) => onChange(value)}
@@ -86,7 +87,7 @@ const HeaderWithSearch = ({
             color: '#FFF',
           }}
           buttonStyle={{
-            backgroundColor: '#FF8E26',
+            backgroundColor: '#0936D8',
             padding: '16px 22px 16px 16px',
             gap: '8px',
           }}

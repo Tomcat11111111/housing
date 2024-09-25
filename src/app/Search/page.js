@@ -6,6 +6,7 @@ import Button from '@components/common/Button/Button';
 import Dropdown from '@components/common/Dropdown/Dropdown';
 import ItemCard from '@components/common/ItemCard/ItemCard';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
+import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
@@ -27,6 +28,7 @@ const FILTER_DROPDOWN_LIST = [
 
 const getOriginFilterParams = (searchParams, setFilterParams) => {
   let tempParams = {};
+
   console.log('🚀 ~ getOriginFilterParams ~ searchParams:', searchParams);
   if (searchParams.get('selectedTab')) {
     tempParams.selectedTab = searchParams.get('selectedTab');
@@ -76,7 +78,9 @@ export default function Search() {
   //   console.log(key);
   // }
 
-  const [selectedTab, setSelectedTab] = useState('rent');
+  const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
+  console.log('🚀 ~ Search ~ searchBarParams:', searchBarParams);
+
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');

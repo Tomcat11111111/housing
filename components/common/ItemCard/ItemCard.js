@@ -40,7 +40,7 @@ const ItemCard = (props) => {
   const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
   const [isHovered, setIsHovered] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false); // TODO:接api的值，後續值更新時要去打api
+  // const [isBookmarked, setIsBookmarked] = useState(false);
   const cardRef = useRef();
 
   const getPropertyInfo = () => {
@@ -86,7 +86,7 @@ const ItemCard = (props) => {
             // height={182}
             fill
           />
-          <div className={styles.tagArea}>
+          {/* <div className={styles.tagArea}>
             <Tag
               textStyle={{ color: '#FFFFFF' }}
               tagColor="#386CFC"
@@ -99,7 +99,7 @@ const ItemCard = (props) => {
               text="拍賣"
               padding="6px 8px"
             />
-          </div>
+          </div> */}
           {isHovered && (
             <>
               <button className={`${styles.carouselControl} ${styles.prev}`}>
@@ -117,14 +117,14 @@ const ItemCard = (props) => {
               ))}
             </div>
           )}
-          {isHovered && (
+          {/* {isHovered && (
             <div className={styles.bookmark}>
               <Bookmark
                 isBookmarked={isBookmarked}
                 setIsBookmarked={setIsBookmarked}
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className={styles.cardInfo}>

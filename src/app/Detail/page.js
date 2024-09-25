@@ -15,29 +15,35 @@ import Phone from '@components/icon/Phone/Phone';
 import PhoneInTalk from '@components/icon/PhoneInTalk/PhoneInTalk';
 import Photo from '@components/icon/Photo/Photo';
 import Share from '@components/icon/Share/Share';
-import Arrow from '@icon/Arrow/Arrow';
 import ArrowDropdownDown from '@icon/ArrowDropdownDown/ArrowDropdownDown';
 import BookmarkHollowIcon from '@icon/BookmarkHollowIcon/BookmarkHollowIcon';
+import SmallArrow from '@icon/SmallArrow/SmallArrow';
 import Footer from '@layout/Footer/Footer';
 import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
+import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
 import { getPriceStatusInfo } from '@utils/tools';
 import axios from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Script from 'next/script';
+import { QRCodeCanvas } from 'qrcode.react';
 
 import styles from './Detail.module.scss';
+
+console.log('test');
 
 export default function Detail() {
   const searchParams = useSearchParams();
 
+  const { selectedTab, setSelectedTab } = useSearchStore();
+
   const [propertyId, setPropertyId] = useState('');
   const [cityId, setCityId] = useState({ id: 1, displayName: '台北市' });
-  const [selectedTab, setSelectedTab] = useState('rent');
   const [contactSwitch, setContactSwitch] = useState('book');
   const [collapse, setCollapse] = useState(true);
   const [gender, setGender] = useState('male');
+  const [qrcode, setQrcode] = useState(false);
 
   const getDetailApi = async () => {
     const response = await axios.get(
@@ -126,29 +132,47 @@ export default function Detail() {
     }
   });
 
-  const describeText = `🏠地址：大安區通化街171巷XX號4樓
-🏠建物型態：公寓 
-🏠坪數：15
-🏠格局：2房1廳1衛1陽台 
-🏠租金：28000 
-🏠電：5元/度
-🏠租金含:水費及網路 
-❌禁寵 
-🍀有電磁爐流理台 
-🍀獨立洗衣機
-🍀陽台可曬 
-🍀全室氣密窗 
-🚇信義安和站 
-❌🍀🚇🏠
---------------------------------------------------
-🔥同心不動產專員邱先生 
-🔥加LINE截圖詢問會比較快唷 
-👉租屋專線:☎️0905258257 
-👉LINE: @418hqlrk
----------------------------------------------------
-🔥秒殺物件
-✨釋出稀少
-✨把握機會👍🔥專業把關✨挑選屋況✨住的安心👍💥成交時會酌收一次性服務費💥🔥天氣好壞都誠地為您服務🔥`;
+  //   const describeText = `🏠地址：大安區通化街171巷XX號4樓
+  // 🏠建物型態：公寓
+  // 🏠坪數：15
+  // 🏠格局：2房1廳1衛1陽台
+  // 🏠租金：28000
+  // 🏠電：5元/度
+  // 🏠租金含:水費及網路
+  // ❌禁寵
+  // 🍀有電磁爐流理台
+  // 🍀獨立洗衣機
+  // 🍀陽台可曬
+  // 🍀全室氣密窗
+  // 🚇信義安和站
+  // ❌🍀🚇🏠
+  // --------------------------------------------------
+  // 🔥同心不動產專員邱先生
+  // 🔥加LINE截圖詢問會比較快唷
+  // 👉租屋專線:☎️0905258257
+  // 👉LINE: @418hqlrk
+  // ---------------------------------------------------
+  // 🔥秒殺物件
+  // ✨釋出稀少
+  // ✨把握機會👍🔥專業把關✨挑選屋況✨住的安心👍💥成交時會酌收一次性服務費💥🔥天氣好壞都誠地為您服務🔥`;
+
+  const describeText = `
+            <strong>
+                  tereretkopf
+                  <br />
+                  <br />
+                  XXXX
+                  <br />
+                  dqioedjoepq
+                  <br />
+                  grwklmfwk
+                  <br />
+                  dkelqwdmklwed
+                </strong>
+  `;
+
+  // Escape the HTML content
+  // const describeText = htmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   return (
     <Suspense>
@@ -343,7 +367,7 @@ export default function Detail() {
                   textStyle={{
                     color: '#FFFFFF',
                   }}
-                  tagColor="#FF8E26"
+                  tagColor="#0936D8"
                   padding="4px 8px"
                 />
                 <Tag
@@ -351,7 +375,7 @@ export default function Detail() {
                   textStyle={{
                     color: '#FFFFFF',
                   }}
-                  tagColor="#FF8E26"
+                  tagColor="#0936D8"
                   padding="4px 8px"
                 />
                 <Tag
@@ -359,7 +383,7 @@ export default function Detail() {
                   textStyle={{
                     color: '#FFFFFF',
                   }}
-                  tagColor="#FF8E26"
+                  tagColor="#0936D8"
                   padding="4px 8px"
                 />
                 <Tag
@@ -367,7 +391,7 @@ export default function Detail() {
                   textStyle={{
                     color: '#FFFFFF',
                   }}
-                  tagColor="#FF8E26"
+                  tagColor="#0936D8"
                   padding="4px 8px"
                 />
               </div> */}
@@ -579,9 +603,8 @@ export default function Detail() {
               <p
                 className={styles.describe}
                 data-collapse={collapse ? 'collapse' : ''}
-              >
-                {describeText}
-              </p>
+                dangerouslySetInnerHTML={{ __html: describeText }}
+              ></p>
               <div
                 style={{ position: 'relative' }}
                 onClick={() => {
@@ -649,7 +672,7 @@ export default function Detail() {
                         buttonText="先生"
                         buttonStyle={{
                           padding: '8px 16px',
-                          background: gender === 'male' ? '#FF8E26' : '',
+                          background: gender === 'male' ? '#0936D8' : '',
                         }}
                         textStyle={{
                           color: gender === 'male' ? '#FFF' : '#CCC',
@@ -660,7 +683,7 @@ export default function Detail() {
                         buttonText="小姐"
                         buttonStyle={{
                           padding: '8px 16px',
-                          background: gender === 'female' ? '#FF8E26' : '',
+                          background: gender === 'female' ? '#0936D8' : '',
                         }}
                         textStyle={{
                           color: gender === 'female' ? '#FFF' : '#CCC',
@@ -707,7 +730,7 @@ export default function Detail() {
                 }
                 buttonStyle={{
                   borderRadius: '8px',
-                  background: '#FF8E26',
+                  background: '#0936D8',
                   padding:
                     contactSwitch === 'book' ? '16px 128px' : '16px 84px',
                   gap: '8px',
@@ -720,7 +743,22 @@ export default function Detail() {
                 }}
                 iconPosition={contactSwitch === 'phone' ? 'left' : ''}
                 icon={<PhoneInTalk />}
+                action={() => {
+                  if (contactSwitch === 'phone') {
+                    setQrcode(true);
+                  }
+                }}
               />
+              {contactSwitch === 'phone' && qrcode && (
+                <QRCodeCanvas
+                  value={'tel:0923776003'}
+                  size={128} // Size of the QR code
+                  bgColor={'#ffffff'} // Background color
+                  fgColor={'#000000'} // Foreground color (QR code color)
+                  level={'L'} // Error correction level ('L', 'M', 'Q', 'H')
+                  includeMargin={false} // Add margin or not
+                />
+              )}
             </div>
             <div className={styles.view}>
               <Fire />
@@ -738,7 +776,7 @@ export default function Detail() {
               buttonText="瀏覽更多"
               buttonType="transparent"
               iconPosition="right"
-              icon={<Arrow />}
+              icon={<SmallArrow />}
               textStyle={{
                 color: '#333',
                 fontSize: '14px',
@@ -761,7 +799,7 @@ export default function Detail() {
               buttonText="瀏覽更多"
               buttonType="transparent"
               iconPosition="right"
-              icon={<Arrow />}
+              icon={<SmallArrow />}
               textStyle={{
                 color: '#333',
                 fontSize: '14px',

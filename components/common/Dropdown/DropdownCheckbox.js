@@ -11,13 +11,14 @@ const DropdownCheckbox = ({
     <div className={styles.checkboxSelector}>
       {optionList.map((item, key) => {
         return (
-          <Checkbox
-            text={item.displayName}
-            id={item.id}
-            isChecked={selectedOptions.includes(item.id)}
-            key={`checkbox_${key}`}
-            onChange={onChange}
-          />
+          <div key={`checkbox_${key}`} style={{ padding: '8px 0' }}>
+            <Checkbox
+              text={item.displayName}
+              id={item.id}
+              isChecked={selectedOptions.includes(item.id)}
+              onChange={onChange}
+            />
+          </div>
         );
       })}
     </div>

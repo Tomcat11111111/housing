@@ -1,5 +1,11 @@
-import { useRouter } from 'next/navigation';
+import People from '@components/icon/People/People';
+import Content from '@icon/Content/Content';
+import CustomerService from '@icon/CustomerService/CustomerService';
+import Info from '@icon/Info/Info';
+import Person from '@icon/Person/Person';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import styles from './Footer.module.scss';
 
 const Footer = () => {
@@ -12,12 +18,7 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image
-                  src="/housing/icon/info.png"
-                  alt="info"
-                  width={24}
-                  height={24}
-                />
+                <Info />
               </div>
               <span>關於我們</span>
             </div>
@@ -38,12 +39,7 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image
-                  src="/housing/icon/content.svg"
-                  alt="info"
-                  width={24}
-                  height={24}
-                />
+                <Content />
               </div>
               <span>網站導覽</span>
             </div>
@@ -59,12 +55,7 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image
-                  src="/housing/icon/person.svg"
-                  alt="person"
-                  width={24}
-                  height={24}
-                />
+                <Person color="#333333" />
               </div>
               <span>會員服務</span>
             </div>
@@ -76,12 +67,7 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image
-                  src="/housing/icon/people.svg"
-                  alt="people"
-                  width={24}
-                  height={24}
-                />
+                <People color="#333333" />
               </div>
               <span>合作提案</span>
             </div>
@@ -93,12 +79,7 @@ const Footer = () => {
           <div>
             <div className={styles.listTitle}>
               <div className={styles.linkIcon}>
-                <Image
-                  src="/housing/icon/cs.svg"
-                  alt="cs"
-                  width={24}
-                  height={24}
-                />
+                <CustomerService color="#333333" />
               </div>
               <span>客服中心</span>
             </div>

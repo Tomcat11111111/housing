@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Range } from 'react-range';
+import React from 'react';
+import { Range, getTrackBackground } from 'react-range';
 
 import styles from './RangeSlider.module.scss';
 
@@ -17,11 +17,11 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'money',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最低$
           <span>{getShowMoney(showMin)}</span>
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最高$
           <span>{getShowMoney(showMax)}</span>
         </p>
@@ -30,11 +30,11 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'totalPrice',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最低$
           <span>{getShowMoney(showMin)}</span>萬
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最高$
           <span>{getShowMoney(showMax)}</span>萬
         </p>
@@ -43,11 +43,11 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'perSquare',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最低$
           <span>{getShowMoney(showMin)}</span>萬/坪
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           最低$
           <span>{getShowMoney(showMax)}</span>萬/坪
         </p>
@@ -56,10 +56,10 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'floor',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMin}</span>層
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMax}</span>層
         </p>
       </>,
@@ -67,10 +67,10 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'square',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMin}</span>坪
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMax}</span>坪
         </p>
       </>,
@@ -78,10 +78,10 @@ const UnitBox = ({ max, min, rangeMax, rangeMin, type }) => {
     [
       'year',
       <>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMin}</span>年
         </p>
-        <p className={styles.price}>
+        <p className={styles.unit}>
           <span>{showMax}</span>年
         </p>
       </>,
@@ -100,6 +100,13 @@ const RangeSlider = ({
   onChange,
   type,
 }) => {
+  let bg = getTrackBackground({
+    values: [min, max],
+    colors: ['#E9E9E9', '#0936D8', '#E9E9E9'],
+    min: 0,
+    max: 100,
+  });
+  console.log('🚀 ~ bg:', bg);
   return (
     <div className={styles.container}>
       <Range
@@ -123,7 +130,12 @@ const RangeSlider = ({
               ...props.style,
               height: '1px',
               width: '100%',
-              backgroundColor: '#E9E9E9',
+              background: getTrackBackground({
+                values: [min, max],
+                colors: ['#E9E9E9', '#0936D8', '#E9E9E9'],
+                min: rangeMin,
+                max: rangeMax,
+              }),
             }}
           >
             {children}
@@ -138,7 +150,7 @@ const RangeSlider = ({
               width: '20px',
               backgroundColor: '#999',
               borderRadius: '37px',
-              border: '2px solid #FF8E26',
+              border: '2px solid #0936D8',
               background: '#FFF',
               boxShadow: '0px 0px 4px 0px rgba(0, 0, 0, 0.20)',
             }}
