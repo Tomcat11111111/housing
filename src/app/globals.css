@@ -17,7 +17,7 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: #333333;
   font-family: 'Montserrat';
   font-size: 14px;
   background-color: #f6f6f6;

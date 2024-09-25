@@ -26,13 +26,18 @@ export default function Counter({ text, Icon, count = 0, setCount }) {
     <div
       className={styles.counterContainer}
       ref={counterRef}
-      style={{ border: isHovered ? '1px solid #ff8e26' : null }}
+      style={{ border: isHovered || count > 0 ? '1px solid #333333' : null }}
     >
       <div
         className={styles.iconContainer}
-        style={{ color: isHovered ? '#ff8e26' : null }}
+        style={{ color: isHovered || count > 0 ? '#333333' : null }}
       >
-        <Icon {...{ color: isHovered ? '#ff8e26' : '#909090', size: '24px' }} />
+        <Icon
+          {...{
+            color: isHovered || count > 0 ? '#333333' : '#909090',
+            size: '24px',
+          }}
+        />
         <p>{text}</p>
       </div>
       <div className={styles.counterArea}>
@@ -47,7 +52,12 @@ export default function Counter({ text, Icon, count = 0, setCount }) {
         >
           -
         </button>
-        <span className={styles.counter}>{count === 0 ? '--' : count}</span>
+        <span
+          className={styles.counter}
+          style={{ color: count > 0 ? '#333333' : '#909090' }}
+        >
+          {count === 0 ? '--' : count}
+        </span>
         <button className={styles.button} onClick={() => setCount(count + 1)}>
           +
         </button>

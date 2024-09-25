@@ -5,7 +5,12 @@ import { useCallback, useEffect, useState } from 'react';
 import Button from '@common/Button/Button';
 import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
 import Carousel from '@common/Carousel/Carousel';
+import ArrowDropdownDown from '@components/icon/ArrowDropdownDown/ArrowDropdownDown';
+import ArrowDropdownUp from '@components/icon/ArrowDropdownUp/ArrowDropdownUp';
+import ArrowForward from '@components/icon/ArrowForward/ArrowForward';
 import Arrow from '@icon/Arrow/Arrow';
+import ArrowBack from '@icon/ArrowBack/ArrowBack';
+import SmallArrow from '@icon/SmallArrow/SmallArrow';
 import Footer from '@layout/Footer/Footer';
 import Header from '@layout/Header/Header';
 import SearchBar from '@layout/SearchBar/SearchBar';
@@ -26,13 +31,14 @@ export default function Home() {
 
   const handleScroll = useCallback(() => {
     // Adjusting based on scroll position
-    if (window.scrollY > 529) {
+    if (window.scrollY > 530) {
       setHeaderType('white');
     } else {
       setHeaderType('default');
     }
 
-    if (window.scrollY > 1069) {
+    // if (window.scrollY > 1069) {
+    if (window.scrollY > 761) {
       // fixed區域
       if (!isFixed) setIsFixed(true);
       if (isOpen) setIsOpen(false);
@@ -87,6 +93,12 @@ export default function Home() {
         <Header headerType={headerType} />
       </div>
       <div className={styles.page}>
+        {/* TODO:整理Arrow
+         <Arrow />
+        <ArrowBack />
+        <ArrowForward />
+        <ArrowDropdownDown />
+        <ArrowDropdownUp /> */}
         <div className={styles.carouselContainer}>
           <Carousel
             images={images}
@@ -144,7 +156,8 @@ export default function Home() {
             <Arrow />
           </div>
         </div>
-        {isFixed && <div style={{ height: '524px' }}></div>}
+        {/* {isFixed && <div style={{ height: '524px' }}></div>} */}
+        {isFixed && <div style={{ height: '237px' }}></div>}
         <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
@@ -153,7 +166,7 @@ export default function Home() {
               buttonText="瀏覽更多"
               buttonType="transparent"
               iconPosition="right"
-              icon={<Arrow />}
+              icon={<SmallArrow />}
               textStyle={{
                 color: '#333',
                 fontSize: '14px',
@@ -177,7 +190,7 @@ export default function Home() {
               buttonText="瀏覽更多"
               buttonType="transparent"
               iconPosition="right"
-              icon={<Arrow />}
+              icon={<SmallArrow />}
               textStyle={{
                 color: '#333',
                 fontSize: '14px',

@@ -14,7 +14,7 @@ const Header = ({ headerType = 'default' }) => {
     >
       <div className={styles.headerContent}>
         <div className={styles.iconArea}>
-          <Logo />
+          <Logo size="big" />
         </div>
         {headerType === 'white' && (
           <div className={styles.linkArea}>
@@ -27,28 +27,18 @@ const Header = ({ headerType = 'default' }) => {
           {headerType === 'default' && (
             <>
               <Button
-                buttonText="我有房子"
-                buttonType="orange"
-                textStyle={{ color: '#FFFFFF' }}
+                buttonText="在TOPRE上刊登物件"
+                textStyle={{ fontWeight: 600, lineHeight: '20px' }}
                 buttonStyle={{
-                  backgroundColor: '#FF8E26',
                   padding: '8px',
                 }}
-              />
-              <Button
-                buttonText="我有廣告"
-                buttonType="orange"
-                textStyle={{ color: '#FFFFFF' }}
-                buttonStyle={{
-                  backgroundColor: '#FF8E26',
-                  padding: '8px',
-                }}
+                buttonType="transparent"
               />
               <div className={styles.memberArea}>
-                <div>登入</div>
+                <div style={{ cursor: 'pointer' }}>登入</div>
                 <div>|</div>
-                <div style={{ fontWeight: 700 }}>註冊</div>
-                <Account />
+                <div style={{ cursor: 'pointer' }}>註冊</div>
+                <Account color="#0936D8" />
               </div>
             </>
           )}

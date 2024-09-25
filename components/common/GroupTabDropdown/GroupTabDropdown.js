@@ -41,7 +41,7 @@ export default function GroupTabDropdown({ selectedTab, onChange }) {
             color: '#FFF',
           }}
           buttonStyle={{
-            backgroundColor: '#FF8E26',
+            backgroundColor: '#0936D8',
             padding: '16px 32px',
             gap: '8px',
           }}
