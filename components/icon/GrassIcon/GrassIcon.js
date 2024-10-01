@@ -1,4 +1,4 @@
-export default function GrassIcon({ color = '#333333', size = '20' }) {
+export default function GrassIcon({ color = '#333333', size = 20 }) {
   return (
     <svg
       width={size}

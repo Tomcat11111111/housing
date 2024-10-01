@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import Bookmark from '@common/Bookmark/Bookmark';
-import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
-import BedIcon from '@icon/BedIcon/BedIcon';
-import CouchIcon from '@icon/CouchIcon/CouchIcon';
-import TubIcon from '@icon/TubIcon/TubIcon';
-import { getPriceStatusInfo } from '@utils/tools';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Arrow from '../../icon/Arrow/Arrow';
-import Carousel from '../Carousel/Carousel';
-import Tag from '../Tag/Tag';
+import Bookmark from '@/common/Bookmark/Bookmark';
+import Carousel from '@/common/Carousel/Carousel';
+import Tag from '@/common/Tag/Tag';
+
+import { getPriceStatusInfo } from '@/utils/tools';
+
+import Arrow from '@/icon/Arrow/Arrow';
+import BedIcon from '@/icon/BedIcon/BedIcon';
+import Clock from '@/icon/Clock/Clock';
+import CouchIcon from '@/icon/CouchIcon/CouchIcon';
+import Eye from '@/icon/Eye/Eye';
+import GrassIcon from '@/icon/GrassIcon/GrassIcon';
+import TubIcon from '@/icon/TubIcon/TubIcon';
+
 import styles from './ItemCard.module.scss';
 
 const ItemCard = (props) => {
@@ -22,30 +27,31 @@ const ItemCard = (props) => {
     title,
     views = 0,
     updatedAt = '',
-    district = '',
     squareMeters,
     floor,
     totalFloors,
     age,
-    room,
-    bathroom,
-    livingRoom,
-    balcony,
+    room = 0,
+    bathroom = 0,
+    livingRoom = 0,
+    balcony = 0,
     price = null,
     images = [],
+    location,
   } = itemData;
+  const { district } = location;
 
   const router = useRouter();
 
   const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
 
   const [isHovered, setIsHovered] = useState(false);
-  // const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const cardRef = useRef();
 
   const getPropertyInfo = () => {
     let result = '';
-    if (district) result += `${district} | `;
+    if (district.displayName) result += `${district.displayName} | `;
     if (squareMeters) result += `${squareMeters}坪 | `;
     if (age) result += `${age} | `;
     if (floor) result += `${floor}F/${totalFloors}F`;
@@ -69,6 +75,8 @@ const ItemCard = (props) => {
     }
   }, [cardRef]);
 
+  const cardColor = isHovered ? '#333' : '#666';
+
   return (
     <div
       className={styles.itemCard}
@@ -86,20 +94,22 @@ const ItemCard = (props) => {
             // height={182}
             fill
           />
-          {/* <div className={styles.tagArea}>
-            <Tag
-              textStyle={{ color: '#FFFFFF' }}
-              tagColor="#386CFC"
-              text="新建案"
-              padding="6px 8px"
-            />
-            <Tag
-              textStyle={{ color: '#FFFFFF' }}
-              tagColor="#386CFC"
-              text="拍賣"
-              padding="6px 8px"
-            />
-          </div> */}
+          {isHovered && (
+            <div className={styles.tagArea}>
+              <Tag
+                textStyle={{ color: '#FFFFFF' }}
+                tagColor="#386CFC"
+                text="新建案"
+                padding="6px 8px"
+              />
+              <Tag
+                textStyle={{ color: '#FFFFFF' }}
+                tagColor="#386CFC"
+                text="拍賣"
+                padding="6px 8px"
+              />
+            </div>
+          )}
           {isHovered && (
             <>
               <button className={`${styles.carouselControl} ${styles.prev}`}>
@@ -117,58 +127,51 @@ const ItemCard = (props) => {
               ))}
             </div>
           )}
-          {/* {isHovered && (
+          {isHovered && (
             <div className={styles.bookmark}>
               <Bookmark
                 isBookmarked={isBookmarked}
                 setIsBookmarked={setIsBookmarked}
               />
             </div>
-          )} */}
+          )}
         </div>
       </div>
       <div className={styles.cardInfo}>
-        <div className={styles.address}>{title}</div>
+        <div className={styles.address} style={{ color: cardColor }}>
+          {title}
+        </div>
+        {/* TODO:color */}
         <div className={styles.browse}>
           <Tag
             text={`${views}人瀏覽`}
-            icon={
-              <Image
-                src="/housing/icon/eye.svg"
-                alt="eye"
-                width={20}
-                height={20}
-              />
-            }
+            icon={<Eye />}
             gap="4px"
             iconPosition="left"
           />
           |
           <Tag
             text="10小時內更新"
-            icon={
-              <Image
-                src="/housing/icon/time.svg"
-                alt="time"
-                width={20}
-                height={20}
-              />
-            }
+            icon={<Clock />}
             gap="4px"
             iconPosition="left"
           />
         </div>
-        <div className={styles.propertyInfo}>{getPropertyInfo()}</div>
+        <div className={styles.propertyInfo} style={{ color: cardColor }}>
+          {getPropertyInfo()}
+        </div>
         <div className={styles.icon}>
           <Tag
+            tagColor={isHovered ? '#F6F6F6' : ''}
             text={room}
-            icon={<BedIcon />}
+            icon={<BedIcon color={cardColor} size={16} />}
             gap="8px"
-            padding="8px"
+            padding="4px 8px"
             iconPosition="left"
             borderColor="#F6F6F6"
+            borderRadius="4px"
             textStyle={{
-              color: '#333',
+              color: cardColor,
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -176,14 +179,16 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
+            tagColor={isHovered ? '#F6F6F6' : ''}
             text={livingRoom}
-            icon={<CouchIcon />}
+            icon={<CouchIcon color={cardColor} size={16} />}
             gap="8px"
-            padding="8px"
+            padding="4px 8px"
             iconPosition="left"
             borderColor="#F6F6F6"
+            borderRadius="4px"
             textStyle={{
-              color: '#333',
+              color: cardColor,
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -191,14 +196,16 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
+            tagColor={isHovered ? '#F6F6F6' : ''}
             text={bathroom}
-            icon={<TubIcon />}
+            icon={<TubIcon color={cardColor} size={16} />}
             gap="8px"
-            padding="8px"
+            padding="4px 8px"
             iconPosition="left"
             borderColor="#F6F6F6"
+            borderRadius="4px"
             textStyle={{
-              color: '#333',
+              color: cardColor,
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -206,14 +213,16 @@ const ItemCard = (props) => {
             }}
           />
           <Tag
+            tagColor={isHovered ? '#F6F6F6' : ''}
             text={balcony}
-            icon={<GrassIcon />}
+            icon={<GrassIcon color={cardColor} size={16} />}
             gap="8px"
-            padding="8px"
+            padding="4px 8px"
             iconPosition="left"
             borderColor="#F6F6F6"
+            borderRadius="4px"
             textStyle={{
-              color: '#333',
+              color: cardColor,
               fontSize: '12px',
               fontWeight: 700,
               lineHeight: '18px',
@@ -234,6 +243,7 @@ const ItemCard = (props) => {
           icon={priceStatusInfo?.icon}
           padding="8px 16px"
           gap="4px"
+          opacity={isHovered ? '' : 0.8}
         />
         {price && <span>{price.toLocaleString()}/月</span>}
       </div>

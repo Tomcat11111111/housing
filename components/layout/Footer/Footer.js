@@ -1,10 +1,12 @@
-import People from '@components/icon/People/People';
-import Content from '@icon/Content/Content';
-import CustomerService from '@icon/CustomerService/CustomerService';
-import Info from '@icon/Info/Info';
-import Person from '@icon/Person/Person';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+
+import People from '@/components/icon/People/People';
+
+import Content from '@/icon/Content/Content';
+import CustomerService from '@/icon/CustomerService/CustomerService';
+import Info from '@/icon/Info/Info';
+import Person from '@/icon/Person/Person';
 
 import styles from './Footer.module.scss';
 

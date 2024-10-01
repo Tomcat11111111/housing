@@ -3,10 +3,6 @@
   position: relative;
 }
 
-.headerContainer {
-  height: 80px;
-}
-
 // Page
 
 .page {
@@ -40,6 +36,10 @@
   padding: 16px 16px 16px 24px;
   align-items: center;
   flex-grow: 1;
+
+  &:hover {
+    background: #e9e9e9;
+  }
 }
 
 .cardLeft {

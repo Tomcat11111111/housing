@@ -1,4 +1,4 @@
-import BookmarkHollowIcon from '@icon/BookmarkHollowIcon/BookmarkHollowIcon';
+import BookmarkHollowIcon from '@/icon/BookmarkHollowIcon/BookmarkHollowIcon';
 
 export default function Bookmark({ isBookmarked, setIsBookmarked }) {
   const handleBookmark = (e) => {

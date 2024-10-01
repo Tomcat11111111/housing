@@ -1,4 +1,4 @@
-import Checkbox from '@common/Checkbox/Checkbox';
+import Checkbox from '@/common/Checkbox/Checkbox';
 
 import styles from './DropdownCheckbox.module.scss';
 

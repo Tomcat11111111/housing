@@ -106,7 +106,6 @@ const RangeSlider = ({
     min: 0,
     max: 100,
   });
-  console.log('🚀 ~ bg:', bg);
   return (
     <div className={styles.container}>
       <Range

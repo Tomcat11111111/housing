@@ -2,23 +2,26 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import Button from '@common/Button/Button';
-import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
-import Carousel from '@common/Carousel/Carousel';
-import ArrowDropdownDown from '@components/icon/ArrowDropdownDown/ArrowDropdownDown';
-import ArrowDropdownUp from '@components/icon/ArrowDropdownUp/ArrowDropdownUp';
-import ArrowForward from '@components/icon/ArrowForward/ArrowForward';
-import Arrow from '@icon/Arrow/Arrow';
-import ArrowBack from '@icon/ArrowBack/ArrowBack';
-import SmallArrow from '@icon/SmallArrow/SmallArrow';
-import Footer from '@layout/Footer/Footer';
-import Header from '@layout/Header/Header';
-import SearchBar from '@layout/SearchBar/SearchBar';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+
+import Button from '@/common/Button/Button';
+import CardCarouselBox from '@/common/CardCarouselBox/CardCarouselBox';
+import Carousel from '@/common/Carousel/Carousel';
+
+import Footer from '@/layout/Footer/Footer';
+import Header from '@/layout/Header/Header';
+import SearchBar from '@/layout/SearchBar/SearchBar';
+
+import Arrow from '@/icon/Arrow/Arrow';
+import ArrowBack from '@/icon/ArrowBack/ArrowBack';
+import ArrowDropdownDown from '@/icon/ArrowDropdownDown/ArrowDropdownDown';
+import ArrowDropdownUp from '@/icon/ArrowDropdownUp/ArrowDropdownUp';
+import ArrowForward from '@/icon/ArrowForward/ArrowForward';
+import SmallArrow from '@/icon/SmallArrow/SmallArrow';
 
 import styles from './page.module.scss';
 
@@ -89,9 +92,7 @@ export default function Home() {
 
   return (
     <main className={styles.basic}>
-      <div className={styles.headerContainer}>
-        <Header headerType={headerType} />
-      </div>
+      <Header headerType={headerType} />
       <div className={styles.page}>
         {/* TODO:整理Arrow
          <Arrow />
@@ -110,7 +111,12 @@ export default function Home() {
           />
         </div>
         <div className={styles.pageCardArea}>
-          <div className={styles.pageCard}>
+          <div
+            className={styles.pageCard}
+            onClick={() => {
+              router.push(`/auction`);
+            }}
+          >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
@@ -125,7 +131,12 @@ export default function Home() {
             </div>
             <Arrow />
           </div>
-          <div className={styles.pageCard}>
+          <div
+            className={styles.pageCard}
+            onClick={() => {
+              router.push(`/discount`);
+            }}
+          >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
@@ -140,7 +151,12 @@ export default function Home() {
             </div>
             <Arrow />
           </div>
-          <div className={styles.pageCard}>
+          <div
+            className={styles.pageCard}
+            onClick={() => {
+              router.push(`/flat`);
+            }}
+          >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Image
@@ -178,7 +194,7 @@ export default function Home() {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
-              action={() => router.push('/Search')}
+              action={() => router.push('/recommand')}
             />
           </div>
           <CardCarouselBox cardItemList={recommendationsList} />
@@ -202,7 +218,7 @@ export default function Home() {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
-              action={() => router.push('/Search')}
+              action={() => router.push('/recommand')}
             />
           </div>
           <CardCarouselBox cardItemList={recommendationsList} />

@@ -1,3 +1,7 @@
+.headerContainer {
+  height: 80px;
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -46,9 +50,11 @@
 }
 
 .buttonArea {
-  padding: 16px 0;
   display: flex;
-  gap: 16px;
+  padding: 16px 0;
+  gap: 4px;
+  min-width: 208px;
+  justify-content: end;
 }
 
 .button {
@@ -64,4 +70,9 @@
   align-items: center;
   gap: 12px;
   font-size: 14px;
+}
+
+.memberButton {
+  display: flex;
+  align-items: center;
 }

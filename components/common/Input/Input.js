@@ -21,8 +21,6 @@ const Input = (props) => {
         style={{ width: inputWidth ? inputWidth : '100%' }}
         value={input}
         onChange={(e) => {
-          console.log('🚀 ~ Input ~ e.target.value:', e.target.value);
-
           onChange(input + e.target.value);
         }}
       />

@@ -1,27 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '@common/Button/Button';
-import Dropdown from '@common/Dropdown/Dropdown';
-import GroupTab from '@common/GroupTab/GroupTab';
-import GroupTabDropdown from '@common/GroupTabDropdown/GroupTabDropdown';
-import Input from '@common/Input/Input';
-import RangeSlider from '@common/RangeSlider/RangeSlider';
-import Counter from '@components/common/Counter/Counter';
-import BedIcon from '@components/icon/BedIcon/BedIcon';
-import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
-import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
-import TubIcon from '@components/icon/TubIcon/TubIcon';
-import Remove from '@icon/Remove/Remove';
-import SearchIcon from '@icon/SearchIcon/SearchIcon';
-import SmallArrow from '@icon/SmallArrow/SmallArrow';
-import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
-import { RENTAL_CATEGORIES, SALES_CATEGORIES } from '@utils/tools';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { find, join, map, propEq } from 'ramda';
 import URI from 'urijs';
+
+import Button from '@/common/Button/Button';
+import Dropdown from '@/common/Dropdown/Dropdown';
+import GroupTab from '@/common/GroupTab/GroupTab';
+import GroupTabDropdown from '@/common/GroupTabDropdown/GroupTabDropdown';
+import Input from '@/common/Input/Input';
+import RangeSlider from '@/common/RangeSlider/RangeSlider';
+
+import Counter from '@/components/common/Counter/Counter';
+import BedIcon from '@/components/icon/BedIcon/BedIcon';
+import CouchIcon from '@/components/icon/CouchIcon/CouchIcon';
+import GrassIcon from '@/components/icon/GrassIcon/GrassIcon';
+import TubIcon from '@/components/icon/TubIcon/TubIcon';
+
+import useSearchStore from '@/store/useSearchStore';
+
+import { RENTAL_CATEGORIES, SALES_CATEGORIES } from '@/utils/tools';
+
+import Remove from '@/icon/Remove/Remove';
+import SearchIcon from '@/icon/SearchIcon/SearchIcon';
+import SmallArrow from '@/icon/SmallArrow/SmallArrow';
 
 import styles from './SearchBar.module.scss';
 
@@ -30,7 +35,6 @@ const SearchBar = (props) => {
 
   const { selectedTab, setSelectedTab, setSearchBarParams, searchBarParams } =
     useSearchStore();
-  console.log('🚀 ~ SearchBar ~ searchBarParams:', searchBarParams);
 
   const router = useRouter();
 
@@ -78,7 +82,6 @@ const SearchBar = (props) => {
   const [balconyCount, setBalconyCount] = useState(0);
   const [city, setCity] = useState({ id: 1, displayName: '台北市' });
   const [input, setInput] = useState('');
-  console.log('🚀 ~ SearchBar ~ input:', input);
 
   const mapRef = useRef(null);
 
@@ -494,7 +497,6 @@ const SearchBar = (props) => {
                   placeholder="請輸入地點/街道/社區或其他資訊"
                   input={input}
                   onChange={(value) => {
-                    console.log('🚀 ~ SearchBar ~ value:', value);
                     setInput(value);
                   }}
                 />

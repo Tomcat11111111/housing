@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 
-import DropdownCheckbox from '@common/Dropdown/DropdownCheckbox';
-import useOutSideClose from '@utils/hooks/useoutsideClose';
+import DropdownCheckbox from '@/common/Dropdown/DropdownCheckbox';
+
+import useOutSideClose from '@/utils/hooks/useoutsideClose';
 
 import ArrowDropdownDown from '../../icon/ArrowDropdownDown/ArrowDropdownDown';
 import ArrowDropdownUp from '../../icon/ArrowDropdownUp/ArrowDropdownUp';

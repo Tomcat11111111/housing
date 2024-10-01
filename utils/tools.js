@@ -1,5 +1,6 @@
-import House from '@icon/House/House';
 import Image from 'next/image';
+
+import House from '@/icon/House/House';
 
 export const ORIGIN_OPTION_LIST = [
   { displayName: '租房子', id: 'rent', icon: House },
