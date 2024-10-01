@@ -2,36 +2,40 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 
-import Button from '@common/Button/Button';
-import CardCarouselBox from '@common/CardCarouselBox/CardCarouselBox';
-import Input from '@components/common/Input/Input';
-import Tag from '@components/common/Tag/Tag';
-import Account from '@components/icon/Account/Account';
-import ArrowDropdownUp from '@components/icon/ArrowDropdownUp/ArrowDropdownUp';
-import Fire from '@components/icon/Fire/Fire';
-import Mail from '@components/icon/Mail/Mail';
-import Person from '@components/icon/Person/Person';
-import Phone from '@components/icon/Phone/Phone';
-import PhoneInTalk from '@components/icon/PhoneInTalk/PhoneInTalk';
-import Photo from '@components/icon/Photo/Photo';
-import Share from '@components/icon/Share/Share';
-import ArrowDropdownDown from '@icon/ArrowDropdownDown/ArrowDropdownDown';
-import BookmarkHollowIcon from '@icon/BookmarkHollowIcon/BookmarkHollowIcon';
-import SmallArrow from '@icon/SmallArrow/SmallArrow';
-import Footer from '@layout/Footer/Footer';
-import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
-import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
-import { getPriceStatusInfo } from '@utils/tools';
 import axios from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 import { QRCodeCanvas } from 'qrcode.react';
 
-import styles from './Detail.module.scss';
+import Button from '@/common/Button/Button';
+import CardCarouselBox from '@/common/CardCarouselBox/CardCarouselBox';
 
-console.log('test');
+import Footer from '@/layout/Footer/Footer';
+import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
+
+import Input from '@/components/common/Input/Input';
+import Tag from '@/components/common/Tag/Tag';
+import Account from '@/components/icon/Account/Account';
+import ArrowDropdownUp from '@/components/icon/ArrowDropdownUp/ArrowDropdownUp';
+import Fire from '@/components/icon/Fire/Fire';
+import Mail from '@/components/icon/Mail/Mail';
+import Person from '@/components/icon/Person/Person';
+import Phone from '@/components/icon/Phone/Phone';
+import PhoneInTalk from '@/components/icon/PhoneInTalk/PhoneInTalk';
+import Photo from '@/components/icon/Photo/Photo';
+import Share from '@/components/icon/Share/Share';
+
+import useSearchStore from '@/store/useSearchStore';
+
+import { getPriceStatusInfo } from '@/utils/tools';
+
+import ArrowDropdownDown from '@/icon/ArrowDropdownDown/ArrowDropdownDown';
+import BookmarkHollowIcon from '@/icon/BookmarkHollowIcon/BookmarkHollowIcon';
+import SmallArrow from '@/icon/SmallArrow/SmallArrow';
+
+import styles from './Detail.module.scss';
 
 export default function Detail() {
   const searchParams = useSearchParams();
@@ -65,8 +69,6 @@ export default function Detail() {
     offers = [],
     price,
   } = rentDetailData;
-  console.log('🚀 ~ Detail ~ rentDetailData:', rentDetailData);
-  console.log('🚀 ~ Detail ~ property:', property);
   const {
     location,
     views,

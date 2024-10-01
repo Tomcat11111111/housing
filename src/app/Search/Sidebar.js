@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react';
 
-import Button from '@components/common/Button/Button';
-import Counter from '@components/common/Counter/Counter';
-import Dropdown from '@components/common/Dropdown/Dropdown';
-import RangeSlider from '@components/common/RangeSlider/RangeSlider';
-import Arrow from '@components/icon/Arrow/Arrow';
-import BedIcon from '@components/icon/BedIcon/BedIcon';
-import CouchIcon from '@components/icon/CouchIcon/CouchIcon';
-import GrassIcon from '@components/icon/GrassIcon/GrassIcon';
-import Reload from '@components/icon/Reload/Reload';
-import SearchIcon from '@components/icon/SearchIcon/SearchIcon';
-import TubIcon from '@components/icon/TubIcon/TubIcon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { find, propEq } from 'ramda';
+
+import Button from '@/components/common/Button/Button';
+import Counter from '@/components/common/Counter/Counter';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
+import RangeSlider from '@/components/common/RangeSlider/RangeSlider';
+import Arrow from '@/components/icon/Arrow/Arrow';
+import BedIcon from '@/components/icon/BedIcon/BedIcon';
+import CouchIcon from '@/components/icon/CouchIcon/CouchIcon';
+import GrassIcon from '@/components/icon/GrassIcon/GrassIcon';
+import Reload from '@/components/icon/Reload/Reload';
+import SearchIcon from '@/components/icon/SearchIcon/SearchIcon';
+import TubIcon from '@/components/icon/TubIcon/TubIcon';
+
 import {
   DIRECTION_OPTIONS,
   PARKING_SPACE_OPTIONS,
   RENTAL_CATEGORIES,
   SALES_CATEGORIES,
   SOURCE_OPTIONS,
-} from '@utils/tools';
-import { find, propEq } from 'ramda';
+} from '@/utils/tools';
 
 import FilterCheckbox from './FilterCheckbox';
 import FilterGroup from './FilterGroup';
@@ -168,7 +170,7 @@ export default function Sidebar({
 
   const getFilterParams = () => {
     const tempParams = {
-      districtIds: district,
+      districtId: district,
     };
 
     if (categories.length > 0) {

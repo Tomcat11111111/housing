@@ -1,55 +1,107 @@
-import Logo from '@components/common/Logo/Logo';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
-import BurgerMenu from '../../common/BurgerMenu/BurgerMenu';
-import Button from '../../common/Button/Button';
-import Account from '../../icon/Account/Account';
+import BurgerMenu from '@/common/BurgerMenu/BurgerMenu';
+import Button from '@/common/Button/Button';
+
+import Logo from '@/components/common/Logo/Logo';
+
+import Account from '@/icon/Account/Account';
+
 import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
+  const router = useRouter();
+
   return (
-    <div
-      className={styles.header}
-      data-header={headerType === 'white' ? 'white' : ''}
-    >
-      <div className={styles.headerContent}>
-        <div className={styles.iconArea}>
-          <Logo size="big" />
-        </div>
-        {headerType === 'white' && (
-          <div className={styles.linkArea}>
-            <button data-active={'active'}>首頁</button>|
-            <button>拍賣特區</button>|<button>破盤特區</button>|
-            <button>平轉特區</button>
+    <header className={styles.headerContainer}>
+      <div
+        className={styles.header}
+        data-header={headerType === 'white' ? 'white' : ''}
+      >
+        <div className={styles.headerContent}>
+          <div className={styles.iconArea}>
+            <Logo size="big" />
           </div>
-        )}
-        <div className={styles.buttonArea}>
-          {headerType === 'default' && (
-            <>
-              <Button
-                buttonText="在TOPRE上刊登物件"
-                textStyle={{ fontWeight: 600, lineHeight: '20px' }}
-                buttonStyle={{
-                  padding: '8px',
-                }}
-                buttonType="transparent"
-              />
-              <div className={styles.memberArea}>
-                <div style={{ cursor: 'pointer' }}>登入</div>
-                <div>|</div>
-                <div style={{ cursor: 'pointer' }}>註冊</div>
-                <Account color="#0936D8" />
-              </div>
-            </>
-          )}
           {headerType === 'white' && (
-            <button className={styles.burger}>
-              <BurgerMenu />
-            </button>
+            <div className={styles.linkArea}>
+              <button
+                data-active={'active'}
+                onClick={() => {
+                  router.push('/');
+                }}
+              >
+                首頁
+              </button>
+              |
+              <button
+                onClick={() => {
+                  router.push(`/auction`);
+                }}
+              >
+                拍賣特區
+              </button>
+              |
+              <button
+                onClick={() => {
+                  router.push(`/discount`);
+                }}
+              >
+                破盤特區
+              </button>
+              |
+              <button
+                onClick={() => {
+                  router.push(`/flat`);
+                }}
+              >
+                平轉特區
+              </button>
+            </div>
           )}
+          <div className={styles.buttonArea}>
+            {headerType === 'default' && (
+              <>
+                <Button
+                  buttonText="在TOPRE上刊登物件"
+                  textStyle={{ fontWeight: 600, lineHeight: '20px' }}
+                  buttonStyle={{
+                    padding: '8px',
+                  }}
+                  buttonType="transparent"
+                />
+                <div className={styles.memberArea}>
+                  <div className={styles.memberButton}>
+                    <Button
+                      buttonText="登入"
+                      textStyle={{ lineHeight: '20px' }}
+                      buttonStyle={{
+                        padding: '8px  12px',
+                      }}
+                      buttonType="transparent"
+                    />
+                    |
+                    <Button
+                      buttonText="註冊"
+                      textStyle={{ lineHeight: '20px' }}
+                      buttonStyle={{
+                        padding: '8px 12px',
+                      }}
+                      buttonType="transparent"
+                    />
+                  </div>
+                  <Account color="#0936D8" />
+                </div>
+              </>
+            )}
+            {headerType === 'white' && (
+              <button className={styles.burger}>
+                <BurgerMenu />
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

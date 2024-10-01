@@ -1,5 +1,5 @@
-import CheckboxChecked from '@components/icon/CheckboxChecked/CheckboxChecked';
-import CheckboxIcon from '@components/icon/CheckboxIcon/CheckboxIcon';
+import CheckboxChecked from '@/components/icon/CheckboxChecked/CheckboxChecked';
+import CheckboxIcon from '@/components/icon/CheckboxIcon/CheckboxIcon';
 
 import styles from './Checkbox.module.scss';
 

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '@common/Button/Button';
-import useOutSideClose from '@utils/hooks/useoutsideClose';
-import { ORIGIN_OPTION_LIST } from '@utils/tools';
+import Button from '@/common/Button/Button';
+
+import useOutSideClose from '@/utils/hooks/useoutsideClose';
+import { ORIGIN_OPTION_LIST } from '@/utils/tools';
 
 import styles from './GroupTabDropdown.module.scss';
 

@@ -8,10 +8,12 @@
   "importOrder": [
     "^(^react$|@react|react)",
     "<THIRD_PARTY_MODULES>",
+    "^@/common/(.*)$",
+    "^@/layout/(.*)$",
     "^@/components/(.*)$",
-    "^@/components/icon/(.*)$",
     "^@/store/(.*)$",
     "^@/utils/(.*)$",
+    "^@/icon/(.*)$",
     "^~/(.*)$",
     "^[./.{js, jsx, ts, tsx}]",
     "^[./.{scss}]"

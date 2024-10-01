@@ -10,6 +10,8 @@ const Tag = (props) => {
     icon = {},
     iconPosition = '',
     padding = '',
+    borderRadius = '8px',
+    opacity = '',
   } = props;
 
   return (
@@ -20,6 +22,8 @@ const Tag = (props) => {
         backgroundColor: tagColor,
         gap: gap,
         padding: padding,
+        borderRadius: borderRadius,
+        opacity: opacity,
       }}
     >
       {iconPosition === 'left' ? icon : null}

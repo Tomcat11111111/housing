@@ -12,13 +12,6 @@ export default function Logo({ size = 'big' }) {
         cursor: 'pointer',
       }}
     >
-      {/* <Image
-        src="/housing/icon/ellipse.svg"
-        alt="ellipse"
-        width={30}
-        height={30}
-      />
-      <Image src="/housing/icon/icon.svg" alt="icon" width={72} height={20} /> */}
       {size === 'big' ? (
         <Image
           src="/housing/icon/top_icon_big.svg"

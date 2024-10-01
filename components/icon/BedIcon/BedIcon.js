@@ -1,4 +1,4 @@
-export default function CouchIcon({ color = '#333333', size = '20' }) {
+export default function CouchIcon({ color = '#333333', size = 20 }) {
   return (
     <svg
       width={size}

@@ -2,16 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '@components/common/Button/Button';
-import Dropdown from '@components/common/Dropdown/Dropdown';
-import ItemCard from '@components/common/ItemCard/ItemCard';
-import HeaderWithSearch from '@layout/HeaderWithSearch/HeaderWithSearch';
-import useSearchStore from '@store/useSearchStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { find, propEq, sort } from 'ramda';
+
+import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
+import Loading from '@/layout/Loading/Loading';
+
+import Button from '@/components/common/Button/Button';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
+import ItemCard from '@/components/common/ItemCard/ItemCard';
+
+import useSearchStore from '@/store/useSearchStore';
 
 import styles from './Search.module.scss';
 import Sidebar from './Sidebar';
@@ -29,7 +33,6 @@ const FILTER_DROPDOWN_LIST = [
 const getOriginFilterParams = (searchParams, setFilterParams) => {
   let tempParams = {};
 
-  console.log('🚀 ~ getOriginFilterParams ~ searchParams:', searchParams);
   if (searchParams.get('selectedTab')) {
     tempParams.selectedTab = searchParams.get('selectedTab');
   }
@@ -42,7 +45,7 @@ const getOriginFilterParams = (searchParams, setFilterParams) => {
 
 const defaultFilterParams = {
   city: { id: 1, displayName: '台北市' },
-  cityIds: 1,
+  cityId: 1,
   districtId: 1,
   limit: 10,
   categoryIds: [],
@@ -66,20 +69,7 @@ const defaultFilterParams = {
 export default function Search() {
   const searchParams = useSearchParams();
 
-  // console.log('🚀 ~ Search ~ searchParams:', searchParams);
-  // console.log(searchParams.get('selectedTab'));
-  // console.log(searchParams.getAll('selectedTab'));
-  // searchParams.keys().map((item) => {
-  //   console.log('🚀 ~ console.log ~ item:', item);
-  // });
-
-  // Display the keys
-  // for (const key of searchParams.keys()) {
-  //   console.log(key);
-  // }
-
   const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
-  console.log('🚀 ~ Search ~ searchBarParams:', searchBarParams);
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -108,6 +98,7 @@ export default function Search() {
 
   const getRentPropertiesApi = async (data) => {
     try {
+      console.log('🚀 ~ getRentPropertiesApi ~ data.meta:', data.meta);
       const reponse = await axios.get(
         'https://jzj-api.zeabur.app/properties/for-rent',
         {
@@ -154,7 +145,7 @@ export default function Search() {
           headerType="white"
           city={filterParams.city}
           onCityChange={(city) =>
-            setFilterParams({ ...filterParams, city: city, cityIds: city.id })
+            setFilterParams({ ...filterParams, city: city, cityId: city.id })
           }
           selectedTab={selectedTab}
           onChange={(value) => setSelectedTab(value)}
@@ -238,10 +229,15 @@ export default function Search() {
                   )}
                 </div>
               ))}
-            {!isFetching && queryResult.list.length === 0 && (
-              <div className={styles.noResult}>沒有資料</div>
-            )}
           </div>
+          {!isFetching && queryResult.list.length === 0 && (
+            <div className={styles.noResult}>沒有資料</div>
+          )}
+          {isFetching && (
+            <div className={styles.loadingContainer}>
+              <Loading />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import Checkbox from '@components/common/Checkbox/Checkbox';
+import Checkbox from '@/components/common/Checkbox/Checkbox';
 
 import styles from './FilterCheckbox.module.scss';
 

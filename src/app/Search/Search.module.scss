@@ -12,6 +12,7 @@
   padding: 16px 24px 24px;
   height: calc(100vh - 80px);
   overflow-y: auto;
+  width: 100%;
 }
 
 .buttonArea {
@@ -34,4 +35,9 @@
 
 .cardContainer {
   min-width: 270px;
+}
+
+.loadingContainer {
+  height: 100%;
+  transform: translateY(-106px);
 }

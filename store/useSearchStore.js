@@ -7,7 +7,6 @@ const useSearchStore = create((set) => ({
     set(() => ({ selectedTab: tab }));
   },
   setSearchBarParams: (changeParams) => {
-    console.log('🚀 ~ useSearchStore ~ changeParams:', changeParams);
     set((state) => ({
       ...state,
       ...changeParams,

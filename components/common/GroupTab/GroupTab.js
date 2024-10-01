@@ -1,5 +1,6 @@
-import Button from '@common/Button/Button';
-import { ORIGIN_OPTION_LIST } from '@utils/tools';
+import Button from '@/common/Button/Button';
+
+import { ORIGIN_OPTION_LIST } from '@/utils/tools';
 
 import styles from './GroupTab.module.scss';
 
