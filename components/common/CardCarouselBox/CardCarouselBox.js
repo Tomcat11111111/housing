@@ -1,44 +1,91 @@
-import { useRef } from 'react';
-import React from 'react';
+import Slider from 'react-slick';
 
-import ArrowBack from '../../icon/ArrowBack/ArrowBack';
-import ArrowForward from '../../icon/ArrowForward/ArrowForward';
-import ItemCard from '../ItemCard/ItemCard';
+import ItemCard from '@/common/ItemCard/ItemCard';
+
+import ArrowBack from '@/icon/ArrowBack/ArrowBack';
+import ArrowForward from '@/icon/ArrowForward/ArrowForward';
+
 import styles from './CardCarouselBox.module.scss';
 
 const CardCarouselBox = (props) => {
   const { cardItemList = [] } = props;
 
-  const sliderRef = useRef();
+  const NextArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{
+          ...style,
+          display: 'block',
+          right: -28,
+          zIndex: 2,
+          position: 'absolute',
+          right: '10px',
+          top: '50%',
+          // borderRadius: '95px',
+          // opacity: 0.8,
+          // background: '#fff',
+          // padding: '16px',
+          // height: '56px',
+          // width: '56px',
+        }}
+        onClick={onClick}
+      >
+        <ArrowForward />
+      </div>
+    );
+  };
+
+  // Custom Previous Arrow Component
+  const PrevArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{
+          ...style,
+          display: 'block',
+          left: -28,
+          zIndex: 2,
+          position: 'absolute',
+          right: '10px',
+          top: '50%',
+        }}
+        onClick={onClick}
+      >
+        <ArrowBack />
+      </div>
+    );
+  };
+
+  const settings = {
+    // dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    nextArrow: (
+      // <div className={styles.arrowForward}>
+      <NextArrow />
+      // </div>
+    ),
+    prevArrow: (
+      // <div className={styles.arrowBack}>
+      <PrevArrow />
+      // </div>
+    ),
+  };
 
   return (
     cardItemList.length > 0 && (
-      <div className={styles.cardCarouselBox}>
-        <div
-          className={styles.arrowBack}
-          //TODO: 補上carousel操作
-          onClick={() => sliderRef.current.slickPrev()}
-        >
-          <ArrowBack />
-        </div>
-        <div className={styles.cardContainer}>
-          {cardItemList.map((itemData, index) => (
-            <div className={styles.cardBox} key={index}>
-              <ItemCard
-                itemData={itemData}
-                index={index}
-                averagePrice={12000}
-              />
-            </div>
-          ))}
-        </div>
-        <div
-          className={styles.arrowForward}
-          onClick={() => sliderRef.current.slickNext()}
-        >
-          <ArrowForward />
-        </div>
-      </div>
+      <Slider {...settings}>
+        {cardItemList.map((itemData, index) => (
+          <div className={styles.cardBox} key={index}>
+            <ItemCard itemData={itemData} index={index} averagePrice={12000} />
+          </div>
+        ))}
+      </Slider>
     )
   );
 };
