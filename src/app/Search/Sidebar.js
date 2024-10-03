@@ -67,16 +67,16 @@ export default function Sidebar({
   const [balconyCount, setBalconyCount] = useState(0);
   const [rentMax, setRentMax] = useState(120100);
   const [rentMin, setRentMin] = useState(4000);
-  const [floorMax, setFloorMax] = useState(20);
-  const [floorMin, setFloorMin] = useState(1);
-  const [totalMax, setTotalMax] = useState(5000);
-  const [totalMin, setTotalMin] = useState(200);
-  const [squareMax, setSquareMax] = useState(150);
-  const [squareMin, setSquareMin] = useState(1);
-  const [singleMax, setSingleMax] = useState(205);
-  const [singleMin, setSingleMin] = useState(15);
-  const [yearMax, setYearMax] = useState(60);
-  const [yearMin, setYearMin] = useState(0);
+  const [floorMax, setFloorMax] = useState(21);
+  const [floorMin, setFloorMin] = useState(0);
+  const [totalMax, setTotalMax] = useState(5001);
+  const [totalMin, setTotalMin] = useState(199);
+  const [squareMax, setSquareMax] = useState(151);
+  const [squareMin, setSquareMin] = useState(0);
+  const [singleMax, setSingleMax] = useState(206);
+  const [singleMin, setSingleMin] = useState(14);
+  const [yearMax, setYearMax] = useState(61);
+  const [yearMin, setYearMin] = useState(-1);
   const [directions, setDirections] = useState([]);
   const [sources, setSources] = useState([]);
   const [parkingSpaces, setParkingSpaces] = useState([]);
@@ -170,8 +170,10 @@ export default function Sidebar({
 
   const getFilterParams = () => {
     const tempParams = {
-      districtIds: district,
+      districtId: district,
     };
+
+    console.log('🚀 ~ getFilterParams district:', district);
 
     if (categories.length > 0) {
       tempParams.category = categories;
@@ -246,8 +248,10 @@ export default function Sidebar({
       ...tempParams,
     }));
 
-    queryClient.invalidateQueries({
-      queryKey: ['getRentPropertiesApi'],
+    setTimeout(() => {
+      queryClient.invalidateQueries({
+        queryKey: ['getRentPropertiesApi'],
+      });
     });
   };
 

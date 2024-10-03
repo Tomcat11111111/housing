@@ -21,7 +21,7 @@ const Input = (props) => {
         style={{ width: inputWidth ? inputWidth : '100%' }}
         value={input}
         onChange={(e) => {
-          onChange(input + e.target.value);
+          onChange(e.target.value);
         }}
       />
       {iconPosition === 'right' ? icon : null}

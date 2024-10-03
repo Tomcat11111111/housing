@@ -65,16 +65,16 @@ const CardCarouselBox = (props) => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 2,
-    nextArrow: (
-      // <div className={styles.arrowForward}>
-      <NextArrow />
-      // </div>
-    ),
-    prevArrow: (
-      // <div className={styles.arrowBack}>
-      <PrevArrow />
-      // </div>
-    ),
+    // nextArrow: (
+    //   // <div className={styles.arrowForward}>
+    //   <NextArrow />
+    //   // </div>
+    // ),
+    // prevArrow: (
+    //   // <div className={styles.arrowBack}>
+    //   <PrevArrow />
+    //   // </div>
+    // ),
   };
 
   return (

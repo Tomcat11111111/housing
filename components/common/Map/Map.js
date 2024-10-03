@@ -13,7 +13,7 @@ function Map() {
     lng: 121.51535,
   };
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM', // 替换为你的 Google API 密钥
+    googleMapsApiKey: 'AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM', // Google API key
     libraries: ['places', 'geometry'],
   });
 

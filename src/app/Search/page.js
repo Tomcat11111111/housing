@@ -31,18 +31,18 @@ const FILTER_DROPDOWN_LIST = [
   { id: '+createdAt', displayName: '刊登時間 舊到新' },
 ];
 
-const getOriginFilterParams = (searchParams, setFilterParams) => {
-  let tempParams = {};
+// const getOriginFilterParams = (searchParams, setFilterParams) => {
+//   let tempParams = {};
 
-  if (searchParams.get('selectedTab')) {
-    tempParams.selectedTab = searchParams.get('selectedTab');
-  }
+//   if (searchParams.get('selectedTab')) {
+//     tempParams.selectedTab = searchParams.get('selectedTab');
+//   }
 
-  setFilterParams((prev) => ({
-    ...prev,
-    ...tempParams,
-  }));
-};
+//   setFilterParams((prev) => ({
+//     ...prev,
+//     ...tempParams,
+//   }));
+// };
 
 const defaultFilterParams = {
   city: { id: 1, displayName: '台北市' },
@@ -73,6 +73,7 @@ export default function Search() {
   const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
+  // console.log('🚀 ~ Search ~ filterParams:', filterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
@@ -101,7 +102,7 @@ export default function Search() {
     try {
       console.log('🚀 ~ getRentPropertiesApi ~ data.meta:', data.meta);
       const reponse = await axios.get(
-        'https://jzj-api.zeabur.app/properties/for-rent',
+        `https://jzj-api.zeabur.app/properties/${selectedTab === 'rent' ? 'for-rent' : 'for-sale'}`,
         {
           params: data.meta,
         }
@@ -135,9 +136,9 @@ export default function Search() {
     },
   });
 
-  useEffect(() => {
-    getOriginFilterParams(searchParams, setFilterParams);
-  }, [searchParams]);
+  // useEffect(() => {
+  //   getOriginFilterParams(searchParams, setFilterParams);
+  // }, [searchParams]);
 
   return (
     <div>

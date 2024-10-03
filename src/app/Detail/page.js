@@ -50,6 +50,10 @@ export default function Detail() {
   const [contactSwitch, setContactSwitch] = useState('book');
   const [collapse, setCollapse] = useState(true);
   const [gender, setGender] = useState('male');
+  const [phone, setPhone] = useState('');
+  const [mail, setMail] = useState('');
+  const [name, setName] = useState('');
+  const [search, setSearch] = useState('');
 
   const getDetailApi = async () => {
     const response = await axios.get(
@@ -75,9 +79,9 @@ export default function Detail() {
     rentalOffersAndRules = [],
   } = rentDetailData;
   const [, equipments, rules] = rentalOffersAndRules;
-  console.log('🚀 ~ Detail ~ rentDetailData:', rentDetailData);
+  // console.log('🚀 ~ Detail ~ rentDetailData:', rentDetailData);
   const {
-    location,
+    location = {},
     views,
     title,
     room,
@@ -89,6 +93,8 @@ export default function Detail() {
     totalFloors,
     shape = {},
   } = property;
+
+  const { city, district } = location;
 
   useEffect(() => {
     setPropertyId(searchParams.get('id'));
@@ -186,7 +192,12 @@ export default function Detail() {
           onCityChange={(value) => setCityId(value)}
           padding="0 172px"
           selectedTab={selectedTab}
-          onChange={(value) => setSelectedTab(value)}
+          onChange={(value) => {
+            setSelectedTab(value);
+            router.push('/Search');
+          }}
+          input={search}
+          setInput={(value) => setSearch(value)}
         />
       </div>
       <div className={styles.body}>
@@ -209,14 +220,14 @@ export default function Detail() {
               className={styles.breadcrumb}
               onClick={() => router.push('/Search')}
             >
-              {location?.cityId}
+              {city?.displayName}
             </span>
             &gt;
             <span
               className={styles.breadcrumb}
               onClick={() => router.push('/Search')}
             >
-              {location?.districtId}
+              {district?.displayName}
             </span>
             &gt;
             {categoryStr && (
@@ -738,6 +749,8 @@ export default function Detail() {
                       icon={<Person />}
                       iconPosition="left"
                       inputWidth="120px"
+                      input={name}
+                      onChange={(value) => setName(value)}
                     />
                   </div>
                   <div className={styles.inputContainer}>
@@ -745,6 +758,8 @@ export default function Detail() {
                       placeholder="聯絡電話"
                       icon={<Phone />}
                       iconPosition="left"
+                      input={phone}
+                      onChange={(value) => setPhone(value)}
                     />
                   </div>
                   <div className={styles.inputContainer}>
@@ -752,6 +767,8 @@ export default function Detail() {
                       placeholder="聯絡信箱"
                       icon={<Mail />}
                       iconPosition="left"
+                      input={mail}
+                      onChange={(value) => setMail(value)}
                     />
                   </div>
                   <p className={styles.reminder}>
@@ -836,7 +853,9 @@ export default function Detail() {
               }}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsList} />
+          <CardCarouselBox
+            cardItemList={[...recommendationsList, ...recommendationsList]}
+          />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
@@ -859,7 +878,9 @@ export default function Detail() {
               }}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsList} />
+          <CardCarouselBox
+            cardItemList={[...recommendationsList, ...recommendationsList]}
+          />
         </div>
       </div>
       <Footer />
