@@ -113,20 +113,23 @@
 
 .carouselControl {
   position: absolute;
-  top: 80px;
+  top: calc(50% - 16px);
   border: none;
   color: white;
   cursor: pointer;
   z-index: 1;
+  border-radius: 95px;
+  opacity: 0.8;
+  background: #fff;
+  padding: 10px;
 }
 
 .carouselControl.prev {
-  left: 10px;
-  transform: rotate(180deg);
+  left: 16px;
 }
 
 .carouselControl.next {
-  right: 10px;
+  right: 12px;
 }
 
 .indicator {
@@ -141,6 +144,6 @@
 
 .bookmark {
   top: 15px;
-  right: 11px;
+  right: 12px;
   position: absolute;
 }

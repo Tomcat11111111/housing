@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { QRCodeCanvas } from 'qrcode.react';
 
@@ -39,6 +40,7 @@ import styles from './Detail.module.scss';
 
 export default function Detail() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const { selectedTab, setSelectedTab } = useSearchStore();
 
@@ -47,7 +49,6 @@ export default function Detail() {
   const [contactSwitch, setContactSwitch] = useState('book');
   const [collapse, setCollapse] = useState(true);
   const [gender, setGender] = useState('male');
-  const [qrcode, setQrcode] = useState(false);
 
   const getDetailApi = async () => {
     const response = await axios.get(
@@ -63,12 +64,17 @@ export default function Detail() {
     initialData: { property: {} },
   });
   const {
-    property,
+    property = {},
     inclusions = [],
     material = {},
     offers = [],
-    price,
+    price = '',
+    introduction = '',
+    categoryStr = '',
+    rentalOffersAndRules = [],
   } = rentDetailData;
+  const [, equipments, rules] = rentalOffersAndRules;
+  console.log('🚀 ~ Detail ~ rentDetailData:', rentDetailData);
   const {
     location,
     views,
@@ -134,7 +140,7 @@ export default function Detail() {
     }
   });
 
-  //   const describeText = `🏠地址：大安區通化街171巷XX號4樓
+  // const describeText = `🏠地址：大安區通化街171巷XX號4樓
   // 🏠建物型態：公寓
   // 🏠坪數：15
   // 🏠格局：2房1廳1衛1陽台
@@ -158,23 +164,17 @@ export default function Detail() {
   // ✨釋出稀少
   // ✨把握機會👍🔥專業把關✨挑選屋況✨住的安心👍💥成交時會酌收一次性服務費💥🔥天氣好壞都誠地為您服務🔥`;
 
-  const describeText = `
-            <strong>
-                  tereretkopf
-                  <br />
-                  <br />
-                  XXXX
-                  <br />
-                  dqioedjoepq
-                  <br />
-                  grwklmfwk
-                  <br />
-                  dkelqwdmklwed
-                </strong>
-  `;
+  const textAreaRef = useRef(null);
+  // console.log(textAreaRef.current?.clientHeight);
 
-  // Escape the HTML content
-  // const describeText = htmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // const [textAreaHeight, setTextAreaHeight] = useState(0);
+
+  // useEffect(() => {
+  //   if (textAreaHeight) return;
+
+  //   setTextAreaHeight(textAreaRef.current?.clientHeight);
+  // }, []);
+  // console.log('🚀 ~ useEffect ~ textAreaHeight:', textAreaHeight);
 
   return (
     <Suspense>
@@ -191,11 +191,38 @@ export default function Detail() {
       <div className={styles.body}>
         <nav className={styles.toolbar}>
           <div className={styles.breadcrumbContainer}>
-            <span className={styles.breadcrumb}>首頁</span>&gt;
-            <span className={styles.breadcrumb}>租房</span>&gt;
-            <span className={styles.breadcrumb}>台北市</span>&gt;
-            <span className={styles.breadcrumb}>大安區</span>&gt;
-            <span className={styles.breadcrumb}>整層住家</span>&gt;
+            <span
+              className={styles.breadcrumb}
+              onClick={() => {
+                router.push('/');
+              }}
+            >
+              首頁
+            </span>
+            &gt;
+            <span className={styles.breadcrumb}>
+              {selectedTab === 'rent' ? '租房' : '買房'}
+            </span>
+            &gt;
+            <span
+              className={styles.breadcrumb}
+              onClick={() => router.push('/Search')}
+            >
+              {location?.cityId}
+            </span>
+            &gt;
+            <span
+              className={styles.breadcrumb}
+              onClick={() => router.push('/Search')}
+            >
+              {location?.districtId}
+            </span>
+            &gt;
+            {categoryStr && (
+              <>
+                <span className={styles.breadcrumb}>{categoryStr}</span>&gt;
+              </>
+            )}
             <span className={styles.address}>{location?.address}</span>
           </div>
           <div className={styles.tool}>
@@ -400,7 +427,7 @@ export default function Detail() {
               <div className={styles.propertyInfo}>
                 <div className={styles.propertyInfoGroup}>
                   <span className={styles.typeName}>類型</span>
-                  <span className={styles.type}>套房（待補上）</span>
+                  <span className={styles.type}>{categoryStr}</span>
                 </div>
                 <div className={styles.propertyInfoGroup}>
                   <span className={styles.typeName}>格局</span>
@@ -442,7 +469,7 @@ export default function Detail() {
                     {offers.map((offer, index) => {
                       return (
                         <p key={`offer_${index}`} className={styles.info}>
-                          {offer.displayName}
+                          {offer?.displayName}
                         </p>
                       );
                     })}
@@ -460,11 +487,15 @@ export default function Detail() {
                 </div>
                 <div className={styles.infoArea}>
                   <span className={styles.infoType}>房屋設備</span>
-                  <div className={styles.infoGroup}>
-                    <p className={styles.colon}>隔間：</p>
-                    <p className={styles.info}>{material.displayName}</p>
-                  </div>
-                  <div className={styles.infoGroup}>
+                  {equipments?.content.map((item) => {
+                    return (
+                      <div className={styles.infoGroup} key={item?.subtitle}>
+                        <p className={styles.colon}>{item?.subtitle}：</p>
+                        <p className={styles.info}>{item?.description}</p>
+                      </div>
+                    );
+                  })}
+                  {/* <div className={styles.infoGroup}>
                     <p className={styles.colon}>車位：</p>
                     <p className={styles.info}>機械式車位</p>
                   </div>
@@ -472,7 +503,7 @@ export default function Detail() {
                     <p className={styles.colon}>管理：</p>
                     <p className={styles.info}>管理員(警衛)</p>
                     <p className={styles.info}>$1200/月</p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className={styles.infoArea}>
                   <span className={styles.infoType}>租屋規則</span>
@@ -604,9 +635,14 @@ export default function Detail() {
               <span className={styles.title}>屋況介紹</span>
               <p
                 className={styles.describe}
-                data-collapse={collapse ? 'collapse' : ''}
-                dangerouslySetInnerHTML={{ __html: describeText }}
+                data-collapse={
+                  // textAreaHeight > 400 && collapse ? 'collapse' : ''
+                  collapse ? 'collapse' : ''
+                }
+                dangerouslySetInnerHTML={{ __html: introduction }}
+                ref={textAreaRef}
               ></p>
+              {/* {textAreaHeight > 400 && ( */}
               <div
                 style={{ position: 'relative' }}
                 onClick={() => {
@@ -626,6 +662,7 @@ export default function Detail() {
                 )}
                 {collapse && <div className={styles.cover}></div>}
               </div>
+              {/* )} */}
             </div>
           </article>
           <div className={styles.detailSideBar}>
@@ -722,8 +759,22 @@ export default function Detail() {
               )}
               {contactSwitch === 'phone' && (
                 <div className={styles.phone}>
-                  <Account size={80} />
-                  <span>王小明 先生</span>
+                  <div className={styles.phoneInfo}>
+                    <Account size={40} />
+                    <span>王小明 先生</span>
+                  </div>
+                  {contactSwitch === 'phone' && (
+                    <div className={styles.qrcode}>
+                      <QRCodeCanvas
+                        value={'tel:0923776003'}
+                        size={160} // Size of the QR code
+                        bgColor={'#ffffff'} // Background color
+                        fgColor={'#000000'} // Foreground color (QR code color)
+                        level={'L'} // Error correction level ('L', 'M', 'Q', 'H')
+                        includeMargin={false} // Add margin or not
+                      />
+                    </div>
+                  )}
                 </div>
               )}
               <Button
@@ -751,21 +802,11 @@ export default function Detail() {
                   }
                 }}
               />
-              {contactSwitch === 'phone' && qrcode && (
-                <QRCodeCanvas
-                  value={'tel:0923776003'}
-                  size={128} // Size of the QR code
-                  bgColor={'#ffffff'} // Background color
-                  fgColor={'#000000'} // Foreground color (QR code color)
-                  level={'L'} // Error correction level ('L', 'M', 'Q', 'H')
-                  includeMargin={false} // Add margin or not
-                />
-              )}
             </div>
             <div className={styles.view}>
               <Fire />
               <span>此物件十分搶手</span>
-              312人瀏覽
+              {views}人瀏覽
             </div>
           </div>
         </div>

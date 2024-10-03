@@ -274,11 +274,17 @@
 }
 
 .phone {
-  height: 234px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.phoneInfo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
 
   > span {
     color: #333;
@@ -286,6 +292,10 @@
     font-weight: 700;
     line-height: 24px;
   }
+}
+
+.qrcode {
+  margin: 30px 0;
 }
 
 .inputContainer {
