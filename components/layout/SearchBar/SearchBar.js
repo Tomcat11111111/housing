@@ -219,7 +219,7 @@ const SearchBar = (props) => {
     }
 
     setSearchBarParams(tempSearchParams);
-    // router.push('/Search');
+    router.push('/Search');
   };
 
   return (

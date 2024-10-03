@@ -10,6 +10,7 @@ import { find, propEq, sort } from 'ramda';
 
 import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
 import Loading from '@/layout/Loading/Loading';
+import NoData from '@/layout/NoData/NoData';
 
 import Button from '@/components/common/Button/Button';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
@@ -231,7 +232,9 @@ export default function Search() {
               ))}
           </div>
           {!isFetching && queryResult.list.length === 0 && (
-            <div className={styles.noResult}>沒有資料</div>
+            <div className={styles.loadingContainer}>
+              <NoData />
+            </div>
           )}
           {isFetching && (
             <div className={styles.loadingContainer}>

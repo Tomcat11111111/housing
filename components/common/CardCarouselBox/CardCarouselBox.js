@@ -9,7 +9,7 @@ import styles from './CardCarouselBox.module.scss';
 const CardCarouselBox = (props) => {
   const { cardItemList = [] } = props;
 
-  // const sliderRef = useRef();
+  const sliderRef = useRef();
 
   return (
     cardItemList.length > 0 && (
@@ -17,7 +17,7 @@ const CardCarouselBox = (props) => {
         <div
           className={styles.arrowBack}
           //TODO: 補上carousel操作
-          // onClick={() => sliderRef.current.slickPrev()}
+          onClick={() => sliderRef.current.slickPrev()}
         >
           <ArrowBack />
         </div>
@@ -34,7 +34,7 @@ const CardCarouselBox = (props) => {
         </div>
         <div
           className={styles.arrowForward}
-          // onClick={() => sliderRef.current.slickNext()}
+          onClick={() => sliderRef.current.slickNext()}
         >
           <ArrowForward />
         </div>

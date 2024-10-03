@@ -113,10 +113,10 @@ const ItemCard = (props) => {
           {isHovered && (
             <>
               <button className={`${styles.carouselControl} ${styles.prev}`}>
-                <Arrow color="#fff" />
+                <Arrow color="#909090" size={12} direction="left" />
               </button>
               <button className={`${styles.carouselControl} ${styles.next}`}>
-                <Arrow color="#fff" />
+                <Arrow color="#909090" size={12} direction="right" />
               </button>
             </>
           )}
