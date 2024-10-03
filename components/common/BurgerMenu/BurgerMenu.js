@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import Account from '../../icon/Account/Account';
 import Close from '../../icon/Close/Close';
 import Menu from '../../icon/Menu/Menu';
@@ -22,7 +23,7 @@ function BurgerMenu() {
             className={styles.menuItem}
             style={{ color: '#CCCCCC' }}
             onClick={() => {
-              onListClick(item, key);
+              // onListClick(item, key);
             }}
           >
             未登入
@@ -33,7 +34,7 @@ function BurgerMenu() {
             className={styles.menuItem}
             style={{ fontWeight: 700 }}
             onClick={() => {
-              onListClick(item, key);
+              // onListClick(item, key);
             }}
           >
             註冊
@@ -41,7 +42,7 @@ function BurgerMenu() {
           <div
             className={styles.menuItem}
             onClick={() => {
-              onListClick(item, key);
+              // onListClick(item, key);
             }}
           >
             登入
@@ -50,7 +51,7 @@ function BurgerMenu() {
           <div
             className={styles.menuItem}
             onClick={() => {
-              onListClick(item, key);
+              // onListClick(item, key);
             }}
           >
             我有房子
@@ -58,7 +59,7 @@ function BurgerMenu() {
           <div
             className={styles.menuItem}
             onClick={() => {
-              onListClick(item, key);
+              // onListClick(item, key);
             }}
           >
             我有廣告
