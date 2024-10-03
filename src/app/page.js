@@ -90,6 +90,7 @@ export default function Home() {
     initialData: [],
   });
 
+  console.log('🚀 ~ handleScroll ~ recommendationsList:', recommendationsList);
   return (
     <main className={styles.basic}>
       <Header headerType={headerType} />
@@ -197,7 +198,9 @@ export default function Home() {
               action={() => router.push('/recommand')}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsList} />
+          <CardCarouselBox
+            cardItemList={[...recommendationsList, ...recommendationsList]}
+          />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>

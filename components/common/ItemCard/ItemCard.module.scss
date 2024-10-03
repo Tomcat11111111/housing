@@ -113,7 +113,8 @@
 
 .carouselControl {
   position: absolute;
-  top: calc(50% - 16px);
+  top: 50%;
+  transform: translateY(-50%);
   border: none;
   color: white;
   cursor: pointer;
