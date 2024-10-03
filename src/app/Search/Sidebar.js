@@ -170,7 +170,7 @@ export default function Sidebar({
 
   const getFilterParams = () => {
     const tempParams = {
-      districtId: district,
+      districtIds: district,
     };
 
     if (categories.length > 0) {

@@ -12,6 +12,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 
 import Button from '@/common/Button/Button';
 import CardCarouselBox from '@/common/CardCarouselBox/CardCarouselBox';
+import Map from '@/common/Map/Map';
 
 import Footer from '@/layout/Footer/Footer';
 import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
@@ -457,7 +458,9 @@ export default function Detail() {
                 <p className={styles.colon}>地址：</p>
                 {location?.address}
               </span>
-              <div ref={mapRef} className={styles.mapFill} id="map"></div>
+              <div className={styles.mapFill}>
+                <Map />
+              </div>
             </div>
             {selectedTab === 'rent' && (
               <div className={styles.area}>

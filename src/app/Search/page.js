@@ -46,7 +46,7 @@ const getOriginFilterParams = (searchParams, setFilterParams) => {
 
 const defaultFilterParams = {
   city: { id: 1, displayName: '台北市' },
-  cityId: 1,
+  cityIds: 1,
   districtId: 1,
   limit: 10,
   categoryIds: [],
@@ -146,7 +146,7 @@ export default function Search() {
           headerType="white"
           city={filterParams.city}
           onCityChange={(city) =>
-            setFilterParams({ ...filterParams, city: city, cityId: city.id })
+            setFilterParams({ ...filterParams, city: city, cityIds: city.id })
           }
           selectedTab={selectedTab}
           onChange={(value) => setSelectedTab(value)}
@@ -156,7 +156,6 @@ export default function Search() {
         />
       </div>
       <div className={styles.page}>
-        {/* {isSideBarOpen && ( */}
         <Sidebar
           isSideBarOpen={isSideBarOpen}
           setIsSideBarOpen={setIsSideBarOpen}
@@ -166,7 +165,6 @@ export default function Search() {
           setFilterParams={setFilterParams}
           selectedTab={selectedTab}
         />
-        {/* )} */}
         <div className={styles.listContainer}>
           <div className={styles.buttonArea}>
             {!isSideBarOpen && (
