@@ -17,10 +17,11 @@ import Header from '@/layout/Header/Header';
 import SearchBar from '@/layout/SearchBar/SearchBar';
 
 import Arrow from '@/icon/Arrow/Arrow';
-import ArrowBack from '@/icon/ArrowBack/ArrowBack';
-import ArrowDropdownDown from '@/icon/ArrowDropdownDown/ArrowDropdownDown';
-import ArrowDropdownUp from '@/icon/ArrowDropdownUp/ArrowDropdownUp';
-import ArrowForward from '@/icon/ArrowForward/ArrowForward';
+import Domain from '@/icon/Domain/Domain';
+// import ArrowBack from '@/icon/ArrowBack/ArrowBack';
+// import ArrowDropdownDown from '@/icon/ArrowDropdownDown/ArrowDropdownDown';
+// import ArrowDropdownUp from '@/icon/ArrowDropdownUp/ArrowDropdownUp';
+// import ArrowForward from '@/icon/ArrowForward/ArrowForward';
 import SmallArrow from '@/icon/SmallArrow/SmallArrow';
 
 import styles from './page.module.scss';
@@ -90,7 +91,6 @@ export default function Home() {
     initialData: [],
   });
 
-  console.log('🚀 ~ handleScroll ~ recommendationsList:', recommendationsList);
   return (
     <main className={styles.basic}>
       <Header headerType={headerType} />
@@ -120,12 +120,7 @@ export default function Home() {
           >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
-                <Image
-                  src="/housing/icon/domain.svg"
-                  alt="account"
-                  width={30}
-                  height={30}
-                />
+                <Domain />
                 <span>拍賣特區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
@@ -140,12 +135,7 @@ export default function Home() {
           >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
-                <Image
-                  src="/housing/icon/domain.svg"
-                  alt="account"
-                  width={30}
-                  height={30}
-                />
+                <Domain />
                 <span>破盤特區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
@@ -160,12 +150,7 @@ export default function Home() {
           >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
-                <Image
-                  src="/housing/icon/domain.svg"
-                  alt="account"
-                  width={30}
-                  height={30}
-                />
+                <Domain />
                 <span>平賣特區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
