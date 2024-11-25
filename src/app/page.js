@@ -61,10 +61,9 @@ export default function Home() {
   }, [handleScroll]);
 
   const images = [
-    '/housing/image/house.png',
-    '/housing/image/banner_example.png',
-    '/housing/image/banner_example_2.png',
-    '/housing/image/banner_example_3.png',
+    '/housing/image/Banner_1.png',
+    '/housing/image/Banner_2.png',
+    '/housing/image/Banner_3.png',
   ];
 
   const getRecommendationsApi = async () => {
