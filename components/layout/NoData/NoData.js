@@ -4,7 +4,7 @@ import Reload from '@/icon/Reload/Reload';
 
 import styles from './NoData.module.scss';
 
-export default function NoData({}) {
+export default function NoData({ func = () => {} }) {
   return (
     <div className={styles.noDataContainer}>
       <svg
@@ -41,6 +41,7 @@ export default function NoData({}) {
         }}
         icon={<Reload />}
         iconPosition="left"
+        action={func}
       />
     </div>
   );

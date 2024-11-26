@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import Image from 'next/image';
 
 import BurgerMenu from '@/components/common/BurgerMenu/BurgerMenu';
 import Button from '@/components/common/Button/Button';
@@ -21,6 +20,7 @@ const HeaderWithSearch = ({
   onChange,
   input,
   setInput,
+  search,
 }) => {
   const getCitiesApi = async () => {
     const regionData = [];
@@ -94,6 +94,7 @@ const HeaderWithSearch = ({
           }}
           icon={<SearchIcon color="#FFFFFF" />}
           iconPosition="left"
+          action={search}
         />
       </div>
       <div className={styles.buttonArea}>

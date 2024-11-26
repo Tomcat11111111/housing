@@ -3,6 +3,11 @@
   border-radius: 8px;
   align-items: center;
 
+  &[data-disabled='disabled'] {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
   &[data-button-type='orange'] {
   }
 
