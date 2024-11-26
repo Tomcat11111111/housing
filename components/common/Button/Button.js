@@ -9,11 +9,13 @@ const Button = (props) => {
     iconPosition = '',
     icon = {},
     action = () => {},
+    isDisabled = false,
   } = props;
 
   return (
     <button
       className={styles.button}
+      data-disabled={isDisabled ? 'disabled' : ''}
       style={buttonStyle}
       onClick={(e) => {
         e.stopPropagation();

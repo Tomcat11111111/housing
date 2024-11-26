@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
 import BurgerMenu from '@/common/BurgerMenu/BurgerMenu';

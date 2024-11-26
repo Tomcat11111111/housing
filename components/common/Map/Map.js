@@ -7,11 +7,13 @@ import TypeSwitch from '@/common/Map/TypeSwitch';
 
 import styles from './Map.module.scss';
 
-function Map() {
+function Map({ coordinates = [] }) {
+  const [lat, lng] = coordinates;
   const center = {
-    lat: 25.031722,
-    lng: 121.51535,
+    lat,
+    lng,
   };
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM', // Google API key
     libraries: ['places', 'geometry'],
