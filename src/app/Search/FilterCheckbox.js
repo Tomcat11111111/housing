@@ -4,7 +4,7 @@ import styles from './FilterCheckbox.module.scss';
 
 export default function FilterCheckbox({
   optionList = [],
-  selectedOptions,
+  selectedOptions = [],
   onChange,
 }) {
   const isEven = (num) => num % 2 === 0;
