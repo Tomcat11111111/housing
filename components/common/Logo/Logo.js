@@ -14,10 +14,10 @@ export default function Logo({ size = 'big' }) {
     >
       {size === 'big' ? (
         <Image
-          src="/housing/icon/top_icon_big.svg"
+          src="/housing/image/logo.png"
           alt="icon"
-          width={207.6}
-          height={48}
+          width={102}
+          height={45}
         />
       ) : (
         <Image
