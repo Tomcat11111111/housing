@@ -2,7 +2,7 @@ import Ellipse from '@/icon/Ellipse/Ellipse';
 
 import styles from './Loading.module.scss';
 
-export default function Loading({ size = 100 }) {
+export default function Loading({ size = 100, text = '' }) {
   return (
     <div className={styles.loadingContainer}>
       <svg
@@ -29,7 +29,7 @@ export default function Loading({ size = 100 }) {
         />
       </svg>
       <div className={styles.text}>
-        物件搜尋中
+        {text}
         <div className={styles.ellipse}>
           <Ellipse /> <Ellipse /> <Ellipse />
         </div>
