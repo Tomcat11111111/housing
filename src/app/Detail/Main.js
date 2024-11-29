@@ -52,7 +52,7 @@ const Main = () => {
     return response.data;
   };
 
-  const { isSuccess, data: rentDetailData } = useQuery({
+  const { status, data: rentDetailData } = useQuery({
     queryKey: ['detail'],
     queryFn: getDetailApi,
     select: (response) => {
@@ -102,7 +102,7 @@ const Main = () => {
     enabled: !!propertyId,
   });
 
-  if (!isSuccess)
+  if (status !== 'success')
     return (
       <div className={styles.loadingContainer}>
         <Loading text="資料讀取中" />
