@@ -16,6 +16,8 @@ import Footer from '@/layout/Footer/Footer';
 import Header from '@/layout/Header/Header';
 import SearchBar from '@/layout/SearchBar/SearchBar';
 
+import useSearchStore from '@/store/useSearchStore';
+
 import Arrow from '@/icon/Arrow/Arrow';
 import Domain from '@/icon/Domain/Domain';
 // import ArrowBack from '@/icon/ArrowBack/ArrowBack';
@@ -32,6 +34,8 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(true);
 
   const router = useRouter();
+
+  const { setSelectedTab } = useSearchStore();
 
   const handleScroll = useCallback(() => {
     // Adjusting based on scroll position
@@ -114,13 +118,30 @@ export default function Home() {
           <div
             className={styles.pageCard}
             onClick={() => {
-              router.push(`/auction`);
+              setSelectedTab('buy');
+              router.push(`/Search`);
             }}
           >
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Domain />
-                <span>拍賣特區</span>
+                <span>售屋區</span>
+              </div>
+              <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
+            </div>
+            <Arrow />
+          </div>
+          <div
+            className={styles.pageCard}
+            onClick={() => {
+              setSelectedTab('rent');
+              router.push(`/Search`);
+            }}
+          >
+            <div className={styles.cardLeft}>
+              <div className={styles.title}>
+                <Domain />
+                <span>租屋區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
@@ -135,22 +156,7 @@ export default function Home() {
             <div className={styles.cardLeft}>
               <div className={styles.title}>
                 <Domain />
-                <span>破盤特區</span>
-              </div>
-              <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
-            </div>
-            <Arrow />
-          </div>
-          <div
-            className={styles.pageCard}
-            onClick={() => {
-              router.push(`/flat`);
-            }}
-          >
-            <div className={styles.cardLeft}>
-              <div className={styles.title}>
-                <Domain />
-                <span>平賣特區</span>
+                <span>破盤區</span>
               </div>
               <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
             </div>
