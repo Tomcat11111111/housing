@@ -14,7 +14,8 @@ export default function Logo({ size = 'big' }) {
         cursor: 'pointer',
       }}
     >
-      {size === 'big' ? (
+      <Image src="/housing/image/logo.png" alt="icon" width={102} height={45} />
+      {/* {size === 'big' ? (
         <Image
           src="/housing/image/logo.png"
           alt="icon"
@@ -28,7 +29,7 @@ export default function Logo({ size = 'big' }) {
           width={147.26}
           height={48}
         />
-      )}
+      )} */}
     </div>
   );
 }
