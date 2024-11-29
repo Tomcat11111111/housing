@@ -70,9 +70,16 @@ export default function Home() {
     '/housing/image/Banner_3.png',
   ];
 
-  const getRecommendationsApi = async () => {
+  const getRentalRecommendationsApi = async () => {
     const response = await axios.get(
       'https://jzj-api.zeabur.app/properties/for-rent?limit=4&offset=0&sort=-views' // 先寫租的
+    );
+    return response.data;
+  };
+
+  const getSaleRecommendationsApi = async () => {
+    const response = await axios.get(
+      'https://jzj-api.zeabur.app/properties/for-sale?limit=4&offset=0&sort=-views' // 先寫租的
     );
     return response.data;
   };
@@ -87,9 +94,16 @@ export default function Home() {
     return formatData;
   };
 
-  const { data: recommendationsList } = useQuery({
-    queryKey: ['getRecommendationsData'],
-    queryFn: getRecommendationsApi,
+  const { data: rentalRecommendationsList } = useQuery({
+    queryKey: ['getRentalRecommendationsData'],
+    queryFn: getRentalRecommendationsApi,
+    select: formatCardData,
+    initialData: [],
+  });
+
+  const { data: saleRecommendationsList } = useQuery({
+    queryKey: ['getSaleRecommendationsData'],
+    queryFn: getSaleRecommendationsApi,
     select: formatCardData,
     initialData: [],
   });
@@ -189,7 +203,7 @@ export default function Home() {
             />
           </div>
           <CardCarouselBox
-            cardItemList={[...recommendationsList, ...recommendationsList]}
+            cardItemList={saleRecommendationsList}
           />
         </div>
         <div className={styles.recommendArea}>
@@ -214,7 +228,9 @@ export default function Home() {
               action={() => router.push('/recommand')}
             />
           </div>
-          <CardCarouselBox cardItemList={recommendationsList} />
+          <CardCarouselBox
+            cardItemList={rentalRecommendationsList}
+          />
         </div>
       </div>
       <Footer />

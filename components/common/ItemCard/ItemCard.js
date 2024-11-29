@@ -88,7 +88,7 @@ const ItemCard = (props) => {
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src="/housing/image/house_item.png"
+            src={images.length > 0 ? images[0].url : '/housing/image/house_item.png'}
             alt="house_item"
             // width={389}
             // height={182}
