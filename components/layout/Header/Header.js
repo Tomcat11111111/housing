@@ -7,12 +7,15 @@ import Button from '@/common/Button/Button';
 
 import Logo from '@/components/common/Logo/Logo';
 
+import useSearchStore from '@/store/useSearchStore';
+
 import Account from '@/icon/Account/Account';
 
 import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
   const router = useRouter();
+  const { setSelectedTab } = useSearchStore();
 
   return (
     <header className={styles.headerContainer}>
@@ -37,10 +40,20 @@ const Header = ({ headerType = 'default' }) => {
               |
               <button
                 onClick={() => {
-                  router.push(`/auction`);
+                  setSelectedTab('buy');
+                  router.push(`/Search`);
                 }}
               >
-                拍賣特區
+                售屋區
+              </button>
+              |
+              <button
+                onClick={() => {
+                  setSelectedTab('rent');
+                  router.push(`/Search`);
+                }}
+              >
+                租屋區
               </button>
               |
               <button
@@ -48,15 +61,7 @@ const Header = ({ headerType = 'default' }) => {
                   router.push(`/discount`);
                 }}
               >
-                破盤特區
-              </button>
-              |
-              <button
-                onClick={() => {
-                  router.push(`/flat`);
-                }}
-              >
-                平轉特區
+                破盤區
               </button>
             </div>
           )}
