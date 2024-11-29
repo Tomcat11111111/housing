@@ -27,11 +27,11 @@ import DetailImage from './DetailImage';
 import DetailSideBar from './DetailSideBar';
 import styles from './Main.module.scss';
 
-const Main = () => {
+const Main = ({ selectedTab }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const { selectedTab, setSearchParams } = useSearchStore();
+  const { setSearchParams } = useSearchStore();
   const [propertyId, setPropertyId] = useState('');
   const [collapse, setCollapse] = useState(true);
   const textAreaRef = useRef(null);
@@ -52,10 +52,12 @@ const Main = () => {
     return response.data;
   };
 
-  const { status, data: rentDetailData } = useQuery({
+  const { isSuccess, data: rentDetailData } = useQuery({
     queryKey: ['detail'],
     queryFn: getDetailApi,
     select: (response) => {
+      if (selectedTab === 'buy') return response;
+
       const { property = {}, rentalOffersAndRules } = response;
       let modifyRules = [];
 
@@ -102,7 +104,7 @@ const Main = () => {
     enabled: !!propertyId,
   });
 
-  if (status !== 'success')
+  if (!isSuccess)
     return (
       <div className={styles.loadingContainer}>
         <Loading text="資料讀取中" />
@@ -118,6 +120,7 @@ const Main = () => {
     equipments,
     modifyRules,
     inclusions,
+    propertySummary = [],
   } = rentDetailData;
 
   const {
@@ -392,97 +395,59 @@ const Main = () => {
             <div className={styles.area}>
               <span className={styles.title}>物件介紹</span>
               <div className={styles.infoArea}>
-                <span className={styles.infoType}>房屋資料</span>
-                <div style={{ display: 'flex' }}>
-                  <div className={styles.singleArea}>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>現況：</p>
-                      <p className={styles.info}>自住中</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>裝潢程度：</p>
-                      <p className={styles.info}>中檔裝潢</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>公設比：</p>
-                      <p className={styles.info}>27%</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>法定用途：</p>
-                      <p className={styles.info}>住家用</p>
-                    </span>
-                  </div>
-                  <div className={styles.singleArea}>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>管理費：</p>
-                      <p className={styles.info}>3799元/月</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>帶租約：</p>
-                      <p className={styles.info}>否</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>車位：</p>
-                      <p className={styles.info}>否</p>
-                    </span>
-                  </div>
-                </div>
-                <span className={styles.infoType}>坪數說明</span>
-                <div style={{ display: 'flex' }}>
-                  <div className={styles.singleArea}>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>建物登記：</p>
-                      <p className={styles.info}>15.51坪</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>附屬建物：</p>
-                      <p className={styles.info}>1.51坪</p>
-                    </span>
-                  </div>
-                  <div className={styles.singleArea}>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>主建物：</p>
-                      <p className={styles.info}>7.28坪</p>
-                    </span>
-                    <span className={styles.singleInfo}>
-                      <p className={styles.colon}>公共設施：</p>
-                      <p className={styles.info}>6.72坪</p>
-                    </span>
-                  </div>
-                </div>
+                {propertySummary.map((info) => (
+                  <>
+                    <span className={styles.infoType}>{info.title}</span>
+                    <div className={styles.singleArea}>
+                      {info.content.map((item, index) => {
+                        return (
+                          <span
+                            className={styles.singleInfo}
+                            key={`info_${index}`}
+                          >
+                            <p className={styles.colon}>{item.subtitle}：</p>
+                            <p className={styles.info}>{item.description}</p>
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </>
+                ))}
               </div>
             </div>
           )}
-          <div className={styles.area}>
-            <span className={styles.title}>屋況介紹</span>
-            <p
-              className={styles.describe}
-              data-collapse={textAreaHeight && collapse ? 'collapse' : ''}
-              dangerouslySetInnerHTML={{ __html: introduction }}
-              ref={textAreaRef}
-            ></p>
-            {textAreaHeight > 400 && (
-              <div
-                style={{ position: 'relative' }}
-                onClick={() => {
-                  setCollapse(!collapse);
-                }}
-              >
-                {collapse ? (
-                  <div className={styles.collapseBtn}>
-                    <p>查看全部</p>
-                    <ArrowDropdownDown color="#909090" />
-                  </div>
-                ) : (
-                  <div className={styles.collapseBtn}>
-                    <p>收起介紹</p>
-                    <ArrowDropdownUp color="#909090" />
-                  </div>
-                )}
-                {collapse && <div className={styles.cover}></div>}
-              </div>
-            )}
-          </div>
+          {introduction && (
+            <div className={styles.area}>
+              <span className={styles.title}>屋況介紹</span>
+              <p
+                className={styles.describe}
+                data-collapse={textAreaHeight && collapse ? 'collapse' : ''}
+                dangerouslySetInnerHTML={{ __html: introduction }}
+                ref={textAreaRef}
+              ></p>
+              {textAreaHeight > 400 && (
+                <div
+                  style={{ position: 'relative' }}
+                  onClick={() => {
+                    setCollapse(!collapse);
+                  }}
+                >
+                  {collapse ? (
+                    <div className={styles.collapseBtn}>
+                      <p>查看全部</p>
+                      <ArrowDropdownDown color="#909090" />
+                    </div>
+                  ) : (
+                    <div className={styles.collapseBtn}>
+                      <p>收起介紹</p>
+                      <ArrowDropdownUp color="#909090" />
+                    </div>
+                  )}
+                  {collapse && <div className={styles.cover}></div>}
+                </div>
+              )}
+            </div>
+          )}
         </article>
         <DetailSideBar price={price} views={views} />
       </div>

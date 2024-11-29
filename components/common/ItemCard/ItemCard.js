@@ -20,7 +20,7 @@ import TubIcon from '@/icon/TubIcon/TubIcon';
 import styles from './ItemCard.module.scss';
 
 const ItemCard = (props) => {
-  const { itemData, averagePrice, index } = props;
+  const { itemData, averagePrice, index, type } = props;
 
   const {
     id,
@@ -38,6 +38,8 @@ const ItemCard = (props) => {
     price = null,
     images = [],
     location,
+    totalPrice,
+    unitPrice,
   } = itemData;
   const { district } = location;
 
@@ -48,6 +50,13 @@ const ItemCard = (props) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const cardRef = useRef();
+
+  const truncateToTenThousandWithUnit = (amount) => {
+    if (amount < 10000) return amount.toLocaleString();
+
+    const truncated = Math.floor(amount / 10000);
+    return `${truncated.toLocaleString()} 萬`;
+  };
 
   const getPropertyInfo = () => {
     let result = '';
@@ -88,10 +97,12 @@ const ItemCard = (props) => {
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src={images.length > 0 ? images[0].url : '/housing/image/house_item.png'}
+            src={
+              images.length > 0
+                ? images[0].url
+                : '/housing/image/house_item.png'
+            }
             alt="house_item"
-            // width={389}
-            // height={182}
             fill
           />
           {isHovered && (
@@ -141,7 +152,6 @@ const ItemCard = (props) => {
         <div className={styles.address} style={{ color: cardColor }}>
           {title}
         </div>
-        {/* TODO:color */}
         <div className={styles.browse}>
           <Tag
             text={`${views}人瀏覽`}
@@ -246,6 +256,7 @@ const ItemCard = (props) => {
           opacity={isHovered ? '' : 0.8}
         />
         {price && <span>{price.toLocaleString()}/月</span>}
+        {totalPrice && <span>{truncateToTenThousandWithUnit(totalPrice)}</span>}
       </div>
     </div>
   );

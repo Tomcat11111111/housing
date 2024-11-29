@@ -29,7 +29,7 @@ export default function Detail() {
 
   const getRecommendationsApi = async () => {
     const response = await axios.get(
-      'https://jzj-api.zeabur.app/properties/for-rent?limit=4&offset=0&sort=-views' // 先寫租的
+      `https://jzj-api.zeabur.app/properties/${selectedTab ? 'for-rent' : 'for-sale'}?limit=4&offset=0&sort=-views`
     );
     return response.data;
   };
@@ -68,7 +68,7 @@ export default function Detail() {
           setInput={(value) => setSearch(value)}
         />
       </div>
-      <Main />
+      <Main selectedTab={selectedTab} />
       <div className={styles.recommendBox}>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>

@@ -150,12 +150,12 @@ const DetailSideBar = (props) => {
           <div className={styles.phone}>
             <div className={styles.phoneInfo}>
               <Account size={40} />
-              <span>王小明 先生</span>
+              <span>金小姐</span>
             </div>
             {contactSwitch === 'phone' && (
               <div className={styles.qrcode}>
                 <QRCodeCanvas
-                  value={'tel:0923776003'}
+                  value={'tel:0936698468'}
                   size={160} // Size of the QR code
                   bgColor={'#ffffff'} // Background color
                   fgColor={'#000000'} // Foreground color (QR code color)
@@ -167,11 +167,11 @@ const DetailSideBar = (props) => {
           </div>
         )}
         <Button
-          buttonText={contactSwitch === 'phone' ? '0937-059-940' : '立即預約'}
+          buttonText={contactSwitch === 'phone' ? '0936-698-468' : '立即預約'}
           buttonStyle={{
             borderRadius: '8px',
             background: '#0936D8',
-            padding: contactSwitch === 'book' ? '16px 128px' : '16px 84px',
+            padding: contactSwitch === 'book' ? '16px 128px' : '16px 82px',
             gap: '8px',
           }}
           textStyle={{
@@ -183,9 +183,7 @@ const DetailSideBar = (props) => {
           iconPosition={contactSwitch === 'phone' ? 'left' : ''}
           icon={<PhoneInTalk />}
           action={() => {
-            if (contactSwitch === 'phone') {
-              setQrcode(true);
-            } else {
+            if (contactSwitch !== 'phone') {
               reserveMutation({ name, phone, email });
             }
           }}
