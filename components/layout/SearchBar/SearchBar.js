@@ -219,7 +219,7 @@ const SearchBar = (props) => {
     }
 
     setSearchBarParams(tempSearchParams);
-    router.push('/search');
+    router.push('/Search');
   };
 
   return (
@@ -266,7 +266,7 @@ const SearchBar = (props) => {
                   padding: '8px 8px 8px 16px',
                   gap: '8px',
                 }}
-                action={() => router.push('/search')}
+                action={() => router.push('/Search')}
               />
             </div>
           </div>
@@ -562,7 +562,7 @@ const SearchBar = (props) => {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
-              action={() => router.push('/search')}
+              action={() => router.push('/Search')}
             />
           </div>
         </>

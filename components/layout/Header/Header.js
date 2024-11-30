@@ -41,7 +41,7 @@ const Header = ({ headerType = 'default' }) => {
               <button
                 onClick={() => {
                   setSelectedTab('buy');
-                  router.push(`/search`);
+                  router.push(`/Search`);
                 }}
               >
                 售屋區
@@ -50,7 +50,7 @@ const Header = ({ headerType = 'default' }) => {
               <button
                 onClick={() => {
                   setSelectedTab('rent');
-                  router.push(`/search`);
+                  router.push(`/Search`);
                 }}
               >
                 租屋區

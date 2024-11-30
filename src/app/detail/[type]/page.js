@@ -132,7 +132,7 @@ export default function Detail({ params }) {
           selectedTab={selectedTab}
           onChange={(value) => {
             setSelectedTab(value);
-            router.push('/search');
+            router.push('/Search');
           }}
           input={search}
           setInput={(value) => setSearch(value)}

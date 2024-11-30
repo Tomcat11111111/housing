@@ -133,7 +133,7 @@ export default function Home() {
             className={styles.pageCard}
             onClick={() => {
               setSelectedTab('buy');
-              router.push(`/search`);
+              router.push(`/Search`);
             }}
           >
             <div className={styles.cardLeft}>
@@ -149,7 +149,7 @@ export default function Home() {
             className={styles.pageCard}
             onClick={() => {
               setSelectedTab('rent');
-              router.push(`/search`);
+              router.push(`/Search`);
             }}
           >
             <div className={styles.cardLeft}>
