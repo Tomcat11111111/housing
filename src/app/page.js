@@ -65,9 +65,9 @@ export default function Home() {
   }, [handleScroll]);
 
   const images = [
-    '/housing/image/Banner_1.png',
-    '/housing/image/Banner_2.png',
-    '/housing/image/Banner_3.png',
+    '/image/Banner_1.png',
+    '/image/Banner_2.png',
+    '/image/Banner_3.png',
   ];
 
   const getRentalRecommendationsApi = async () => {
@@ -133,7 +133,7 @@ export default function Home() {
             className={styles.pageCard}
             onClick={() => {
               setSelectedTab('buy');
-              router.push(`/Search`);
+              router.push(`/search`);
             }}
           >
             <div className={styles.cardLeft}>
@@ -149,7 +149,7 @@ export default function Home() {
             className={styles.pageCard}
             onClick={() => {
               setSelectedTab('rent');
-              router.push(`/Search`);
+              router.push(`/search`);
             }}
           >
             <div className={styles.cardLeft}>
@@ -202,9 +202,7 @@ export default function Home() {
               action={() => router.push('/recommand')}
             />
           </div>
-          <CardCarouselBox
-            cardItemList={saleRecommendationsList}
-          />
+          <CardCarouselBox cardItemList={saleRecommendationsList} type="buy" />
         </div>
         <div className={styles.recommendArea}>
           <div className={styles.recommendTitle}>
@@ -230,6 +228,7 @@ export default function Home() {
           </div>
           <CardCarouselBox
             cardItemList={rentalRecommendationsList}
+            type="rent"
           />
         </div>
       </div>

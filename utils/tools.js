@@ -16,7 +16,7 @@ const PRICE_STATUS_MAP = new Map([
       color: '#E85454',
       icon: (
         <Image
-          src="/housing/icon/trending_up.svg"
+          src="/icon/trending_up.svg"
           alt="trending_up"
           width={20}
           height={20}
@@ -31,7 +31,7 @@ const PRICE_STATUS_MAP = new Map([
       color: '#52C32A',
       icon: (
         <Image
-          src="/housing/icon/trending_down.svg"
+          src="/icon/trending_down.svg"
           alt="trending_down"
           width={20}
           height={20}
@@ -46,7 +46,7 @@ const PRICE_STATUS_MAP = new Map([
       color: '#FAAF1D',
       icon: (
         <Image
-          src="/housing/icon/trending_flat.svg"
+          src="/icon/trending_flat.svg"
           alt="trending_flat"
           width={20}
           height={20}

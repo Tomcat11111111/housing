@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const useSearchStore = create((set) => ({
-  selectedTab: 'rent',
+  selectedTab: 'buy', //TODO: 先帶buy
   searchBarParams: {},
   setSelectedTab: (tab) => {
     set(() => ({ selectedTab: tab }));

@@ -73,7 +73,6 @@ export default function Search() {
   const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
-  // console.log('🚀 ~ Search ~ filterParams:', filterParams);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
@@ -100,7 +99,6 @@ export default function Search() {
 
   const getRentPropertiesApi = async (data) => {
     try {
-      console.log('🚀 ~ getRentPropertiesApi ~ data.meta:', data.meta);
       const reponse = await axios.get(
         `https://jzj-api.zeabur.app/properties/${selectedTab === 'rent' ? 'for-rent' : 'for-sale'}`,
         {
@@ -114,9 +112,12 @@ export default function Search() {
 
   const formatCardData = (reponse) => {
     const { total, data = [] } = reponse;
+
     const formatData = data.map((item) => ({
       ...item.property,
-      price: item.price,
+      price: item.price ?? null,
+      totalPrice: item.totalPrice ?? null,
+      unitPrice: item.unitPrice ?? null,
     }));
 
     return {
@@ -175,7 +176,7 @@ export default function Search() {
                 iconPosition="left"
                 icon={
                   <Image
-                    src="/housing/icon/setting.svg"
+                    src="/icon/setting.svg"
                     alt="setting"
                     width={24}
                     height={24}
@@ -225,6 +226,7 @@ export default function Search() {
                       itemData={itemData}
                       index={index}
                       averagePrice={12000}
+                      type={selectedTab}
                     />
                   )}
                 </div>

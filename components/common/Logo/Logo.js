@@ -14,17 +14,17 @@ export default function Logo({ size = 'big' }) {
         cursor: 'pointer',
       }}
     >
-      <Image src="/housing/image/logo.png" alt="icon" width={102} height={45} />
+      <Image src="/image/logo.png" alt="icon" width={102} height={45} />
       {/* {size === 'big' ? (
         <Image
-          src="/housing/image/logo.png"
+          src="/image/logo.png"
           alt="icon"
           width={102}
           height={45}
         />
       ) : (
         <Image
-          src="/housing/icon/top_icon_small.svg"
+          src="/icon/top_icon_small.svg"
           alt="icon"
           width={147.26}
           height={48}

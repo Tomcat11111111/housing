@@ -173,8 +173,6 @@ export default function Sidebar({
       districtId: district,
     };
 
-    console.log('🚀 ~ getFilterParams district:', district);
-
     if (categories.length > 0) {
       tempParams.category = categories;
     }

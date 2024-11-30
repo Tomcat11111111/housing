@@ -13,7 +13,7 @@ const DetailImage = () => {
           style={{
             borderRadius: '16px 0 0 16px',
           }}
-          src="/housing/image/金智傑房屋網 image 7.png"
+          src="/image/金智傑房屋網 image 7.png"
           alt={1}
           fill
         />
@@ -39,7 +39,7 @@ const DetailImage = () => {
               height: '196px',
             }}
           >
-            <Image src="/housing/image/金智傑房屋網 image 8.png" alt={1} fill />
+            <Image src="/image/金智傑房屋網 image 8.png" alt={1} fill />
           </div>
           <div
             style={{
@@ -52,7 +52,7 @@ const DetailImage = () => {
               style={{
                 borderRadius: '0 16px 16px 0',
               }}
-              src="/housing/image/金智傑房屋網 image 9.png"
+              src="/image/金智傑房屋網 image 9.png"
               alt={1}
               fill
             />
@@ -66,11 +66,7 @@ const DetailImage = () => {
               height: '196px',
             }}
           >
-            <Image
-              src="/housing/image/金智傑房屋網 image 10.png"
-              alt={1}
-              fill
-            />
+            <Image src="/image/金智傑房屋網 image 10.png" alt={1} fill />
           </div>
           <div
             style={{
@@ -83,7 +79,7 @@ const DetailImage = () => {
               style={{
                 borderRadius: '0 16px 16px 0',
               }}
-              src="/housing/image/金智傑房屋網 image 11.png"
+              src="/image/金智傑房屋網 image 11.png"
               alt={1}
               fill
             />

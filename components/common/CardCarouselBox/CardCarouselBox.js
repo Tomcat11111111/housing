@@ -2,13 +2,17 @@ import Slider from 'react-slick';
 
 import ItemCard from '@/common/ItemCard/ItemCard';
 
+import useSearchStore from '@/store/useSearchStore';
+
 import ArrowBack from '@/icon/ArrowBack/ArrowBack';
 import ArrowForward from '@/icon/ArrowForward/ArrowForward';
 
 import styles from './CardCarouselBox.module.scss';
 
 const CardCarouselBox = (props) => {
-  const { cardItemList = [] } = props;
+  const { cardItemList = [], type } = props;
+
+  const { setSelectedTab } = useSearchStore();
 
   const NextArrow = (props) => {
     const { className, style, onClick } = props;
@@ -81,7 +85,13 @@ const CardCarouselBox = (props) => {
     cardItemList.length > 0 && (
       <Slider {...settings}>
         {cardItemList.map((itemData, index) => (
-          <div className={styles.cardBox} key={index}>
+          <div
+            className={styles.cardBox}
+            key={index}
+            onClick={() => {
+              setSelectedTab(type);
+            }}
+          >
             <ItemCard itemData={itemData} index={index} averagePrice={12000} />
           </div>
         ))}

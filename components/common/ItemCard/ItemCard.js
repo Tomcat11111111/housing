@@ -91,17 +91,13 @@ const ItemCard = (props) => {
       className={styles.itemCard}
       ref={cardRef}
       onClick={() => {
-        if (id) router.push(`/Detail?id=${id}`);
+        if (id) router.push(`/detail/${type}?id=${id}`);
       }}
     >
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src={
-              images.length > 0
-                ? images[0].url
-                : '/housing/image/house_item.png'
-            }
+            src={images.length > 0 ? images[0].url : '/image/house_item.png'}
             alt="house_item"
             fill
           />

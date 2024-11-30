@@ -219,7 +219,7 @@ const SearchBar = (props) => {
     }
 
     setSearchBarParams(tempSearchParams);
-    router.push('/Search');
+    router.push('/search');
   };
 
   return (
@@ -266,7 +266,7 @@ const SearchBar = (props) => {
                   padding: '8px 8px 8px 16px',
                   gap: '8px',
                 }}
-                action={() => router.push('/Search')}
+                action={() => router.push('/search')}
               />
             </div>
           </div>
@@ -524,7 +524,7 @@ const SearchBar = (props) => {
               iconPosition="left"
               icon={
                 <Image
-                  src="/housing/icon/setting.svg"
+                  src="/icon/setting.svg"
                   alt="setting"
                   width={24}
                   height={24}
@@ -562,7 +562,7 @@ const SearchBar = (props) => {
                 padding: '8px 8px 8px 16px',
                 gap: '8px',
               }}
-              action={() => router.push('/Search')}
+              action={() => router.push('/search')}
             />
           </div>
         </>

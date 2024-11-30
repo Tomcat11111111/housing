@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { BookmarkIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -21,95 +22,23 @@ import Loading from '@/components/layout/Loading/Loading';
 import useSearchStore from '@/store/useSearchStore';
 
 import ArrowDropdownDown from '@/icon/ArrowDropdownDown/ArrowDropdownDown';
-import BookmarkHollowIcon from '@/icon/BookmarkHollowIcon/BookmarkHollowIcon';
 
 import DetailImage from './DetailImage';
 import DetailSideBar from './DetailSideBar';
 import styles from './Main.module.scss';
 
-const Main = ({ selectedTab }) => {
-  const searchParams = useSearchParams();
+const Main = ({ type, detailData }) => {
   const router = useRouter();
 
   const { setSearchParams } = useSearchStore();
-  const [propertyId, setPropertyId] = useState('');
   const [collapse, setCollapse] = useState(true);
+  const [isBookmarked, setIsBookmarked] = useState(false); //TODO:後續改API
+
   const textAreaRef = useRef(null);
-
-  useEffect(() => {
-    setPropertyId(searchParams.get('id'));
-  }, [searchParams]);
-
   const textAreaHeight = useMemo(
     () => textAreaRef.current?.clientHeight,
     [textAreaRef.current]
   );
-
-  const getDetailApi = async () => {
-    const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/${selectedTab === 'rent' ? 'for-rent' : 'for-sale'}/${propertyId}`
-    );
-    return response.data;
-  };
-
-  const { isSuccess, data: rentDetailData } = useQuery({
-    queryKey: ['detail'],
-    queryFn: getDetailApi,
-    select: (response) => {
-      if (selectedTab === 'buy') return response;
-
-      const { property = {}, rentalOffersAndRules } = response;
-      let modifyRules = [];
-
-      const [landLordOffer, equipments, rules = {}] = rentalOffersAndRules;
-      const { content = [] } = rules;
-
-      const tempRules =
-        content.length > 0
-          ? filter((rule) => rule?.subtitle !== '租金內含', content)
-          : [];
-
-      const inclusions =
-        content.length > 0 ? find(propEq('租金內含', 'subtitle'))(content) : '';
-
-      if (tempRules.length > 0) {
-        modifyRules = map((rule) => {
-          if (rule?.subtitle === '可遷入日') {
-            const date = dayjs(rule.description);
-
-            if (date.get('year')) {
-              rule.description =
-                date.get('year') +
-                '年' +
-                (date.get('month') + 1) +
-                '月' +
-                date.get('date') +
-                '日';
-            }
-          }
-
-          return rule;
-        })(tempRules);
-      }
-
-      return {
-        ...response,
-        landLordOffer,
-        property,
-        modifyRules,
-        inclusions,
-        equipments,
-      };
-    },
-    enabled: !!propertyId,
-  });
-
-  if (!isSuccess)
-    return (
-      <div className={styles.loadingContainer}>
-        <Loading text="資料讀取中" />
-      </div>
-    );
 
   const {
     property = {},
@@ -121,7 +50,7 @@ const Main = ({ selectedTab }) => {
     modifyRules,
     inclusions,
     propertySummary = [],
-  } = rentDetailData;
+  } = detailData;
 
   const {
     location = {},
@@ -154,9 +83,9 @@ const Main = ({ selectedTab }) => {
           &gt;
           <span
             className={styles.breadcrumb}
-            onClick={() => router.push('/Search')}
+            onClick={() => router.push('/search')}
           >
-            {selectedTab === 'rent' ? '租房' : '買房'}
+            {type === 'rent' ? '租房' : '買房'}
           </span>
           &gt;
           <span
@@ -169,7 +98,7 @@ const Main = ({ selectedTab }) => {
                   displayName: city?.displayName,
                 },
               });
-              router.push('/Search');
+              router.push('/search');
             }}
           >
             {city?.displayName}
@@ -186,7 +115,7 @@ const Main = ({ selectedTab }) => {
                   displayName: city?.displayName,
                 },
               });
-              router.push('/Search');
+              router.push('/search');
             }}
           >
             {district?.displayName}
@@ -204,12 +133,7 @@ const Main = ({ selectedTab }) => {
             <Tag
               text={`${views}人瀏覽`}
               icon={
-                <Image
-                  src="/housing/icon/eye.svg"
-                  alt="eye"
-                  width={20}
-                  height={20}
-                />
+                <Image src="/icon/eye.svg" alt="eye" width={20} height={20} />
               }
               gap="4px"
               iconPosition="left"
@@ -218,12 +142,7 @@ const Main = ({ selectedTab }) => {
             <Tag
               text="10小時內更新"
               icon={
-                <Image
-                  src="/housing/icon/time.svg"
-                  alt="time"
-                  width={20}
-                  height={20}
-                />
+                <Image src="/icon/time.svg" alt="time" width={20} height={20} />
               }
               gap="4px"
               iconPosition="left"
@@ -251,7 +170,13 @@ const Main = ({ selectedTab }) => {
               buttonText="收藏"
               buttonType="transparent"
               iconPosition="left"
-              icon={<BookmarkHollowIcon color="#333333" />}
+              icon={
+                isBookmarked ? (
+                  <BookmarkIcon fill="#333333" color="#333333" />
+                ) : (
+                  <BookmarkIcon color="#333333" />
+                )
+              }
               textStyle={{
                 color: '#333',
                 fontSize: '14px',
@@ -263,6 +188,7 @@ const Main = ({ selectedTab }) => {
                 padding: '8px 16px 8px 16px',
                 gap: '8px',
               }}
+              action={() => setIsBookmarked(!isBookmarked)}
             />
           </div>
         </div>
@@ -347,7 +273,7 @@ const Main = ({ selectedTab }) => {
               </div>
             )}
           </div>
-          {selectedTab === 'rent' && (
+          {type === 'rent' && (
             <div className={styles.area}>
               <span className={styles.title}>設備＆規則</span>
               <div className={styles.infoArea}>
@@ -391,7 +317,7 @@ const Main = ({ selectedTab }) => {
               </div>
             </div>
           )}
-          {selectedTab === 'buy' && (
+          {type === 'buy' && (
             <div className={styles.area}>
               <span className={styles.title}>物件介紹</span>
               <div className={styles.infoArea}>
