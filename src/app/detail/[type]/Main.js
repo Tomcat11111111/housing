@@ -83,7 +83,7 @@ const Main = ({ type, detailData }) => {
           &gt;
           <span
             className={styles.breadcrumb}
-            onClick={() => router.push('/search')}
+            onClick={() => router.push('/Search')}
           >
             {type === 'rent' ? '租房' : '買房'}
           </span>
@@ -98,7 +98,7 @@ const Main = ({ type, detailData }) => {
                   displayName: city?.displayName,
                 },
               });
-              router.push('/search');
+              router.push('/Search');
             }}
           >
             {city?.displayName}
@@ -115,7 +115,7 @@ const Main = ({ type, detailData }) => {
                   displayName: city?.displayName,
                 },
               });
-              router.push('/search');
+              router.push('/Search');
             }}
           >
             {district?.displayName}
