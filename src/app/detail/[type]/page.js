@@ -59,7 +59,6 @@ export default function Detail({ params }) {
       select: formatCardData,
     }
   );
-  console.log('isRecommendSuccess: ', isRecommendSuccess);
 
   const propertyId = searchParams.get('id');
 
