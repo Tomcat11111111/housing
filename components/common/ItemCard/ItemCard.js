@@ -19,6 +19,29 @@ import TubIcon from '@/icon/TubIcon/TubIcon';
 
 import styles from './ItemCard.module.scss';
 
+const getPriceDisplay = (price, type, isHovered) => {
+  console.log('type: ', type);
+  if (type === 'rent') {
+    return (
+      <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>
+        {price.toLocaleString()}/月
+      </span>
+    );
+  }
+
+  if (price < 10000) return price.toLocaleString();
+
+  const truncated = Math.floor(price / 10000);
+  return (
+    <div className={styles.priceBox}>
+      <span>總價</span>
+      <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>
+        {truncated.toLocaleString()} 萬
+      </span>
+    </div>
+  );
+};
+
 const ItemCard = (props) => {
   const { itemData, averagePrice, index, type } = props;
 
@@ -45,18 +68,14 @@ const ItemCard = (props) => {
 
   const router = useRouter();
 
-  const priceStatusInfo = getPriceStatusInfo(price, averagePrice);
+  const tempAveragePrice = type === 'buy' ? 25000000 : 50000; // 先寫死，之後要改成從API取得
+
+  const displayPrice = type === 'buy' ? totalPrice : price;
+  const priceStatusInfo = getPriceStatusInfo(displayPrice, tempAveragePrice);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const cardRef = useRef();
-
-  const truncateToTenThousandWithUnit = (amount) => {
-    if (amount < 10000) return amount.toLocaleString();
-
-    const truncated = Math.floor(amount / 10000);
-    return `${truncated.toLocaleString()} 萬`;
-  };
 
   const getPropertyInfo = () => {
     let result = '';
@@ -101,6 +120,9 @@ const ItemCard = (props) => {
             alt="house_item"
             fill
           />
+
+          {/* 
+          //TODO:之後補上tag
           {isHovered && (
             <div className={styles.tagArea}>
               <Tag
@@ -116,7 +138,7 @@ const ItemCard = (props) => {
                 padding="6px 8px"
               />
             </div>
-          )}
+          )} */}
           {isHovered && (
             <>
               <button className={`${styles.carouselControl} ${styles.prev}`}>
@@ -239,20 +261,21 @@ const ItemCard = (props) => {
         <hr />
       </div>
       <div className={styles.bottom} data-hover={isHovered ? 'hover' : ''}>
-        <Tag
-          text={priceStatusInfo?.text}
-          textStyle={{
-            color: '#F6F6F6',
-          }}
-          tagColor={priceStatusInfo?.color}
-          iconPosition="right"
-          icon={priceStatusInfo?.icon}
-          padding="8px 16px"
-          gap="4px"
-          opacity={isHovered ? '' : 0.8}
-        />
-        {price && <span>{price.toLocaleString()}/月</span>}
-        {totalPrice && <span>{truncateToTenThousandWithUnit(totalPrice)}</span>}
+        <div className={styles.priceTag}>
+          <Tag
+            text={priceStatusInfo?.text}
+            textStyle={{
+              color: '#F6F6F6',
+            }}
+            tagColor={priceStatusInfo?.color}
+            iconPosition="right"
+            icon={priceStatusInfo?.icon}
+            padding="8px 16px"
+            gap="4px"
+            opacity={isHovered ? '' : 0.8}
+          />
+        </div>
+        {getPriceDisplay(displayPrice, type, isHovered)}
       </div>
     </div>
   );

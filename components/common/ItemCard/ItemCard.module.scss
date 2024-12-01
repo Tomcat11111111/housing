@@ -56,20 +56,8 @@
   padding: 0 16px 16px 16px;
   transition: transform 0.3s ease;
 
-  > span {
-    font-weight: 700;
-    line-height: 22px;
-    letter-spacing: 0.8px;
-    font-size: 16px;
-  }
-
   &[data-hover='hover'] {
-    > span {
-      transform: scale(1.2);
-      transform-origin: bottom;
-    }
-
-    > div {
+    > .priceTag {
       transform: scale(1.05);
       transform-origin: bottom;
     }
@@ -147,4 +135,23 @@
   top: 15px;
   right: 12px;
   position: absolute;
+}
+
+.priceBox {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.price {
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0.8px;
+  font-size: 16px;
+  display: inline-block;
+
+  &[data-hover='hover'] {
+    transform: scale(1.2);
+    transform-origin: bottom;
+  }
 }

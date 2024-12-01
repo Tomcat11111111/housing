@@ -8,7 +8,7 @@ import 'slick-carousel/slick/slick.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: '拓墣',
+  title: '拓撲TOP',
   description: '',
 };
 
