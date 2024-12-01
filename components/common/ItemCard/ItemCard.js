@@ -7,7 +7,7 @@ import Bookmark from '@/common/Bookmark/Bookmark';
 import Carousel from '@/common/Carousel/Carousel';
 import Tag from '@/common/Tag/Tag';
 
-import { getPriceStatusInfo } from '@/utils/tools';
+import { getPriceStatusInfo, getSalePriceDisplay } from '@/utils/tools';
 
 import Arrow from '@/icon/Arrow/Arrow';
 import BedIcon from '@/icon/BedIcon/BedIcon';
@@ -18,30 +18,6 @@ import GrassIcon from '@/icon/GrassIcon/GrassIcon';
 import TubIcon from '@/icon/TubIcon/TubIcon';
 
 import styles from './ItemCard.module.scss';
-
-const getPriceDisplay = (price, type, isHovered) => {
-  if (!price) return <></>;
-
-  if (type === 'rent') {
-    return (
-      <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>
-        {price.toLocaleString()}/月
-      </span>
-    );
-  }
-
-  if (price < 10000) return price.toLocaleString();
-
-  const truncated = Math.floor(price / 10000);
-  return (
-    <div className={styles.priceBox}>
-      <span>總價</span>
-      <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>
-        {truncated.toLocaleString()} 萬
-      </span>
-    </div>
-  );
-};
 
 const ItemCard = (props) => {
   const { itemData, averagePrice, index, type } = props;
@@ -276,7 +252,22 @@ const ItemCard = (props) => {
             opacity={isHovered ? '' : 0.8}
           />
         </div>
-        {getPriceDisplay(displayPrice, type, isHovered)}
+        {price && type === 'rent' && (
+          <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>
+            {price.toLocaleString()}/月
+          </span>
+        )}
+        {totalPrice && type === 'buy' && (
+          <div className={styles.priceBox}>
+            <span>總價</span>
+            <span
+              className={styles.price}
+              data-hover={isHovered ? 'hover' : ''}
+            >
+              {getSalePriceDisplay(totalPrice)} 萬
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

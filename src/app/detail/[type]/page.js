@@ -41,7 +41,7 @@ export default function Detail({ params }) {
   };
 
   const { isSuccess, data: detailData } = useQuery({
-    queryKey: ['detail'],
+    queryKey: [`detail_${propertyId}`],
     queryFn: getDetailApi,
     select: (response) => {
       if (type === 'buy') return response;

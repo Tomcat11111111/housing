@@ -375,7 +375,12 @@ const Main = ({ type, detailData }) => {
             </div>
           )}
         </article>
-        <DetailSideBar price={displayPrice} views={views} />
+        <DetailSideBar
+          price={displayPrice}
+          unitPrice={unitPrice}
+          views={views}
+          type={type}
+        />
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ const RecommendList = (props) => {
   return isRecommendSuccess ? (
     <div className={styles.recommendArea}>
       <div className={styles.recommendTitle}>
-        <span>熱門物件</span>
+        <span>熱門{type === 'rent' ? '出租' : '出售'}物件</span>
         <Button
           buttonText="瀏覽更多"
           buttonType="transparent"

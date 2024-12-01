@@ -62,6 +62,11 @@ export const getPriceStatusInfo = (price = 0, average = 0) => {
   if (price === average) return PRICE_STATUS_MAP.get('equal');
 };
 
+export const getSalePriceDisplay = (price = 0) => {
+  const truncated = Math.floor(price / 10000);
+  return truncated.toLocaleString();
+};
+
 // 租房 物件類型
 export const RENTAL_CATEGORIES = [
   // {id: 'shared_suite', value: 'new', displayName: '分租套房'}

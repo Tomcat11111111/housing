@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { QRCodeCanvas } from 'qrcode.react';
 
 import Button from '@/common/Button/Button';
@@ -14,12 +15,12 @@ import Person from '@/components/icon/Person/Person';
 import Phone from '@/components/icon/Phone/Phone';
 import PhoneInTalk from '@/components/icon/PhoneInTalk/PhoneInTalk';
 
-import { getPriceStatusInfo } from '@/utils/tools';
+import { getPriceStatusInfo, getSalePriceDisplay } from '@/utils/tools';
 
 import styles from './DetailSideBar.module.scss';
 
 const DetailSideBar = (props) => {
-  const { price, views } = props;
+  const { price, unitPrice, views, type } = props;
 
   const [contactSwitch, setContactSwitch] = useState('book');
   const [gender, setGender] = useState('male');
@@ -29,7 +30,7 @@ const DetailSideBar = (props) => {
 
   const reserveApi = async ({ name, phone, email }) => {
     const response = await axios.post(
-      `https://jzj-api.zeabur.app/properties/${selectedTab === 'rent' ? 'for-rent' : 'for-sale'}/${propertyId}/reserve`,
+      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}/${propertyId}/reserve`,
       {
         name,
         phone,
@@ -50,8 +51,22 @@ const DetailSideBar = (props) => {
   return (
     <div className={styles.detailSideBar}>
       {price && (
-        <div className={styles.price}>
-          {price && <span>{price.toLocaleString()}/月</span>}
+        <div className={styles.priceArea}>
+          {type === 'rent' && (
+            <span className={styles.price}>{price.toLocaleString()}/月</span>
+          )}
+          {type === 'buy' && (
+            <div>
+              <div className={styles.price}>
+                {getSalePriceDisplay(price)}
+                <span>萬元</span>
+              </div>
+              <div className={styles.unitPrice}>
+                <span>單價：</span>
+                {getSalePriceDisplay(unitPrice)}萬/坪
+              </div>
+            </div>
+          )}
           <Tag
             text={priceStatusInfo?.text}
             textStyle={{
