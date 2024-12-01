@@ -225,7 +225,7 @@ const SearchBar = (props) => {
     }
 
     setSearchBarParams(tempSearchParams);
-    router.push('/search'); // 要改回來
+    router.push('/Search');
   };
 
   return (
