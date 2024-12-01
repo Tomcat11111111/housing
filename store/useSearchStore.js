@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 const useSearchStore = create((set) => ({
   selectedTab: 'buy', //TODO: 先寫死為buy
+  searchCity: { id: 3, displayName: '新北市' },
   searchBarParams: {},
   setSelectedTab: (tab) => {
     set(() => ({ selectedTab: tab }));
@@ -11,6 +12,9 @@ const useSearchStore = create((set) => ({
       ...state,
       ...changeParams,
     }));
+  },
+  setSearchCity: (city) => {
+    set(() => ({ city }));
   },
 }));
 

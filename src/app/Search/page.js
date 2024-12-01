@@ -20,12 +20,22 @@ import useSearchStore from '@/store/useSearchStore';
 import styles from './Search.module.scss';
 import Sidebar from './Sidebar';
 
-const FILTER_DROPDOWN_LIST = [
+const FILTER_RENT_DROPDOWN_LIST = [
   { id: '', displayName: '預設' },
   { id: encodeURIComponent('-price'), displayName: '金額 大到小' },
   { id: encodeURIComponent('+price'), displayName: '金額 小到大' },
   { id: encodeURIComponent('-squareMeters'), displayName: '坪數 大到小' },
   { id: encodeURIComponent('+squareMeters'), displayName: '坪數 小到大' },
+  { id: encodeURIComponent('-createdAt'), displayName: '刊登時間 新到舊' },
+  { id: encodeURIComponent('+createdAt'), displayName: '刊登時間 舊到新' },
+];
+
+const FILTER_SALE_DROPDOWN_LIST = [
+  { id: '', displayName: '預設' },
+  { id: encodeURIComponent('-totalPrice'), displayName: '金額 大到小' },
+  { id: encodeURIComponent('+totalPrice'), displayName: '金額 小到大' },
+  { id: encodeURIComponent('-ownership'), displayName: '坪數 大到小' },
+  { id: encodeURIComponent('+ownership'), displayName: '坪數 小到大' },
   { id: encodeURIComponent('-createdAt'), displayName: '刊登時間 新到舊' },
   { id: encodeURIComponent('+createdAt'), displayName: '刊登時間 舊到新' },
 ];
@@ -52,10 +62,12 @@ const defaultFilterParams = {
 };
 
 export default function Search() {
-  const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
+  const { selectedTab, setSelectedTab, searchBarParams, searchCity } =
+    useSearchStore();
+  console.log('searchCity: ', searchCity);
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
-  const [city, setCity] = useState({ id: 3, displayName: '新北市' });
+  const [city, setCity] = useState(searchCity);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
@@ -196,12 +208,19 @@ export default function Search() {
             <div className={styles.dropdownButton}>
               <Dropdown
                 dropdownType="menu"
-                optionList={FILTER_DROPDOWN_LIST}
+                optionList={
+                  selectedTab === 'rent'
+                    ? FILTER_RENT_DROPDOWN_LIST
+                    : FILTER_SALE_DROPDOWN_LIST
+                }
                 value={filterOption}
                 onChange={(id) => setFilterOption(id)}
                 displayName={
-                  find(propEq(filterOption, 'id'))(FILTER_DROPDOWN_LIST)
-                    ?.displayName
+                  find(propEq(filterOption, 'id'))(
+                    selectedTab === 'rent'
+                      ? FILTER_RENT_DROPDOWN_LIST
+                      : FILTER_SALE_DROPDOWN_LIST
+                  )?.displayName
                 }
               />
             </div>

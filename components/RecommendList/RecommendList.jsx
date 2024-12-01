@@ -13,7 +13,7 @@ const RecommendList = (props) => {
 
   const getRecommendationsApi = async () => {
     const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}?limit=6&offset=0&sort=-views`
+      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}?limit=5&offset=0&sort=-views`
     );
     return response.data;
   };

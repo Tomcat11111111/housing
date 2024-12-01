@@ -116,8 +116,8 @@ export default function Detail({ params }) {
         </div>
       )}
       <div className={styles.recommendBox}>
-        <RecommendList type="rent" queryKey="detail_1" />
         <RecommendList type="buy" queryKey="detail_2" />
+        <RecommendList type="rent" queryKey="detail_1" />
       </div>
       <Footer />
     </Suspense>

@@ -33,8 +33,13 @@ import styles from './SearchBar.module.scss';
 const SearchBar = (props) => {
   const { isFixed, isOpen, setIsOpen } = props;
 
-  const { selectedTab, setSelectedTab, setSearchBarParams, searchBarParams } =
-    useSearchStore();
+  const {
+    selectedTab,
+    setSelectedTab,
+    setSearchBarParams,
+    searchBarParams,
+    setSearchCity,
+  } = useSearchStore();
 
   const router = useRouter();
 
@@ -187,10 +192,10 @@ const SearchBar = (props) => {
   const onSearch = () => {
     let tempSearchParams = {};
     tempSearchParams = {
-      cityId: city.id,
-      city: city,
       input: input,
     };
+
+    setSearchCity(city);
 
     if (categories.length > 0) {
       tempSearchParams.categories = categories;

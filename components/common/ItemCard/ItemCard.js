@@ -60,7 +60,7 @@ const ItemCard = (props) => {
     let result = '';
     if (district.displayName) result += `${district.displayName} | `;
     if (squareMeters) result += `${squareMeters}坪 | `;
-    if (age) result += `${age} | `;
+    if (age) result += `${age}年 | `;
     if (floor) result += `${floor}F/${totalFloors}F`;
 
     return result;
@@ -118,7 +118,7 @@ const ItemCard = (props) => {
               />
             </div>
           )} */}
-          {isHovered && (
+          {/* {isHovered && (
             <>
               <button
                 className={`${styles.carouselControl} ${styles.prev}`}
@@ -137,14 +137,14 @@ const ItemCard = (props) => {
                 <Arrow color="#909090" size={12} direction="right" />
               </button>
             </>
-          )}
-          {isHovered && (
+          )} */}
+          {/* {isHovered && (
             <div className={styles.indicators}>
               {firstFiveImages.map((_, index) => (
                 <button key={index} className={styles.indicator} />
               ))}
             </div>
-          )}
+          )} */}
           {isHovered && (
             <div className={styles.bookmark}>
               <Bookmark
