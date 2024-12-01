@@ -20,7 +20,7 @@ import { getPriceStatusInfo, getSalePriceDisplay } from '@/utils/tools';
 import styles from './DetailSideBar.module.scss';
 
 const DetailSideBar = (props) => {
-  const { price, unitPrice, views, type } = props;
+  const { price, unitPrice, views, type, id } = props;
 
   const [contactSwitch, setContactSwitch] = useState('book');
   const [gender, setGender] = useState('male');
@@ -30,7 +30,7 @@ const DetailSideBar = (props) => {
 
   const reserveApi = async ({ name, phone, email }) => {
     const response = await axios.post(
-      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}/${propertyId}/reserve`,
+      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}/${id}/reserve`,
       {
         name,
         phone,
@@ -182,6 +182,7 @@ const DetailSideBar = (props) => {
           </div>
         )}
         <Button
+          buttonType="blue"
           buttonText={contactSwitch === 'phone' ? '0936-698-468' : '立即預約'}
           buttonStyle={{
             borderRadius: '8px',
@@ -197,8 +198,10 @@ const DetailSideBar = (props) => {
           }}
           iconPosition={contactSwitch === 'phone' ? 'left' : ''}
           icon={<PhoneInTalk />}
+          isDisabled={!phone || !email || !name}
           action={() => {
             if (contactSwitch !== 'phone') {
+              console.log('reserveMutation: ', name, phone, email);
               reserveMutation({ name, phone, email });
             }
           }}

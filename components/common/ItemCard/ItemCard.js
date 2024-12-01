@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { slice } from 'ramda';
 
 import Bookmark from '@/common/Bookmark/Bookmark';
 import Carousel from '@/common/Carousel/Carousel';
@@ -45,7 +46,8 @@ const ItemCard = (props) => {
 
   const router = useRouter();
 
-  const tempAveragePrice = type === 'buy' ? 25000000 : 50000; // 先寫死，之後要改成從API取得
+  const firstFiveImages = slice(0, 5, images); // TODO: 暫時只取前五張圖片，為了點點點
+  const tempAveragePrice = type === 'buy' ? 25000000 : 50000; // TODO: 先寫死，之後要改成從API取得
 
   const displayPrice = type === 'buy' ? totalPrice : price;
   const priceStatusInfo = getPriceStatusInfo(displayPrice, tempAveragePrice);
@@ -93,7 +95,7 @@ const ItemCard = (props) => {
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src={images.length > 0 ? images[0].url : '/image/house_item.png'}
+            src={images.length > 0 ? images[0].url : '/image/house_item.png'} // TODO: 補上預設圖片（？
             alt="house_item"
             fill
           />
@@ -118,17 +120,27 @@ const ItemCard = (props) => {
           )} */}
           {isHovered && (
             <>
-              <button className={`${styles.carouselControl} ${styles.prev}`}>
+              <button
+                className={`${styles.carouselControl} ${styles.prev}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <Arrow color="#909090" size={12} direction="left" />
               </button>
-              <button className={`${styles.carouselControl} ${styles.next}`}>
+              <button
+                className={`${styles.carouselControl} ${styles.next}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <Arrow color="#909090" size={12} direction="right" />
               </button>
             </>
           )}
           {isHovered && (
             <div className={styles.indicators}>
-              {images.map((_, index) => (
+              {firstFiveImages.map((_, index) => (
                 <button key={index} className={styles.indicator} />
               ))}
             </div>

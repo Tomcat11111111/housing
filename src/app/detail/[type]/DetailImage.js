@@ -5,7 +5,8 @@ import Photo from '@/components/icon/Photo/Photo';
 
 import styles from './DetailImage.module.scss';
 
-const DetailImage = () => {
+const DetailImage = (props) => {
+  const { images } = props;
   //TODO:接物件的圖片
   return (
     <figure className={styles.imgArea}>
@@ -14,7 +15,7 @@ const DetailImage = () => {
           style={{
             borderRadius: '16px 0 0 16px',
           }}
-          src="/image/金智傑房屋網 image 7.png"
+          src={images[0] ? images[0].url : '/image/house_item.png'}
           alt={1}
           fill
         />
@@ -40,7 +41,11 @@ const DetailImage = () => {
               height: '196px',
             }}
           >
-            <Image src="/image/金智傑房屋網 image 8.png" alt={1} fill />
+            <Image
+              src={images[1] ? images[1].url : '/image/house_item.png'}
+              alt={1}
+              fill
+            />
           </div>
           <div
             style={{
@@ -51,9 +56,9 @@ const DetailImage = () => {
           >
             <Image
               style={{
-                borderRadius: '0 16px 16px 0',
+                borderRadius: '0 16px 0 0',
               }}
-              src="/image/金智傑房屋網 image 9.png"
+              src={images[2] ? images[2].url : '/image/house_item.png'}
               alt={1}
               fill
             />
@@ -67,7 +72,11 @@ const DetailImage = () => {
               height: '196px',
             }}
           >
-            <Image src="/image/金智傑房屋網 image 10.png" alt={1} fill />
+            <Image
+              src={images[3] ? images[3].url : '/image/house_item.png'}
+              alt={1}
+              fill
+            />
           </div>
           <div
             style={{
@@ -78,9 +87,9 @@ const DetailImage = () => {
           >
             <Image
               style={{
-                borderRadius: '0 16px 16px 0',
+                borderRadius: '0 0 16px 0',
               }}
-              src="/image/金智傑房屋網 image 11.png"
+              src={images[4] ? images[4].url : '/image/house_item.png'}
               alt={1}
               fill
             />

@@ -62,6 +62,7 @@ export default function Search() {
   const [input, setInput] = useState('');
 
   const cardListRef = useRef(null);
+  const searchRef = useRef('');
 
   const calculateCardNum = () => {
     const cardListWidth = cardListRef.current?.offsetWidth;
@@ -109,8 +110,18 @@ export default function Search() {
     };
   };
 
-  const { data: queryResult, isFetching } = useQuery({
-    queryKey: ['getRentPropertiesApi', filterOption, selectedTab, city],
+  const {
+    refetch,
+    data: queryResult,
+    isFetching,
+  } = useQuery({
+    queryKey: [
+      'getRentPropertiesApi',
+      filterOption,
+      selectedTab,
+      city,
+      searchRef.current,
+    ],
     queryFn: getRentPropertiesApi,
     select: formatCardData,
     meta: {
@@ -118,6 +129,7 @@ export default function Search() {
       address: input,
       sort: filterOption,
       cityIds: city.id,
+      search: searchRef.current,
     },
     initialData: {
       total: 0,
@@ -136,7 +148,10 @@ export default function Search() {
           onChange={(value) => setSelectedTab(value)}
           input={input}
           setInput={setInput}
-          search={() => {}}
+          search={() => {
+            searchRef.current = input;
+            refetch();
+          }}
         />
       </div>
       <div className={styles.page}>

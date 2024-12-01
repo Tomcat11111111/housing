@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from 'react';
 import { BookmarkIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { slice } from 'ramda';
 
 import Button from '@/common/Button/Button';
 import Map from '@/common/Map/Map';
@@ -22,7 +23,6 @@ import DetailSideBar from './DetailSideBar';
 import styles from './Main.module.scss';
 
 const Main = ({ type, detailData }) => {
-  console.log('detailData: ', detailData);
   const router = useRouter();
 
   const { setSearchParams } = useSearchStore();
@@ -69,7 +69,10 @@ const Main = ({ type, detailData }) => {
     floor,
     totalFloors,
     shape = {},
+    images = [],
   } = property;
+
+  const firstFiveImages = slice(0, 5, images);
 
   const { city, district, geolocation } = location;
 
@@ -193,7 +196,7 @@ const Main = ({ type, detailData }) => {
           </div>
         </div>
       </nav>
-      <DetailImage />
+      <DetailImage images={firstFiveImages} />
       <div className={styles.detail}>
         <article className={styles.detailContent}>
           <div className={styles.titleArea}>
@@ -380,6 +383,7 @@ const Main = ({ type, detailData }) => {
           unitPrice={unitPrice}
           views={views}
           type={type}
+          id={property?.id}
         />
       </div>
     </div>

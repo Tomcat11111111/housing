@@ -5,7 +5,7 @@ import House from '@/icon/House/House';
 export const ORIGIN_OPTION_LIST = [
   { displayName: '租房子', id: 'rent', icon: House },
   { displayName: '買房子', id: 'buy', icon: House },
-  { displayName: '新建案', id: 'new', icon: House },
+  // { displayName: '新建案', id: 'new', icon: House },
 ];
 
 const PRICE_STATUS_MAP = new Map([

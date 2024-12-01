@@ -18,10 +18,12 @@ const Button = (props) => {
       data-disabled={isDisabled ? 'disabled' : ''}
       style={buttonStyle}
       onClick={(e) => {
+        if (isDisabled) return;
+
         e.stopPropagation();
         action();
       }}
-      data-button-type={buttonType}
+      data-button-type={isDisabled ? '' : buttonType}
     >
       {iconPosition === 'left' ? icon : null}
       <span style={textStyle}>{buttonText}</span>

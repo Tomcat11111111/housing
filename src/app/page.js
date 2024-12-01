@@ -98,7 +98,7 @@ export default function Home() {
                 <Domain />
                 <span>售屋區</span>
               </div>
-              <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
+              <p>可以找到各式出售中的物件，可以用篩選器更快找到喜歡的物件。</p>
             </div>
             <Arrow />
           </div>
@@ -114,7 +114,7 @@ export default function Home() {
                 <Domain />
                 <span>租屋區</span>
               </div>
-              <p>可以找到相對低價的物件，歡迎來掏寶找好房屋。</p>
+              <p>可以找到各式出租中的物件，可以用篩選器更快找到喜歡的物件。</p>
             </div>
             <Arrow />
           </div>

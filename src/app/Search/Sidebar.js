@@ -610,7 +610,7 @@ export default function Sidebar({
           iconPosition="left"
         />
         <Button
-          buttonText="搜尋"
+          buttonText="篩選"
           buttonStyle={{
             width: '200px',
             borderRadius: '8px',
