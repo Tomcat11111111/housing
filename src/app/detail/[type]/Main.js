@@ -1,15 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import { BookmarkIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { filter, find, map, propEq } from 'ramda';
 
 import Button from '@/common/Button/Button';
 import Map from '@/common/Map/Map';
@@ -17,7 +12,6 @@ import Map from '@/common/Map/Map';
 import Tag from '@/components/common/Tag/Tag';
 import ArrowDropdownUp from '@/components/icon/ArrowDropdownUp/ArrowDropdownUp';
 import Share from '@/components/icon/Share/Share';
-import Loading from '@/components/layout/Loading/Loading';
 
 import useSearchStore from '@/store/useSearchStore';
 
@@ -28,6 +22,7 @@ import DetailSideBar from './DetailSideBar';
 import styles from './Main.module.scss';
 
 const Main = ({ type, detailData }) => {
+  console.log('detailData: ', detailData);
   const router = useRouter();
 
   const { setSearchParams } = useSearchStore();
@@ -43,7 +38,9 @@ const Main = ({ type, detailData }) => {
   const {
     property = {},
     landLordOffer = {},
-    price = '',
+    price = null,
+    totalPrice = null,
+    unitPrice = null,
     introduction = '',
     categoryStr = '',
     equipments,
@@ -51,6 +48,14 @@ const Main = ({ type, detailData }) => {
     inclusions,
     propertySummary = [],
   } = detailData;
+
+  const displayPrice = useMemo(() => {
+    // TODO: 需要用useMemo嗎？
+    if (type === 'buy') {
+      return totalPrice;
+    }
+    return price;
+  }, [price, totalPrice, type]);
 
   const {
     location = {},
@@ -72,12 +77,7 @@ const Main = ({ type, detailData }) => {
     <div className={styles.body}>
       <nav className={styles.toolbar}>
         <div className={styles.breadcrumbContainer}>
-          <span
-            className={styles.breadcrumb}
-            onClick={() => {
-              router.push('/');
-            }}
-          >
+          <span className={styles.breadcrumb} onClick={() => router.push('/')}>
             首頁
           </span>
           &gt;
@@ -375,7 +375,7 @@ const Main = ({ type, detailData }) => {
             </div>
           )}
         </article>
-        <DetailSideBar price={price} views={views} />
+        <DetailSideBar price={displayPrice} views={views} />
       </div>
     </div>
   );

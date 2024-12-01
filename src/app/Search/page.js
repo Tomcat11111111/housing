@@ -5,8 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { find, propEq, sort } from 'ramda';
+import { find, propEq } from 'ramda';
 
 import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
 import Loading from '@/layout/Loading/Loading';
@@ -23,31 +22,16 @@ import Sidebar from './Sidebar';
 
 const FILTER_DROPDOWN_LIST = [
   { id: '', displayName: '預設' },
-  { id: '-price', displayName: '金額 大到小' },
-  { id: '+price', displayName: '金額 小到大' },
-  { id: '-squareMeters', displayName: '坪數 大到小' },
-  { id: '+squareMeters', displayName: '坪數 小到大' },
-  { id: '-createdAt', displayName: '刊登時間 新到舊' },
-  { id: '+createdAt', displayName: '刊登時間 舊到新' },
+  { id: encodeURIComponent('-price'), displayName: '金額 大到小' },
+  { id: encodeURIComponent('+price'), displayName: '金額 小到大' },
+  { id: encodeURIComponent('-squareMeters'), displayName: '坪數 大到小' },
+  { id: encodeURIComponent('+squareMeters'), displayName: '坪數 小到大' },
+  { id: encodeURIComponent('-createdAt'), displayName: '刊登時間 新到舊' },
+  { id: encodeURIComponent('+createdAt'), displayName: '刊登時間 舊到新' },
 ];
 
-// const getOriginFilterParams = (searchParams, setFilterParams) => {
-//   let tempParams = {};
-
-//   if (searchParams.get('selectedTab')) {
-//     tempParams.selectedTab = searchParams.get('selectedTab');
-//   }
-
-//   setFilterParams((prev) => ({
-//     ...prev,
-//     ...tempParams,
-//   }));
-// };
-
 const defaultFilterParams = {
-  city: { id: 1, displayName: '台北市' },
-  cityIds: 1,
-  districtId: 1,
+  districtId: null,
   limit: 10,
   categoryIds: [],
   minMonthlyRent: 0,
@@ -68,11 +52,10 @@ const defaultFilterParams = {
 };
 
 export default function Search() {
-  const searchParams = useSearchParams();
-
   const { selectedTab, setSelectedTab, searchBarParams } = useSearchStore();
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
+  const [city, setCity] = useState({ id: 3, displayName: '新北市' });
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
@@ -82,7 +65,7 @@ export default function Search() {
 
   const calculateCardNum = () => {
     const cardListWidth = cardListRef.current?.offsetWidth;
-    const cardNum = Math.floor((cardListWidth + 16) / 286);
+    const cardNum = Math.floor((cardListWidth + 16) / 316);
 
     setCardWidth((cardListWidth - (cardNum - 1) * 16) / cardNum);
   };
@@ -99,19 +82,19 @@ export default function Search() {
 
   const getRentPropertiesApi = async (data) => {
     try {
-      const reponse = await axios.get(
+      const response = await axios.get(
         `https://jzj-api.zeabur.app/properties/${selectedTab === 'rent' ? 'for-rent' : 'for-sale'}`,
         {
           params: data.meta,
         }
       );
 
-      return reponse.data;
+      return response.data;
     } catch (error) {}
   };
 
-  const formatCardData = (reponse) => {
-    const { total, data = [] } = reponse;
+  const formatCardData = (response) => {
+    const { total, data = [] } = response;
 
     const formatData = data.map((item) => ({
       ...item.property,
@@ -127,29 +110,28 @@ export default function Search() {
   };
 
   const { data: queryResult, isFetching } = useQuery({
-    queryKey: ['getRentPropertiesApi', filterOption],
+    queryKey: ['getRentPropertiesApi', filterOption, selectedTab, city],
     queryFn: getRentPropertiesApi,
     select: formatCardData,
-    meta: { ...filterParams, address: input, sort: filterOption },
+    meta: {
+      ...filterParams,
+      address: input,
+      sort: filterOption,
+      cityIds: city.id,
+    },
     initialData: {
       total: 0,
       list: [],
     },
   });
 
-  // useEffect(() => {
-  //   getOriginFilterParams(searchParams, setFilterParams);
-  // }, [searchParams]);
-
   return (
     <div>
       <div className={styles.header}>
         <HeaderWithSearch
           headerType="white"
-          city={filterParams.city}
-          onCityChange={(city) =>
-            setFilterParams({ ...filterParams, city: city, cityIds: city.id })
-          }
+          city={city}
+          onCityChange={setCity}
           selectedTab={selectedTab}
           onChange={(value) => setSelectedTab(value)}
           input={input}
@@ -162,10 +144,9 @@ export default function Search() {
           isSideBarOpen={isSideBarOpen}
           setIsSideBarOpen={setIsSideBarOpen}
           total={queryResult?.total}
-          city={filterParams.city}
-          originFilterParams={filterParams}
-          setFilterParams={setFilterParams}
+          city={city}
           selectedTab={selectedTab}
+          setFilterParams={setFilterParams}
         />
         <div className={styles.listContainer}>
           <div className={styles.buttonArea}>
@@ -239,7 +220,7 @@ export default function Search() {
           )}
           {isFetching && (
             <div className={styles.loadingContainer}>
-              <Loading />
+              <Loading text="物件搜尋中" />
             </div>
           )}
         </div>

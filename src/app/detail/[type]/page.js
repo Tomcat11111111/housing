@@ -9,17 +9,13 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { filter, find, map, propEq } from 'ramda';
 
-import Button from '@/common/Button/Button';
-import CardCarouselBox from '@/common/CardCarouselBox/CardCarouselBox';
-
 import Footer from '@/layout/Footer/Footer';
 import HeaderWithSearch from '@/layout/HeaderWithSearch/HeaderWithSearch';
 
+import RecommendList from '@/components/RecommendList/RecommendList';
 import Loading from '@/components/layout/Loading/Loading';
 
 import useSearchStore from '@/store/useSearchStore';
-
-import SmallArrow from '@/icon/SmallArrow/SmallArrow';
 
 import styles from './Detail.module.scss';
 import Main from './Main';
@@ -34,31 +30,6 @@ export default function Detail({ params }) {
 
   const [cityId, setCityId] = useState({ id: 1, displayName: '台北市' });
   const [search, setSearch] = useState('');
-
-  const getRecommendationsApi = async () => {
-    const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}?limit=4&offset=0&sort=-views`
-    );
-    return response.data;
-  };
-
-  const formatCardData = (reponse) => {
-    const { data = [] } = reponse;
-    const formatData = data.map((item) => ({
-      ...item.property,
-      price: item.price,
-    }));
-
-    return formatData;
-  };
-
-  const { isSuccess: isRecommendSuccess, data: recommendationsList } = useQuery(
-    {
-      queryKey: ['getRecommendationsData'],
-      queryFn: getRecommendationsApi,
-      select: formatCardData,
-    }
-  );
 
   const propertyId = searchParams.get('id');
 
@@ -144,56 +115,10 @@ export default function Detail({ params }) {
           <Loading text="資料讀取中" />
         </div>
       )}
-      {isRecommendSuccess && (
-        <div className={styles.recommendBox}>
-          <div className={styles.recommendArea}>
-            <div className={styles.recommendTitle}>
-              <span>熱門物件</span>
-              <Button
-                buttonText="瀏覽更多"
-                buttonType="transparent"
-                iconPosition="right"
-                icon={<SmallArrow />}
-                textStyle={{
-                  color: '#333',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                }}
-                buttonStyle={{
-                  border: '1px solid #E9E9E9',
-                  opacity: 0.6,
-                  padding: '8px 8px 8px 16px',
-                  gap: '8px',
-                }}
-              />
-            </div>
-            <CardCarouselBox cardItemList={[...recommendationsList]} />
-          </div>
-          <div className={styles.recommendArea}>
-            <div className={styles.recommendTitle}>
-              <span>熱門物件</span>
-              <Button
-                buttonText="瀏覽更多"
-                buttonType="transparent"
-                iconPosition="right"
-                icon={<SmallArrow />}
-                textStyle={{
-                  color: '#333',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                }}
-                buttonStyle={{
-                  border: '1px solid #E9E9E9',
-                  opacity: 0.6,
-                  padding: '8px 8px 8px 16px',
-                  gap: '8px',
-                }}
-              />
-            </div>
-            <CardCarouselBox cardItemList={[...recommendationsList]} />
-          </div>
-        </div>
-      )}
+      <div className={styles.recommendBox}>
+        <RecommendList type="rent" queryKey="detail_1" />
+        <RecommendList type="buy" queryKey="detail_2" />
+      </div>
       <Footer />
     </Suspense>
   );

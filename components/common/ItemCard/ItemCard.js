@@ -20,6 +20,8 @@ import TubIcon from '@/icon/TubIcon/TubIcon';
 import styles from './ItemCard.module.scss';
 
 const getPriceDisplay = (price, type, isHovered) => {
+  if (!price) return <></>;
+
   if (type === 'rent') {
     return (
       <span className={styles.price} data-hover={isHovered ? 'hover' : ''}>

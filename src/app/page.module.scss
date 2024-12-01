@@ -78,26 +78,6 @@
   height: 492px;
 }
 
-// 推薦區域
-
-.recommendArea {
-  margin-bottom: 38px;
-}
-
-.recommendTitle {
-  display: flex;
-  justify-content: space-between;
-
-  > span {
-    color: #333;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 36px;
-    letter-spacing: 0.8px;
-    margin: 0 8px;
-  }
-}
-
 .cardcontainer {
   display: flex;
   gap: 16px;

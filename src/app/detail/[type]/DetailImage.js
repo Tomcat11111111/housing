@@ -6,6 +6,7 @@ import Photo from '@/components/icon/Photo/Photo';
 import styles from './DetailImage.module.scss';
 
 const DetailImage = () => {
+  //TODO:接物件的圖片
   return (
     <figure className={styles.imgArea}>
       <div style={{ position: 'relative', width: '50%', height: '400px' }}>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const useSearchStore = create((set) => ({
-  selectedTab: 'buy', //TODO: 先帶buy
+  selectedTab: 'buy', //TODO: 先寫死為buy
   searchBarParams: {},
   setSelectedTab: (tab) => {
     set(() => ({ selectedTab: tab }));

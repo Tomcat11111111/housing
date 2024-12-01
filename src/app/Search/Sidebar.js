@@ -40,7 +40,6 @@ import {
 } from './SidebarHelper';
 
 export default function Sidebar({
-  originFilterParams,
   setFilterParams,
   isSideBarOpen,
   setIsSideBarOpen,
@@ -49,7 +48,6 @@ export default function Sidebar({
   selectedTab,
 }) {
   const queryClient = useQueryClient();
-  // const {} = originfilterParams;
 
   const [district, setDistrict] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -92,20 +90,21 @@ export default function Sidebar({
     }
   };
 
-  const { data: cityDistrictOptions } = useQuery({
+  const { status: districtApiStatus, data: cityDistrictOptions } = useQuery({
     queryKey: ['getCityDistrictApi', city.id],
     queryFn: getCityDistrictApi,
     meta: {
       city: city.id,
     },
+    select: (data) => [{ id: null, displayName: '全部' }, ...data],
     initialData: [],
   });
 
   useEffect(() => {
-    if (cityDistrictOptions.length > 0) {
-      setDistrict(cityDistrictOptions[0].id);
+    if (districtApiStatus === 'success') {
+      setDistrict(null);
     }
-  }, [cityDistrictOptions]);
+  }, [districtApiStatus]);
 
   // 物件特色
   const { data: featuresOptions } = useQuery({
@@ -170,7 +169,7 @@ export default function Sidebar({
 
   const getFilterParams = () => {
     const tempParams = {
-      districtId: district,
+      districtIds: district,
     };
 
     if (categories.length > 0) {
