@@ -38,8 +38,8 @@ const SearchBar = (props) => {
     setSelectedTab,
     setSearchBarParams,
     searchBarParams,
-    searchCity,
     setSearchCity,
+    setSearchInput,
   } = useSearchStore();
 
   const router = useRouter();
@@ -197,6 +197,7 @@ const SearchBar = (props) => {
     };
 
     setSearchCity({ id: city.id, displayName: city.displayName });
+    setSearchInput(input);
 
     if (categories.length > 0) {
       tempSearchParams.categories = categories;

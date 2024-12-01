@@ -62,15 +62,20 @@ const defaultFilterParams = {
 };
 
 export default function Search() {
-  const { selectedTab, setSelectedTab, searchBarParams, searchCity } =
-    useSearchStore();
+  const {
+    selectedTab,
+    setSelectedTab,
+    searchBarParams,
+    searchCity,
+    searchInput,
+  } = useSearchStore();
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [city, setCity] = useState(searchCity);
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const [filterOption, setFilterOption] = useState('');
   const [cardWidth, setCardWidth] = useState(null);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(searchInput);
 
   const cardListRef = useRef(null);
   const searchRef = useRef('');
