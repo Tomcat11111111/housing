@@ -64,7 +64,6 @@ const defaultFilterParams = {
 export default function Search() {
   const { selectedTab, setSelectedTab, searchBarParams, searchCity } =
     useSearchStore();
-  console.log('searchCity: ', searchCity);
 
   const [filterParams, setFilterParams] = useState(defaultFilterParams);
   const [city, setCity] = useState(searchCity);

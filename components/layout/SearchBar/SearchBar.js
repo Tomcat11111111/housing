@@ -38,6 +38,7 @@ const SearchBar = (props) => {
     setSelectedTab,
     setSearchBarParams,
     searchBarParams,
+    searchCity,
     setSearchCity,
   } = useSearchStore();
 
@@ -195,7 +196,7 @@ const SearchBar = (props) => {
       input: input,
     };
 
-    setSearchCity(city);
+    setSearchCity({ id: city.id, displayName: city.displayName });
 
     if (categories.length > 0) {
       tempSearchParams.categories = categories;
@@ -224,7 +225,7 @@ const SearchBar = (props) => {
     }
 
     setSearchBarParams(tempSearchParams);
-    router.push('/Search');
+    router.push('/search'); // 要改回來
   };
 
   return (

@@ -137,8 +137,8 @@ export default function Home() {
         {/* {isFixed && <div style={{ height: '524px' }}></div>} */}
         {isFixed && <div style={{ height: '237px' }}></div>}
         <SearchBar isFixed={isFixed} isOpen={isOpen} setIsOpen={setIsOpen} />
-        <RecommendList type="rent" queryKey="home_1" />
         <RecommendList type="buy" queryKey="home_2" />
+        <RecommendList type="rent" queryKey="home_1" />
       </div>
       <Footer />
     </main>

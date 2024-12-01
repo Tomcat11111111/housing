@@ -14,7 +14,7 @@ const useSearchStore = create((set) => ({
     }));
   },
   setSearchCity: (city) => {
-    set(() => ({ city }));
+    set((state) => ({ ...state, searchCity: city }));
   },
 }));
 
