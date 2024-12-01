@@ -92,7 +92,12 @@ const CardCarouselBox = (props) => {
               setSelectedTab(type);
             }}
           >
-            <ItemCard itemData={itemData} index={index} averagePrice={12000} />
+            <ItemCard
+              itemData={itemData}
+              index={index}
+              averagePrice={12000}
+              type={type}
+            />
           </div>
         ))}
       </Slider>

@@ -56,7 +56,7 @@ const PRICE_STATUS_MAP = new Map([
   ],
 ]);
 
-export const getPriceStatusInfo = (price, average = 0) => {
+export const getPriceStatusInfo = (price = 0, average = 0) => {
   if (price > average) return PRICE_STATUS_MAP.get('above');
   if (price < average) return PRICE_STATUS_MAP.get('below');
   if (price === average) return PRICE_STATUS_MAP.get('equal');
