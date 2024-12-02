@@ -201,7 +201,6 @@ const DetailSideBar = (props) => {
           isDisabled={!phone || !email || !name}
           action={() => {
             if (contactSwitch !== 'phone') {
-              console.log('reserveMutation: ', name, phone, email);
               reserveMutation({ name, phone, email });
             }
           }}
