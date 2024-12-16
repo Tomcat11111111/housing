@@ -29,6 +29,7 @@
     "ramda": "^0.30.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-dropzone": "^14.3.5",
     "react-range": "^1.8.14",
     "react-slick": "^0.30.2",
     "sass": "^1.77.5",
