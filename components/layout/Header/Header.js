@@ -15,7 +15,7 @@ import styles from './Header.module.scss';
 
 const Header = ({ headerType = 'default' }) => {
   const router = useRouter();
-  const { setSelectedTab } = useSearchStore();
+  const { selectedTab, setSelectedTab } = useSearchStore();
 
   return (
     <header className={styles.headerContainer}>
@@ -30,7 +30,8 @@ const Header = ({ headerType = 'default' }) => {
           {headerType === 'white' && (
             <div className={styles.linkArea}>
               <button
-                data-active={'active'}
+                className={styles.linkButton}
+                data-active={selectedTab === '' ? 'active' : ''}
                 onClick={() => {
                   router.push('/');
                 }}
@@ -39,6 +40,8 @@ const Header = ({ headerType = 'default' }) => {
               </button>
               |
               <button
+                className={styles.linkButton}
+                data-active={selectedTab === 'buy' ? 'active' : ''}
                 onClick={() => {
                   setSelectedTab('buy');
                   router.push(`/Search`);
@@ -48,6 +51,8 @@ const Header = ({ headerType = 'default' }) => {
               </button>
               |
               <button
+                className={styles.linkButton}
+                data-active={selectedTab === 'rent' ? 'active' : ''}
                 onClick={() => {
                   setSelectedTab('rent');
                   router.push(`/Search`);
@@ -57,6 +62,7 @@ const Header = ({ headerType = 'default' }) => {
               </button>
               |
               <button
+                className={styles.linkButton}
                 onClick={() => {
                   router.push(`/discount`);
                 }}
@@ -75,6 +81,9 @@ const Header = ({ headerType = 'default' }) => {
                     padding: '8px',
                   }}
                   buttonType="transparent"
+                  action={() => {
+                    router.push('/publish');
+                  }}
                 />
                 <div className={styles.memberArea}>
                   <div className={styles.memberButton}>
@@ -82,7 +91,7 @@ const Header = ({ headerType = 'default' }) => {
                       buttonText="登入"
                       textStyle={{ lineHeight: '20px' }}
                       buttonStyle={{
-                        padding: '8px  12px',
+                        padding: '8px 16px',
                       }}
                       buttonType="transparent"
                     />
@@ -91,7 +100,7 @@ const Header = ({ headerType = 'default' }) => {
                       buttonText="註冊"
                       textStyle={{ lineHeight: '20px' }}
                       buttonStyle={{
-                        padding: '8px 12px',
+                        padding: '8px 16px',
                       }}
                       buttonType="transparent"
                     />

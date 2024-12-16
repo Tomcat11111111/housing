@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { find, propEq } from 'ramda';
 
@@ -185,15 +186,8 @@ export default function Search() {
               <Button
                 buttonText="展開篩選"
                 buttonType="transparent"
-                iconPosition="left"
-                icon={
-                  <Image
-                    src="/icon/setting.svg"
-                    alt="setting"
-                    width={24}
-                    height={24}
-                  />
-                }
+                iconPosition="right"
+                icon={<ChevronRight />}
                 textStyle={{
                   color: '#333',
                   fontSize: '14px',

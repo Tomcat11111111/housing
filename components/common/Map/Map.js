@@ -1,7 +1,7 @@
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { useLoadScript } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react';
 
-import { slice } from 'ramda';
+import { set, slice } from 'ramda';
 
 import TypeSwitch from '@/common/Map/TypeSwitch';
 
@@ -14,13 +14,13 @@ function Map({ coordinates = [] }) {
     lng,
   };
 
-  const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM', // Google API key
     libraries: ['places', 'geometry'],
   });
 
   const [places, setPlaces] = useState([]);
-  const [selectedType, setSelectedType] = useState('bus_station');
+  const [selectedType, setSelectedType] = useState('school');
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -44,42 +44,46 @@ function Map({ coordinates = [] }) {
     };
 
     service.nearbySearch(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        // 計算距離
-        const placesWithDistance = results.map((place) => {
-          const placeLocation = new window.google.maps.LatLng(
-            place.geometry.location.lat(),
-            place.geometry.location.lng()
-          );
+      console.log('status: ', status);
+      console.log(window.google.maps.places.PlacesServiceStatus.OK);
 
-          new google.maps.Marker({
-            position: {
-              lat: place.geometry.location.lat(),
-              lng: place.geometry.location.lng(),
-            },
-            map: map,
-          });
+      // if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+      // 計算距離
+      const placesWithDistance = results.map((place) => {
+        const placeLocation = new window.google.maps.LatLng(
+          place.geometry.location.lat(),
+          place.geometry.location.lng()
+        );
 
-          const distance =
-            window.google.maps.geometry.spherical.computeDistanceBetween(
-              new window.google.maps.LatLng(center.lat, center.lng),
-              placeLocation
-            );
-          return { ...place, distance };
+        new google.maps.Marker({
+          position: {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          },
+          map: map,
         });
 
-        setPlaces(placesWithDistance);
-      }
+        const distance =
+          window.google.maps.geometry.spherical.computeDistanceBetween(
+            new window.google.maps.LatLng(center.lat, center.lng),
+            placeLocation
+          );
+        return { ...place, distance };
+      });
+
+      console.log('placesWithDistance: ', placesWithDistance);
+
+      setPlaces(placesWithDistance);
+      // }
     });
   }, [isLoaded, selectedType]);
 
   const twoClosePlaces = slice(0, 2, places);
-
   return (
     <>
       {isLoaded ? (
         <div className={styles.mapContainer}>
-          <div id="map" className={styles.map}></div>
+          <div id="map" className={styles.dmap}></div>
           <TypeSwitch
             selectedType={selectedType}
             setSelectedType={setSelectedType}

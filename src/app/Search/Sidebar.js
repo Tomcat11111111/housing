@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChevronLeft } from 'lucide-react';
 import { find, propEq } from 'ramda';
 
 import Button from '@/components/common/Button/Button';
@@ -271,7 +272,7 @@ export default function Sidebar({
             gap: '8px',
           }}
           iconPosition="left"
-          icon={<Arrow direction="left" />}
+          icon={<ChevronLeft />}
           action={() => setIsSideBarOpen(false)}
         />
       </div>

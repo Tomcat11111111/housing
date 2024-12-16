@@ -2,9 +2,9 @@ import Logo from '@/components/common/Logo/Logo';
 
 import Account from '@/icon/Account/Account';
 
-import styles from './MemberHeader.module.scss';
+import styles from './PublishHeader.module.scss';
 
-const MemberHeader = () => {
+const PublishHeader = () => {
   return (
     <header className={styles.headerContainer}>
       <div className={styles.header}>
@@ -14,7 +14,7 @@ const MemberHeader = () => {
             <span className={styles.stroke}>|</span>
             <p>會員中心</p>
           </div>
-          <div className={styles.memberArea}>
+          <div className={styles.PublishArea}>
             <p>某某某</p>
             <Account color="#0936D8" />
           </div>
@@ -24,4 +24,4 @@ const MemberHeader = () => {
   );
 };
 
-export default MemberHeader;
+export default PublishHeader;

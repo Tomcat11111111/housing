@@ -37,15 +37,15 @@
   gap: 32px;
   color: #ccc;
   line-height: 20px;
+}
 
-  > button {
-    padding: 21px 0;
+.linkButton {
+  padding: 21px 0;
 
-    &[data-active='active'] {
-      color: #0936d8;
-      font-weight: 700;
-      border-bottom: 3px solid #0936d8;
-    }
+  &[data-active='active'] {
+    color: #0936d8;
+    font-weight: 700;
+    border-bottom: 3px solid #0936d8;
   }
 }
 
