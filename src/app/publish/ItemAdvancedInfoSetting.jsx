@@ -226,7 +226,12 @@ const ItemAdvancedInformation = () => {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <InputAdornment position="start">行動電話＊</InputAdornment>
+                    <>
+                      <InputAdornment position="start">
+                        行動電話＊
+                      </InputAdornment>
+                      <InputAdornment position="start">+886</InputAdornment>
+                    </>
                   ),
                 },
               }}
@@ -238,7 +243,12 @@ const ItemAdvancedInformation = () => {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <InputAdornment position="start">固定電話＊</InputAdornment>
+                    <>
+                      <InputAdornment position="start">
+                        固定電話＊
+                      </InputAdornment>
+                      <InputAdornment position="start">02</InputAdornment>
+                    </>
                   ),
                 },
               }}

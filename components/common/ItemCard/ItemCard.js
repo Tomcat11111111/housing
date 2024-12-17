@@ -24,7 +24,7 @@ const ItemCard = (props) => {
   const { itemData, averagePrice, index, type } = props;
 
   const {
-    id,
+    id = '',
     title,
     views = 0,
     updatedAt = '',
@@ -38,11 +38,11 @@ const ItemCard = (props) => {
     balcony = 0,
     price = null,
     images = [],
-    location,
+    location = {},
     totalPrice,
     unitPrice,
   } = itemData;
-  const { district } = location;
+  const { district = '' } = location;
 
   const router = useRouter();
 
