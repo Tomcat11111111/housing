@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import BurgerMenu from '@/common/BurgerMenu/BurgerMenu';
 import Button from '@/common/Button/Button';
 
+import AuthButton from '@/components/auth/AuthButton';
 import Logo from '@/components/common/Logo/Logo';
 
+import useAuthTypeStore from '@/store/useAuthTypeStore';
 import useSearchStore from '@/store/useSearchStore';
 
 import Account from '@/icon/Account/Account';
@@ -87,23 +89,24 @@ const Header = ({ headerType = 'default' }) => {
                 />
                 <div className={styles.memberArea}>
                   <div className={styles.memberButton}>
-                    <Button
+                    {/* <Button
                       buttonText="登入"
                       textStyle={{ lineHeight: '20px' }}
                       buttonStyle={{
                         padding: '8px 16px',
                       }}
                       buttonType="transparent"
-                    />
-                    |
-                    <Button
+                    /> */}
+                    <AuthButton type={'signin'} />|
+                    {/* <Button
                       buttonText="註冊"
                       textStyle={{ lineHeight: '20px' }}
                       buttonStyle={{
                         padding: '8px 16px',
                       }}
                       buttonType="transparent"
-                    />
+                    /> */}
+                    <AuthButton type={'signup'} />
                   </div>
                   <Account color="#0936D8" />
                 </div>
