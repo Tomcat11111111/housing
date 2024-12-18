@@ -13,7 +13,7 @@ import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 
 const Publish = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
 
   return (
     <div className="h-screen">
@@ -36,9 +36,9 @@ const Publish = () => {
         <div>
           {step > 0 && (
             <Button
-              className="bg-[#0936D8]"
               variant="contained"
               startIcon={<ChevronLeft />}
+              sx={{ bgcolor: '#0936D8' }}
               onClick={() => setStep(step - 1)}
             >
               上一步
@@ -48,7 +48,7 @@ const Publish = () => {
         <div>
           {step < 3 && (
             <Button
-              className="bg-[#0936D8]"
+              sx={{ bgcolor: '#0936D8' }}
               variant="contained"
               endIcon={<ChevronRight />}
               onClick={() => setStep(step + 1)}
@@ -59,14 +59,14 @@ const Publish = () => {
           {step === 3 && (
             <div className="flex gap-2">
               <Button
-                className="border-[#0936D8] text-[#0936D8]"
+                sx={{ bgcolor: '#0936D8' }}
                 variant="outlined"
                 startIcon={<Save />}
               >
                 保存不刊登
               </Button>
               <Button
-                className="bg-[#0936D8]"
+                sx={{ bgcolor: '#0936D8' }}
                 variant="contained"
                 endIcon={<ChevronRight />}
                 onClick={() => {

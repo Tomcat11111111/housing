@@ -8,6 +8,9 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { Maximize } from 'lucide-react';
 import Image from 'next/image';
 
 import FieldGroup from './FieldGroup';
@@ -18,17 +21,46 @@ const ItemAdvancedInformation = () => {
   const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
 
+  const MAX_CHAR = 2000;
+
   const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    const inputText = e.target.value;
+    if (inputText > MAX_CHAR) {
+      const truncatedText = inputText.slice(0, MAX_CHAR);
+      setDescription(truncatedText);
+    } else {
+      setDescription(inputText);
+    }
   };
 
   const handleCheckboxChange = (e) => {
     setSelectedOption(e.target.name);
   };
 
+  const uploadImageApi = async ({ itemFiles }) => {
+    try {
+      const response = await axios.post(
+        'https://jzj-api.zeabur.app/images/upload',
+        {
+          images: itemFiles,
+          // propertyId: propertyId,
+        }
+      );
+
+      return response.data;
+    } catch (error) {}
+  };
+
+  const { mutate: uploadMutation } = useMutation({
+    mutationFn: uploadImageApi,
+    onSuccess: () => {},
+  });
+
   const handleItemFileUpload = (e) => {
     const uploadedFiles = e.target.files;
-    setItemFiles((prevFiles) => [...prevFiles, ...Array.from(uploadedFiles)]);
+    setItemFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+
+    uploadMutation({ itemFiles });
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -100,9 +132,17 @@ const ItemAdvancedInformation = () => {
               id="item-file-upload"
             />
             <Button
-              className="h-[56px] w-[120px] bg-[#0936D8] text-sm absolute bottom-0 right-0"
-              color="primary"
               variant="contained"
+              sx={{
+                height: '56px',
+                width: '120px',
+                bgcolor: '#0936D8',
+                fontSize: '14px',
+                lineHeight: '20px',
+                position: 'absolute',
+                bottom: '0px',
+                right: '0px',
+              }}
               onClick={() => ItemFileRef.current.click()}
             >
               批量上傳
@@ -131,14 +171,27 @@ const ItemAdvancedInformation = () => {
         </div>
       </FieldGroup>
       <FieldGroup title="屋況介紹">
-        <TextField
-          id="description"
-          multiline
-          rows={6}
-          placeholder="可以描述物件特色或現況"
-          value={description}
-          onChange={handleDescriptionChange}
-        />
+        <div className="relative w-full">
+          {/* TextField with word count */}
+          <TextField
+            id="description"
+            multiline
+            rows={6}
+            placeholder="可以描述物件特色或現況"
+            value={description}
+            onChange={handleDescriptionChange}
+            fullWidth
+            sx={{
+              '& .MuiInputBase-root': {
+                paddingBottom: '1.5rem', // Add padding to prevent overlap
+              },
+            }}
+          />
+
+          <div className="absolute bottom-2 right-2 text-[#333333] text-sm font-bold">
+            {`${description.length}/${MAX_CHAR}`}
+          </div>
+        </div>
       </FieldGroup>
 
       <FieldGroup title="核實信息*">
@@ -194,8 +247,14 @@ const ItemAdvancedInformation = () => {
           />
           <Button
             className="h-[56px] w-[162px] bg-[#0936D8]  text-sm "
-            color="primary"
             variant="contained"
+            sx={{
+              height: '56px',
+              width: '162px',
+              bgcolor: '#0936D8',
+              fontSize: '14px',
+              lineHeight: '20px',
+            }}
             onClick={() => RegisterFileRef.current.click()}
           >
             上傳影本或照片
@@ -226,12 +285,7 @@ const ItemAdvancedInformation = () => {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <>
-                      <InputAdornment position="start">
-                        行動電話＊
-                      </InputAdornment>
-                      <InputAdornment position="start">+886</InputAdornment>
-                    </>
+                    <InputAdornment position="start">行動電話＊</InputAdornment>
                   ),
                 },
               }}
@@ -243,12 +297,7 @@ const ItemAdvancedInformation = () => {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <>
-                      <InputAdornment position="start">
-                        固定電話＊
-                      </InputAdornment>
-                      <InputAdornment position="start">02</InputAdornment>
-                    </>
+                    <InputAdornment position="start">固定電話＊</InputAdornment>
                   ),
                 },
               }}
