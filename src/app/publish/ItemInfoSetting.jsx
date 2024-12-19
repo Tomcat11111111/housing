@@ -19,6 +19,7 @@ import clsx from 'clsx';
 
 const ItemTypeSetting = () => {
   const [publishType, setPublishType] = useState('');
+  const [testValue, setTestValue] = useState('無');
 
   return (
     <div className="flex flex-col gap-6 mt-6">
@@ -56,22 +57,136 @@ const ItemTypeSetting = () => {
         />
       </FieldGroup>
       <FieldGroup title="物件位置＊">
+        <div className="flex gap-2 items-center">
+          <FormControl sx={{ minWidth: 134 }}>
+            <InputLabel id="demo-select-small-label">出售地址＊</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={testValue}
+              label="Age"
+              onChange={(e) => setTestValue(e.target.value)}
+            >
+              <MenuItem value="">請選擇縣市</MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 134 }}>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={''}
+              label="Age"
+              // onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>請選擇鄉鎮市區</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            id="contacts"
+            placeholder="請輸入道路或街名"
+            sx={{ width: '144px' }}
+          />
+          <TextField
+            className="w-[100px]"
+            id="contacts"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">巷</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            className="w-[100px]"
+            id="contacts"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">弄</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            className="w-[100px]"
+            id="contacts"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">號</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            className="w-[100px]"
+            id="contacts"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">之</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <p className="text-[#909090]">( 前台只會顯示前半段地址 )</p>
+          {/* <FormControlLabel control={<Checkbox />} label="隱藏門號" /> */}
+        </div>
+        <div className="flex gap-2 items-center">
+          <TextField
+            className="w-[363px]"
+            id="contacts"
+            placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">出租樓層＊</InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">樓</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            id="contacts"
+            className="w-[100px]"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">之</InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            className="w-[158px]"
+            id="contacts"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">總樓層</InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">樓</InputAdornment>
+                ),
+              },
+            }}
+          />
+        </div>
         <TextField
-          id="contacts"
-          placeholder="請輸入物件出售名稱"
-          sx={{ width: '80%' }}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">出售地址＊</InputAdornment>
-              ),
-            },
-          }}
-        />
-        <TextField
+          className="w-[272px]"
           id="contacts"
           placeholder="請輸入物件所在的社區名稱"
-          sx={{ width: '300px' }}
           slotProps={{
             input: {
               startAdornment: (
@@ -170,7 +285,7 @@ const ItemTypeSetting = () => {
           />
         </div>
         <div className="flex gap-10">
-          <FormControl sx={{ m: 1, minWidth: 300 }}>
+          <FormControl sx={{ minWidth: 300 }}>
             <InputLabel id="demo-select-small-label">法定用途＊</InputLabel>
             <Select
               labelId="demo-select-small-label"
@@ -189,7 +304,7 @@ const ItemTypeSetting = () => {
           </FormControl>
           <FormControlLabel control={<Checkbox />} label="隱藏詳細用途" />
         </div>
-        <FormControl sx={{ m: 1, minWidth: 300 }}>
+        <FormControl sx={{ minWidth: 300 }}>
           <InputLabel id="demo-select-small-label">物件現況＊</InputLabel>
           <Select
             labelId="demo-select-small-label"
@@ -222,7 +337,7 @@ const ItemTypeSetting = () => {
               },
             }}
           />
-          <FormControl sx={{ m: 1, minWidth: 196 }}>
+          <FormControl sx={{ minWidth: 196 }}>
             <InputLabel id="demo-select-small-label">裝潢程度＊</InputLabel>
             <Select
               labelId="demo-select-small-label"
@@ -259,7 +374,7 @@ const ItemTypeSetting = () => {
           <FormControlLabel control={<Checkbox />} label="無" />
         </div>
         <div className="flex gap-2">
-          <FormControl sx={{ m: 1, minWidth: 168 }}>
+          <FormControl className="w-[168px]">
             <InputLabel id="demo-select-small-label">帶租約</InputLabel>
             <Select
               labelId="demo-select-small-label"
@@ -276,38 +391,30 @@ const ItemTypeSetting = () => {
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 168 }}>
+          <FormControl className="w-[168px]">
             <InputLabel id="demo-select-small-label">電梯</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              // value={age}
+              value={testValue}
               label="Age"
-              // onChange={handleChange}
+              onChange={(e) => setTestValue(e.target.value)}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value="無">無</MenuItem>
+              <MenuItem value="有">有</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 168 }}>
+          <FormControl className="w-[168px]">
             <InputLabel id="demo-select-small-label">車位</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              // value={age}
+              value={testValue}
               label="Age"
-              // onChange={handleChange}
+              onChange={(e) => setTestValue(e.target.value)}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value="無">無</MenuItem>
+              <MenuItem value="有">有</MenuItem>
             </Select>
           </FormControl>
         </div>
