@@ -35,53 +35,11 @@ const RecommendList = (props) => {
     return formatData;
   };
 
-  const tempMockData = [
-    {
-      title: '加州風格獨棟別墅',
-      url: '/image/金智傑房屋網 image 0.png',
-      price: 85000,
-    },
-    {
-      title: '溫馨北歐風小公寓',
-      url: '/image/金智傑房屋網 image 1.png',
-      price: 50000,
-    },
-    {
-      title: '近明星學區套房',
-      url: '/image/金智傑房屋網 image 2.png',
-      price: 9000,
-    },
-    {
-      title: '市中心豪華樓中樓',
-      url: '/image/金智傑房屋網 image 3.png',
-      price: 25000,
-    },
-    {
-      title: '豪華信義公寓式管理',
-      url: '/image/金智傑房屋網 image 4.png',
-      price: 12000,
-    },
-  ];
-
-  const tempFormatCardData = (response) => {
-    const { data = [] } = response;
-    const formatData = data.map((item, index) => {
-      return {
-        ...item.property,
-        price: tempMockData[index].price,
-        title: tempMockData[index].title,
-        images: [{ url: tempMockData[index].url }],
-      };
-    });
-
-    return formatData;
-  };
-
   const { isSuccess: isRecommendSuccess, data: recommendationsList } = useQuery(
     {
       queryKey: [`getRecommendationsData_${queryKey}`],
       queryFn: getRecommendationsApi,
-      select: type === 'rent' ? tempFormatCardData : formatCardData,
+      select: formatCardData,
     }
   );
 
