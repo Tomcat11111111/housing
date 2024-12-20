@@ -63,7 +63,7 @@ const RecommendList = (props) => {
             padding: '8px 8px 8px 16px',
             gap: '8px',
           }}
-          action={() => router.push('/Search')}
+          action={() => router.push('/search')}
         />
       </div>
       <CardCarouselBox cardItemList={recommendationsList} type={type} />

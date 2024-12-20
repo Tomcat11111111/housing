@@ -46,7 +46,7 @@ const Header = ({ headerType = 'default' }) => {
                 data-active={selectedTab === 'buy' ? 'active' : ''}
                 onClick={() => {
                   setSelectedTab('buy');
-                  router.push(`/Search`);
+                  router.push('/search');
                 }}
               >
                 售屋區
@@ -57,7 +57,7 @@ const Header = ({ headerType = 'default' }) => {
                 data-active={selectedTab === 'rent' ? 'active' : ''}
                 onClick={() => {
                   setSelectedTab('rent');
-                  router.push(`/Search`);
+                  router.push('/search');
                 }}
               >
                 租屋區
@@ -66,7 +66,7 @@ const Header = ({ headerType = 'default' }) => {
               <button
                 className={styles.linkButton}
                 onClick={() => {
-                  router.push(`/discount`);
+                  router.push('/discount');
                 }}
               >
                 破盤區
