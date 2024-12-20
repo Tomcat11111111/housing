@@ -1,0 +1,42 @@
+.header {
+  height: 80px;
+}
+
+.page {
+  position: relative;
+  display: flex;
+  position: relative;
+}
+
+.listContainer {
+  padding: 16px 24px 24px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  width: 100%;
+}
+
+.buttonArea {
+  display: flex;
+  gap: 16px;
+}
+
+.dropdownButton {
+  background: #ffffff;
+  width: 124px;
+  border-radius: 8px;
+}
+
+.cardList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.cardContainer {
+  min-width: 270px;
+}
+
+.loadingContainer {
+  height: 100%;
+}
