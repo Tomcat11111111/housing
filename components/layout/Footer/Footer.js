@@ -3,7 +3,7 @@ import { set } from 'ramda';
 
 import People from '@/components/icon/People/People';
 
-import useAuthTypeStore from '@/store/useAuthTypeStore';
+import { useAuthTypeStore } from '@/store/useAuthStore';
 import useSearchStore from '@/store/useSearchStore';
 
 import Content from '@/icon/Content/Content';
