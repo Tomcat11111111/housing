@@ -8,7 +8,7 @@ import Button from '@/common/Button/Button';
 import AuthButton from '@/components/auth/AuthButton';
 import Logo from '@/components/common/Logo/Logo';
 
-import useAuthTypeStore from '@/store/useAuthTypeStore';
+import useAuthTypeStore from '@/store/useAuthStore';
 import useSearchStore from '@/store/useSearchStore';
 
 import Account from '@/icon/Account/Account';

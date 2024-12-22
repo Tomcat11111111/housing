@@ -1,40 +1,24 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Modal } from '@mui/material';
+import { Button } from '@mui/material';
 
-import useAuthTypeStore from '@/store/useAuthTypeStore';
+import { useAuthTypeStore } from '@/store/useAuthStore';
 
-import SignInModal from './SignInModal';
-import SignupModal from './SignupModal';
+import AuthModalContainer from './AuthModalContainer';
 
 const AuthButton = ({ type }) => {
   const [open, setOpen] = useState(false);
-  const { authType, setAuthType } = useAuthTypeStore();
+  const { setAuthType } = useAuthTypeStore();
 
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setAuthType(type);
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'white',
-    borderRadius: '16px',
-    width: '463px',
-    paddingBottom: '32px',
   };
 
   return (
     <div>
       <Button
-        onClick={handleClickOpen}
+        onClick={handleOpen}
         sx={{
           fontWeight: '400',
           borderRadius: '8px',
@@ -47,12 +31,7 @@ const AuthButton = ({ type }) => {
         {type === 'signin' && '登入'}
         {type === 'signup' && '註冊'}
       </Button>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          {authType === 'signin' && <SignInModal setOpen={setOpen} />}
-          {authType === 'signup' && <SignupModal setOpen={setOpen} />}
-        </Box>
-      </Modal>
+      <AuthModalContainer open={open} setOpen={setOpen} />
     </div>
   );
 };

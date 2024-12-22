@@ -3,37 +3,22 @@ import React, { useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { ChevronLeft, X } from 'lucide-react';
 
-import useAuthTypeStore from '@/store/useAuthTypeStore';
+import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
+
+import AuthStepper from './AuthStepper';
+import ModalHeader from './ModalHeader';
 
 const SignupModal = ({ setOpen }) => {
-  const [identity, setIdentity] = useState('normal');
   const { setAuthType } = useAuthTypeStore();
+  const { identity, setIdentity } = useRegisterStore();
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleNext = () => {
+    setAuthType('enterEmail');
   };
 
   return (
     <div>
-      <div
-        className="flex flex-1 items-center justify-between"
-        style={{
-          paddingInline: '32px',
-          paddingBlock: '16px',
-        }}
-      >
-        <ChevronLeft className=" cursor-pointer" />
-        <p
-          className="font-bold"
-          style={{
-            fontSize: '24px',
-          }}
-        >
-          註冊身分
-        </p>
-        <X onClick={handleClose} className=" cursor-pointer w-6 h-6" />
-      </div>
-      <Divider />
+      <ModalHeader setOpen={setOpen} />
 
       <div
         className="flex flex-col gap-4 justify-center items-center"
@@ -102,9 +87,10 @@ const SignupModal = ({ setOpen }) => {
         </Button>
       </div>
 
-      <div className=" flex flex-1 justify-center items-center gap-2">
+      <div className=" flex flex-1  flex-col justify-center items-center gap-2">
+        <AuthStepper />
         <Button
-          onClick={() => setAuthType('enterEmail')}
+          onClick={handleNext}
           sx={{
             height: '56px',
             width: '400px',

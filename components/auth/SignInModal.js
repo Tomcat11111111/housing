@@ -7,43 +7,59 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import { ChevronLeft, Eye, EyeOff, X } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { Eye, EyeOff } from 'lucide-react';
 
-import useAuthTypeStore from '@/store/useAuthTypeStore';
+import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
+
+import ModalHeader from './ModalHeader';
 
 const SignInModal = ({ setOpen }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    accessToken,
+    setAccessToken,
+  } = useSigninStore();
   const { setAuthType } = useAuthTypeStore();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
-  const handleClose = () => {
-    setOpen(false);
+  const signinApi = async ({ email, password }) => {
+    try {
+      const response = await axios.post(
+        'https://jzj-api.zeabur.app/auth/login',
+        {
+          email,
+          password,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { mutate: signin } = useMutation({
+    mutationFn: signinApi,
+    onSuccess: (data) => {
+      setAccessToken(data.access_token);
+      console.log(accessToken);
+      setOpen(false);
+    },
+  });
+
+  const handleSignin = () => {
+    signin({ email, password });
   };
 
   return (
     <div>
-      <div
-        className="flex flex-1 items-center justify-between"
-        style={{
-          paddingInline: '32px',
-          paddingBlock: '16px',
-        }}
-      >
-        <ChevronLeft style={{ color: 'white' }} />
-        <p
-          className="font-bold"
-          style={{
-            fontSize: '24px',
-          }}
-        >
-          登入
-        </p>
-        <X onClick={handleClose} className=" cursor-pointer w-6 h-6" />
-      </div>
-      <Divider />
+      <ModalHeader setOpen={setOpen} />
       <div
         className="flex flex-col gap-4 justify-center items-center"
         style={{
@@ -109,13 +125,14 @@ const SignInModal = ({ setOpen }) => {
             </p>
           </div>
         </div>
-        {/* TODO: disable邏輯待更改 */}
+
         <Button
-          disabled={!showPassword}
+          disabled={!email || !password}
+          onClick={handleSignin}
           sx={{
             height: '56px',
             width: '400px',
-            bgcolor: showPassword ? '#0936D8' : '#CCCCCC',
+            bgcolor: email && password ? '#0936D8' : '#CCCCCC',
             fontSize: '16px',
             lineHeight: '24px',
             color: '#F6F6F6',
