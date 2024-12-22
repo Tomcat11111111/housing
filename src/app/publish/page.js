@@ -13,7 +13,7 @@ import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 
 const Publish = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   return (
     <div className="h-screen">
