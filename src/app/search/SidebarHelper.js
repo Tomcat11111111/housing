@@ -6,15 +6,15 @@ export const getFeaturesApi = async () => {
 };
 
 export const getShapesApi = async () => {
-  const reponse = await axios.get('https://jzj-api.zeabur.app/shapes');
-  return reponse.data;
+  const response = await axios.get('https://jzj-api.zeabur.app/shapes');
+  return response.data;
 };
 
 export const getIncludedInRentApi = async () => {
-  const reponse = await axios.get(
+  const response = await axios.get(
     'https://jzj-api.zeabur.app/included-in-rent'
   );
-  return reponse.data;
+  return response.data;
 };
 
 export const getDecorLevelsApi = async () => {
@@ -23,27 +23,27 @@ export const getDecorLevelsApi = async () => {
 };
 
 export const getEquipmentApi = async () => {
-  const reponse = await axios.get(
+  const response = await axios.get(
     'https://jzj-api.zeabur.app/offers?type=equipment'
   );
-  return reponse.data;
+  return response.data;
 };
 
 export const getFurnitureApi = async () => {
-  const reponse = await axios.get(
+  const response = await axios.get(
     'https://jzj-api.zeabur.app/offers?type=furniture'
   );
-  return reponse.data;
+  return response.data;
 };
 
 export const getMaterialsApi = async () => {
-  const reponse = await axios.get('https://jzj-api.zeabur.app/materials');
-  return reponse.data;
+  const response = await axios.get('https://jzj-api.zeabur.app/materials');
+  return response.data;
 };
 
 export const getRulesApi = async () => {
-  const reponse = await axios.get('https://jzj-api.zeabur.app/rules');
-  return reponse.data;
+  const response = await axios.get('https://jzj-api.zeabur.app/rules');
+  return response.data;
 };
 
 export const getCityDistrictApi = async (data) => {
@@ -56,6 +56,6 @@ export const getCityDistrictApi = async (data) => {
 };
 
 export const getSurroundingsApi = async () => {
-  const reponse = await axios.get('https://jzj-api.zeabur.app/surroundings');
-  return reponse.data;
+  const response = await axios.get('https://jzj-api.zeabur.app/surroundings');
+  return response.data;
 };

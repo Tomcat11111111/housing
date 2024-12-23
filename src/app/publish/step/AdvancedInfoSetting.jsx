@@ -15,7 +15,7 @@ import Image from 'next/image';
 
 import FieldGroup from './FieldGroup';
 
-const ItemAdvancedInformation = () => {
+const AdvancedInfoSetting = () => {
   const [itemFiles, setItemFiles] = useState([]);
   const [registerFiles, setRegisterFiles] = useState([]);
   const [description, setDescription] = useState('');
@@ -321,4 +321,4 @@ const ItemAdvancedInformation = () => {
   );
 };
 
-export default ItemAdvancedInformation;
+export default AdvancedInfoSetting;
