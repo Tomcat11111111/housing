@@ -15,13 +15,20 @@ import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
 
 import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
+import { completeRegistrationApi } from './actions';
 
 const EnterPasswordModal = ({ setOpen }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { setAuthType } = useAuthTypeStore();
-  const { email, verificationToken, password, setPassword, setAccessToken } =
-    useRegisterStore();
+  const {
+    email,
+    verificationToken,
+    password,
+    setPassword,
+    setAccessToken,
+    accessToken,
+  } = useRegisterStore();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -53,31 +60,19 @@ const EnterPasswordModal = ({ setOpen }) => {
     return areAllValidationsMet() && password === confirmPassword;
   };
 
-  const completeRegistrationApi = async ({
-    email,
-    password,
-    verificationToken,
-  }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/auth/register/complete',
-        {
-          email,
-          password,
-          verificationToken,
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const { mutate: completeRegistration } = useMutation({
     mutationFn: completeRegistrationApi,
     onSuccess: (data) => {
-      console.log(data);
-      setAccessToken(data.access_token);
+      const token = data.access_token;
+      console.log(token);
+      setAccessToken(token);
+      localStorage.setItem('token', token);
+      Cookies.set('token', token, {
+        expires: 1,
+        path: '/',
+        secure: true,
+        sameSite: 'Strict',
+      });
       setOpen(false);
     },
     onError: (error) => {

@@ -14,6 +14,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
 
 import ModalHeader from './ModalHeader';
+import { signinApi } from './actions';
+import Cookies from 'js-cookie';
 
 const SignInModal = ({ setOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,27 +31,23 @@ const SignInModal = ({ setOpen }) => {
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
-  const signinApi = async ({ email, password }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/auth/login',
-        {
-          email,
-          password,
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const { mutate: signin } = useMutation({
     mutationFn: signinApi,
     onSuccess: (data) => {
-      setAccessToken(data.access_token);
-      console.log(accessToken);
+      const token = data.access_token;
+      console.log(token);
+      setAccessToken(token);
+      localStorage.setItem('token', token);
+      Cookies.set('token', token, {
+        expires: 1,
+        path: '/',
+        secure: true,
+        sameSite: 'Strict',
+      });
       setOpen(false);
+    },
+    onError: (error) => {
+      console.log('Error Signing in', error);
     },
   });
 

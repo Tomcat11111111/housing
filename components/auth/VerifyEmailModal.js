@@ -8,6 +8,7 @@ import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
 
 import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
+import { sendVerificationCodeApi, verifyEmailApi } from './actions';
 
 const VerifyEmailModal = ({ setOpen }) => {
   const [countdown, setCountdown] = useState(0);
@@ -19,21 +20,6 @@ const VerifyEmailModal = ({ setOpen }) => {
     verificationToken,
     setVerificationToken,
   } = useRegisterStore();
-
-  const verifyEmailApi = async ({ email, verificationCode }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/auth/register/verify-email',
-        {
-          email,
-          code: verificationCode,
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const { mutate: verifyEmail } = useMutation({
     mutationFn: verifyEmailApi,
@@ -48,21 +34,6 @@ const VerifyEmailModal = ({ setOpen }) => {
 
   const handleNext = () => {
     verifyEmail({ email, verificationCode });
-  };
-
-  const sendVerificationCodeApi = async ({ email }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/auth/register/send-code',
-        {
-          email,
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const { mutate: sendVerificationCode } = useMutation({
