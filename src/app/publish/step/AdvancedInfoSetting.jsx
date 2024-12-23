@@ -13,24 +13,30 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
+import { uploadImageApi } from '../actions';
 import FieldGroup from './FieldGroup';
 import SortableImage from './SortableImage';
 
-const ItemAdvancedInformation = () => {
-  const [itemFiles, setItemFiles] = useState([]);
+const AdvancedInfoSetting = (props) => {
+  const { advancedInfoSettings, setAdvancedInfoSettings } = props;
   const [registerFiles, setRegisterFiles] = useState([]);
-  const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
 
   const MAX_CHAR = 2000;
 
-  const handleDescriptionChange = (e) => {
+  const handleIntroductionChange = (e) => {
     const inputText = e.target.value;
     if (inputText > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
-      setDescription(truncatedText);
+      setAdvancedInfoSettings((prev) => ({
+        ...prev,
+        introduction: truncatedText,
+      }));
     } else {
-      setDescription(inputText);
+      setAdvancedInfoSettings((prev) => ({
+        ...prev,
+        introduction: inputText,
+      }));
     }
   };
 
@@ -41,7 +47,10 @@ const ItemAdvancedInformation = () => {
   // 拖曳上傳
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
-      setItemFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+      setAdvancedInfoSettings((prev) => ({
+        ...prev,
+        images: (prev) => [...prev, ...acceptedFiles],
+      }));
     },
     accept: 'image/*',
     multiple: true,
@@ -52,32 +61,12 @@ const ItemAdvancedInformation = () => {
   const RegisterFileRef = useRef(null);
   const ItemFileRef = useRef(null);
 
-  const uploadImageApi = async ({ itemFiles }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/images/upload/multiple',
-        {
-          images: itemFiles,
-        },
-        {
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
-          },
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error('Error uploading images:', error);
-    }
-  };
-
   const { mutate: uploadMutation } = useMutation({
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
       console.log(data);
-      setItemFiles((prev) => [...prev, data]);
-      console.log(itemFiles);
+      // setItemFiles((prev) => [...prev, data]);
+      console.log(advancedInfoSettings.images);
     },
     onError: (error) => {
       console.error('Upload failed:', error);
@@ -87,20 +76,38 @@ const ItemAdvancedInformation = () => {
   const handleItemFileUpload = (e) => {
     const uploadFiles = Array.from(e.target.files);
     // uploadMutation(uploadFiles);
-    setItemFiles((prevFiles) => [...prevFiles, ...uploadFiles]);
+    setAdvancedInfoSettings((prev) => ({
+      ...prev,
+      images: [...prev.images, ...uploadFiles],
+    }));
   };
 
   // 拖拉排序
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
+    // 確保只有在 active.id 和 over.id 不相等時才更新
     if (active.id !== over.id) {
-      setItemFiles((prev) => {
-        const oldIndex = prev.findIndex(
+      setAdvancedInfoSettings((prev) => {
+        // 找到陣列中 active 和 over 兩個圖片的索引
+        const oldIndex = prev.images.findIndex(
           (_, idx) => idx === parseInt(active.id)
         );
-        const newIndex = prev.findIndex((_, idx) => idx === parseInt(over.id));
-        return arrayMove(prev, oldIndex, newIndex);
+        const newIndex = prev.images.findIndex(
+          (_, idx) => idx === parseInt(over.id)
+        );
+
+        // 如果索引找到，則進行交換
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const updatedImages = arrayMove(prev.images, oldIndex, newIndex);
+
+          return {
+            ...prev,
+            images: updatedImages, // 更新 images 陣列
+          };
+        }
+
+        return prev; // 如果沒有找到有效索引，則不更新
       });
     }
   };
@@ -129,9 +136,11 @@ const ItemAdvancedInformation = () => {
                 onDragEnd={handleDragEnd}
               >
                 <SortableContext
-                  items={itemFiles.map((_, index) => index.toString())}
+                  items={advancedInfoSettings.images.map((_, index) =>
+                    index.toString()
+                  )}
                 >
-                  {itemFiles.map((file, index) => (
+                  {advancedInfoSettings.images.map((file, index) => (
                     <SortableImage
                       key={index}
                       id={index.toString()}
@@ -182,12 +191,12 @@ const ItemAdvancedInformation = () => {
         <div className="relative w-full">
           {/* TextField with word count */}
           <TextField
-            id="description"
+            id="introduction"
             multiline
             rows={6}
             placeholder="可以描述物件特色或現況"
-            value={description}
-            onChange={handleDescriptionChange}
+            value={advancedInfoSettings.introduction}
+            onChange={handleIntroductionChange}
             fullWidth
             sx={{
               '& .MuiInputBase-root': {
@@ -197,7 +206,7 @@ const ItemAdvancedInformation = () => {
           />
 
           <div className="absolute bottom-2 right-2 text-[#333333] text-sm font-bold">
-            {`${description.length}/${MAX_CHAR}`}
+            {`${advancedInfoSettings.introduction.length}/${MAX_CHAR}`}
           </div>
         </div>
       </FieldGroup>
@@ -275,6 +284,14 @@ const ItemAdvancedInformation = () => {
         <div className=" flex flex-col gap-4">
           <TextField
             id="contacts"
+            value={advancedInfoSettings.contact}
+            onChange={(e) => {
+              const contact = e.target.value;
+              setAdvancedInfoSettings((prev) => ({
+                ...prev,
+                contact: contact,
+              }));
+            }}
             placeholder="請輸入姓名"
             sx={{ width: '258px' }}
             slotProps={{
@@ -289,6 +306,14 @@ const ItemAdvancedInformation = () => {
             <TextField
               id="contacts"
               placeholder="請輸入行動電話"
+              value={advancedInfoSettings.mobilePhone}
+              onChange={(e) => {
+                const mobilePhone = e.target.value;
+                setAdvancedInfoSettings((prev) => ({
+                  ...prev,
+                  mobilePhone: mobilePhone,
+                }));
+              }}
               sx={{ width: '324px' }}
               slotProps={{
                 input: {
@@ -301,6 +326,14 @@ const ItemAdvancedInformation = () => {
             <TextField
               id="contacts"
               placeholder="請輸入固定電話"
+              value={advancedInfoSettings.phone}
+              onChange={(e) => {
+                const phone = e.target.value;
+                setAdvancedInfoSettings((prev) => ({
+                  ...prev,
+                  phone: phone,
+                }));
+              }}
               sx={{ width: '288px' }}
               slotProps={{
                 input: {
@@ -314,6 +347,14 @@ const ItemAdvancedInformation = () => {
           <TextField
             id="contacts"
             placeholder="請輸入電子信箱"
+            value={advancedInfoSettings.email}
+            onChange={(e) => {
+              const email = e.target.value;
+              setAdvancedInfoSettings((prev) => ({
+                ...prev,
+                email: email,
+              }));
+            }}
             sx={{ width: '240px' }}
             slotProps={{
               input: {
@@ -329,4 +370,4 @@ const ItemAdvancedInformation = () => {
   );
 };
 
-export default ItemAdvancedInformation;
+export default AdvancedInfoSetting;

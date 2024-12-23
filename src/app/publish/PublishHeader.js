@@ -14,7 +14,7 @@ const PublishHeader = () => {
             <span className={styles.stroke}>|</span>
             <p>會員中心</p>
           </div>
-          <div className={styles.PublishArea}>
+          <div className={styles.memberArea}>
             <p>某某某</p>
             <Account color="#0936D8" />
           </div>
