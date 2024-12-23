@@ -17,6 +17,7 @@ import ItemPreview from './step/ItemPreview';
 import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
+<<<<<<< HEAD
   const [step, setStep] = useState(1);
   const {
     itemTypeSettings,
@@ -26,6 +27,44 @@ const Publish = () => {
     setInfoSettings,
     setAdvancedInfoSettings,
   } = usePublishStore();
+=======
+  const [step, setStep] = useState(2);
+  const [itemTypeSettings, setItemTypeSettings] = useState({
+    // publishType: null,
+    publishType: 'buy',
+    itemType: null,
+    category: null,
+  });
+  const [infoSettings, setInfoSettings] = useState({
+    shapeId: null,
+    title: '',
+    cityId: null,
+    districtId: null,
+    address: '',
+    age: null,
+    squareMeters: null,
+    floor: null,
+    totalFloors: null,
+    room: null,
+    livingRoom: null,
+    bathroom: null,
+    balcony: null,
+    decorLevelId: null,
+    parkingSpace: '無',
+    elevator: '無',
+    totalPrice: null,
+  });
+  console.log('infoSettings: ', infoSettings);
+
+  const [advancedInfoSettings, setAdvancedInfoSettings] = useState({
+    images: [],
+    introduction: '',
+    contact: '',
+    mobilePhone: null,
+    phone: null,
+    email: '',
+  });
+>>>>>>> f686c7d560ceb41f173741ce3a594e2109cf1bec
 
   const itemStatusRef = useRef('');
 
@@ -141,6 +180,8 @@ const Publish = () => {
         )}
         {step === 2 && (
           <ItemAdvancedInfoSetting
+            itemTypeSettings={itemTypeSettings}
+            infoSettings={infoSettings}
             advancedInfoSettings={advancedInfoSettings}
             setAdvancedInfoSettings={setAdvancedInfoSettings}
           />
