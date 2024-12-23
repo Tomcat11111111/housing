@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import {
   Button,
   Checkbox,
@@ -10,10 +12,9 @@ import {
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { Maximize } from 'lucide-react';
-import Image from 'next/image';
 
 import FieldGroup from './FieldGroup';
+import SortableImage from './SortableImage';
 
 const ItemAdvancedInformation = () => {
   const [itemFiles, setItemFiles] = useState([]);
@@ -37,32 +38,7 @@ const ItemAdvancedInformation = () => {
     setSelectedOption(e.target.name);
   };
 
-  const uploadImageApi = async ({ itemFiles }) => {
-    try {
-      const response = await axios.post(
-        'https://jzj-api.zeabur.app/images/upload',
-        {
-          images: itemFiles,
-          // propertyId: propertyId,
-        }
-      );
-
-      return response.data;
-    } catch (error) {}
-  };
-
-  const { mutate: uploadMutation } = useMutation({
-    mutationFn: uploadImageApi,
-    onSuccess: () => {},
-  });
-
-  const handleItemFileUpload = (e) => {
-    const uploadedFiles = e.target.files;
-    setItemFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
-
-    uploadMutation({ itemFiles });
-  };
-
+  // 拖曳上傳
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
       setItemFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
@@ -75,6 +51,59 @@ const ItemAdvancedInformation = () => {
 
   const RegisterFileRef = useRef(null);
   const ItemFileRef = useRef(null);
+
+  const uploadImageApi = async ({ itemFiles }) => {
+    try {
+      const response = await axios.post(
+        'https://jzj-api.zeabur.app/images/upload/multiple',
+        {
+          images: itemFiles,
+        },
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    }
+  };
+
+  const { mutate: uploadMutation } = useMutation({
+    mutationFn: uploadImageApi,
+    onSuccess: (data) => {
+      console.log(data);
+      setItemFiles((prev) => [...prev, data]);
+      console.log(itemFiles);
+    },
+    onError: (error) => {
+      console.error('Upload failed:', error);
+    },
+  });
+
+  const handleItemFileUpload = (e) => {
+    const uploadFiles = Array.from(e.target.files);
+    // uploadMutation(uploadFiles);
+    setItemFiles((prevFiles) => [...prevFiles, ...uploadFiles]);
+  };
+
+  // 拖拉排序
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setItemFiles((prev) => {
+        const oldIndex = prev.findIndex(
+          (_, idx) => idx === parseInt(active.id)
+        );
+        const newIndex = prev.findIndex((_, idx) => idx === parseInt(over.id));
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6 my-6">
@@ -92,33 +121,32 @@ const ItemAdvancedInformation = () => {
           </ul>
         </div>
 
-        {/* 此區的兩個方格是否支援點擊上傳 */}
-        <div className=" w-full h-[200px] ">
-          <div className="h-full relative flex gap-4" {...getRootProps()}>
-            {/* 拖拉或點擊上傳後，圖片預覽的放式? */}
-            {/* 取代原本方格? */}
-            {itemFiles.length > 0 ? (
-              <div className="relative w-[300px] h-[200px] overflow-hidden">
-                <Image
-                  src={URL.createObjectURL(itemFiles[0])}
-                  alt="first-image"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ) : (
+        <div className="w-full">
+          <div className="relative" {...getRootProps()}>
+            <div className=" grid grid-cols-3 w-8/12 gap-4">
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={itemFiles.map((_, index) => index.toString())}
+                >
+                  {itemFiles.map((file, index) => (
+                    <SortableImage
+                      key={index}
+                      id={index.toString()}
+                      src={URL.createObjectURL(file)}
+                      name={file.name}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
               <div
-                className="flex border-2 border-dashed border-[#909090]  rounded-[4px] w-[300px] h-full justify-center items-center cursor-pointer"
+                className="flex border-2 border-dashed border-[#909090]  rounded-[4px] w-[300px] h-[200px] justify-center items-center cursor-pointer"
                 onClick={() => ItemFileRef.current.click()}
               >
-                <p>新增首圖</p>
+                <p>新增圖片</p>
               </div>
-            )}
-            <div
-              className="flex border-2 border-dashed border-[#909090]  rounded-[4px] w-[300px] h-full justify-center items-center cursor-pointer"
-              onClick={() => ItemFileRef.current.click()}
-            >
-              <p>新增圖片</p>
             </div>
 
             <input
@@ -145,28 +173,8 @@ const ItemAdvancedInformation = () => {
               }}
               onClick={() => ItemFileRef.current.click()}
             >
-              批量上傳
+              圖片上傳
             </Button>
-            {/* Preview the uploaded files */}
-            {itemFiles.length > 0 && (
-              <div className="mt-4">
-                <h4>已上傳的檔案:</h4>
-                <div className="flex gap-4">
-                  {itemFiles.map((file, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <Image
-                        src={URL.createObjectURL(file)}
-                        alt={file.name}
-                        width={100}
-                        height={100}
-                        className="w-24 h-24 object-cover rounded-md"
-                      />
-                      <p className="text-xs text-gray-500">{file.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </FieldGroup>
