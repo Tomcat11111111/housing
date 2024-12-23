@@ -27,3 +27,24 @@ export const createRentPropertyApi = async (data) => {
   );
   return response.data;
 };
+
+export const uploadImageApi = async ({ itemFiles }) => {
+  try {
+    const response = await axios.post(
+      'https://jzj-api.zeabur.app/images/upload/multiple',
+      {
+        images: itemFiles,
+      },
+      {
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading images:', error);
+  }
+};
