@@ -11,14 +11,18 @@ import {
   TextField,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { uploadImageApi } from '../actions';
 import FieldGroup from './FieldGroup';
 import SortableImage from './SortableImage';
 
 const AdvancedInfoSetting = (props) => {
-  const { advancedInfoSettings, setAdvancedInfoSettings } = props;
+  const {
+    advancedInfoSettings,
+    setAdvancedInfoSettings,
+    itemTypeSettings,
+    infoSettings,
+  } = props;
   const [registerFiles, setRegisterFiles] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -44,18 +48,6 @@ const AdvancedInfoSetting = (props) => {
     setSelectedOption(e.target.name);
   };
 
-  // 拖曳上傳
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      setAdvancedInfoSettings((prev) => ({
-        ...prev,
-        images: (prev) => [...prev, ...acceptedFiles],
-      }));
-    },
-    accept: 'image/*',
-    multiple: true,
-  });
-
   const handleRegisterFileUpload = () => {};
 
   const RegisterFileRef = useRef(null);
@@ -64,9 +56,11 @@ const AdvancedInfoSetting = (props) => {
   const { mutate: uploadMutation } = useMutation({
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
-      console.log(data);
-      // setItemFiles((prev) => [...prev, data]);
-      console.log(advancedInfoSettings.images);
+      console.log('Response data:', data);
+      setAdvancedInfoSettings((prev) => ({
+        ...prev,
+        images: [...prev.images, ...data],
+      }));
     },
     onError: (error) => {
       console.error('Upload failed:', error);
@@ -75,11 +69,11 @@ const AdvancedInfoSetting = (props) => {
 
   const handleItemFileUpload = (e) => {
     const uploadFiles = Array.from(e.target.files);
-    // uploadMutation(uploadFiles);
-    setAdvancedInfoSettings((prev) => ({
-      ...prev,
-      images: [...prev.images, ...uploadFiles],
-    }));
+    uploadMutation(uploadFiles);
+    // setAdvancedInfoSettings((prev) => ({
+    //   ...prev,
+    //   images: [...prev.images, ...uploadFiles],
+    // }));
   };
 
   // 拖拉排序
@@ -112,11 +106,27 @@ const AdvancedInfoSetting = (props) => {
     }
   };
 
+  // 拖曳上傳
+  const { getRootProps, getInputProps } = useDropzone({
+    // onDrop: (acceptedFiles) => {
+    //   setAdvancedInfoSettings((prev) => ({
+    //     ...prev,
+    //     images: (prev) => [...prev, ...acceptedFiles],
+    //   }));
+    // },
+    onDrop: (acceptedFiles) => {
+      uploadMutation({ acceptedFiles });
+    },
+    accept: 'image/*',
+    multiple: true,
+  });
+
   return (
     <div className="flex flex-col gap-6 my-6">
-      {/* 先寫死，還不確定怎麼把前面資料帶進來 */}
       <div className="text-[#333] text-xl font-bold leading-8 ">
-        出租&gt;住宅&gt;整層住家&gt;公寓&gt;北投區三合街一段
+        {itemTypeSettings.publishType}&gt;{itemTypeSettings.itemType}&gt;
+        {itemTypeSettings.category}&gt;{infoSettings.shapeId}&gt;
+        {infoSettings.title}
       </div>
       <FieldGroup title="物件照片">
         <div className=" text-[#909090] ">
@@ -144,7 +154,7 @@ const AdvancedInfoSetting = (props) => {
                     <SortableImage
                       key={index}
                       id={index.toString()}
-                      src={URL.createObjectURL(file)}
+                      src={file}
                       name={file.name}
                     />
                   ))}

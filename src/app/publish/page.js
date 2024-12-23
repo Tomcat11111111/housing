@@ -15,7 +15,7 @@ import ItemPreview from './step/ItemPreview';
 import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [itemTypeSettings, setItemTypeSettings] = useState({
     // publishType: null,
     publishType: 'buy',
@@ -166,6 +166,8 @@ const Publish = () => {
         )}
         {step === 2 && (
           <ItemAdvancedInfoSetting
+            itemTypeSettings={itemTypeSettings}
+            infoSettings={infoSettings}
             advancedInfoSettings={advancedInfoSettings}
             setAdvancedInfoSettings={setAdvancedInfoSettings}
           />
