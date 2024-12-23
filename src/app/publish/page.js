@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
 
+import usePublishStore from '@/store/publishStore';
+
 import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 import { createRentPropertyApi, createSalePropertyApi } from './actions';
@@ -16,41 +18,14 @@ import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
   const [step, setStep] = useState(1);
-  const [itemTypeSettings, setItemTypeSettings] = useState({
-    // publishType: null,
-    publishType: 'buy',
-    itemType: null,
-    category: null,
-  });
-  const [infoSettings, setInfoSettings] = useState({
-    shapeId: null,
-    title: '',
-    cityId: null,
-    districtId: null,
-    address: '',
-    age: null,
-    squareMeters: null,
-    floor: null,
-    totalFloors: null,
-    room: null,
-    livingRoom: null,
-    bathroom: null,
-    balcony: null,
-    decorLevelId: null,
-    parkingSpace: '無',
-    elevator: '無',
-    totalPrice: null,
-  });
-  console.log('infoSettings: ', infoSettings);
-
-  const [advancedInfoSettings, setAdvancedInfoSettings] = useState({
-    images: [],
-    introduction: '',
-    contact: '',
-    mobilePhone: null,
-    phone: null,
-    email: '',
-  });
+  const {
+    itemTypeSettings,
+    infoSettings,
+    advancedInfoSettings,
+    setItemTypeSettings,
+    setInfoSettings,
+    setAdvancedInfoSettings,
+  } = usePublishStore();
 
   const itemStatusRef = useRef('');
 
