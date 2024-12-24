@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
   itemTypeSettings: {
-    publishType: 'buy',
+    publishType: 'rent',
     itemType: null,
     category: null,
   },
