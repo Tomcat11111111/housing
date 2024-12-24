@@ -8,7 +8,7 @@ import {
   RentHouseTypeList,
 } from './TypeSettingHelper';
 
-import usePublishStore from '@/store/publishStore';
+import usePublishStore from '@/store/usePublishStore';
 
 import clsx from 'clsx';
 

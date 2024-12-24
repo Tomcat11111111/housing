@@ -4,15 +4,13 @@ import {
   InputAdornment,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   TextField,
   Checkbox,
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import usePublishStore from '@/store/publishStore';
+import usePublishStore from '@/store/usePublishStore';
 
 import {
   ElevatorOptions,
@@ -34,14 +32,16 @@ const SaleHouseInfoSetting = () => {
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              主建物坪數 ＊
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">坪</InputAdornment>
-          ),
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                主建物坪數 ＊
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">坪</InputAdornment>
+            ),
+          },
         }}
       />
       ＋
@@ -53,15 +53,17 @@ const SaleHouseInfoSetting = () => {
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              附屬建物坪數 ＊
-            </InputAdornment>
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                附屬建物坪數 ＊
+              </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position="end">坪</InputAdornment>
-          ),
-        }}
+              ),
+            },
+          }}
       />
       ＋
       <TextField
@@ -72,15 +74,17 @@ const SaleHouseInfoSetting = () => {
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              公共設施坪數 ＊
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                公共設施坪數 ＊
             </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position="end">坪</InputAdornment>
-          ),
-        }}
+              ),
+            },
+          }}
       />
       ＝
       <TextField
@@ -90,15 +94,17 @@ const SaleHouseInfoSetting = () => {
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              建物登記坪數
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                建物登記坪數
             </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position="end">坪</InputAdornment>
-          ),
-        }}
+              ),
+            },
+          }}
       />
     </div>
     <div className="flex gap-10">
@@ -140,14 +146,16 @@ const SaleHouseInfoSetting = () => {
         onChange={(e) => setInfoSettings({ age: e.target.value })}
         placeholder="請輸入屋齡"
         sx={{ width: '302px' }}
-        slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">屋齡</InputAdornment>
-          ),
+        slotProps={{  
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">屋齡</InputAdornment>
+            ),
           endAdornment: (
             <InputAdornment position="end">年</InputAdornment>
-          ),
-        }}
+              ),
+            },
+          }}
       />
       <FormControl sx={{ minWidth: 196 }}>
         <InputLabel id="demo-select-small-label">裝潢程度＊</InputLabel>
@@ -171,13 +179,15 @@ const SaleHouseInfoSetting = () => {
         placeholder="請輸入管理費"
         sx={{ width: '302px' }}
         slotProps={{
-          startAdornment: (
-            <InputAdornment position="start">管理費</InputAdornment>
-          ),
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">管理費</InputAdornment>
+            ),
           endAdornment: (
             <InputAdornment position="end">元/月</InputAdornment>
-          ),
-        }}
+              ),
+            },
+          }}
       />
       <FormControlLabel control={<Checkbox />} label="無" />
     </div>
@@ -245,12 +255,14 @@ const SaleHouseInfoSetting = () => {
       placeholder="請輸入物件總價"
       sx={{ width: '302px' }}
       slotProps={{
-        startAdornment: (
-          <InputAdornment position="start">物件總價＊</InputAdornment>
-        ),
-        endAdornment: (
-          <InputAdornment position="end">元</InputAdornment>
-        ),
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">物件總價＊</InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">元</InputAdornment>
+          ),
+        },
       }}
     />
   </FieldGroup>

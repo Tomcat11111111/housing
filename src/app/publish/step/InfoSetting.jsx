@@ -24,11 +24,11 @@ import FieldGroup from './FieldGroup';
 import { HouseFormList } from './InfoSettingHelper';
 
 import SaleHouseInfoSetting from './SaleHouseInfoSetting';
-// import RentHouseInfoSetting from './RentHouseInfoSetting'; // 暫時註解
+import RentHouseInfoSetting from './RentHouseInfoSetting';
 
 import clsx from 'clsx';
 
-import usePublishStore from '@/store/publishStore';
+import usePublishStore from '@/store/usePublishStore';
 
 const InfoSetting = () => {
   const [lane, setLane] = useState(null);
@@ -74,7 +74,7 @@ const InfoSetting = () => {
   }, [lane, alley, number, subNumber]);
 
   return (
-    <div className="flex flex-col gap-6 mt-6">
+    <div className="flex flex-col gap-6 my-6">
       <FieldGroup title="請選擇物件型態">
         <div className="flex gap-6">
           {HouseFormList.map((item) => (
@@ -170,85 +170,97 @@ const InfoSetting = () => {
             sx={{ width: '200px' }}
           />
           <TextField
-            type="number"
+            
             className="w-[100px]"
             id="contacts"
             value={lane}
             onChange={(e) => setLane(e.target.value)}
             slotProps={{
-              endAdornment: (
-                <InputAdornment position="start">巷</InputAdornment>
-              ),
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">巷</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             className="w-[100px]"
             id="contacts"
             value={alley}
             onChange={(e) => setAlley(e.target.value)}
             slotProps={{
-              endAdornment: (
-                <InputAdornment position="start">弄</InputAdornment>
-              ),
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">弄</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             className="w-[100px]"
             id="contacts"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             slotProps={{
-              endAdornment: (
-                <InputAdornment position="start">號</InputAdornment>
-              ),
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">號</InputAdornment>
+                ),
+              },
             }}
           />
           <p className="text-[#909090]">( 前台只會顯示前半段地址 )</p>
         </div>
         <div className="flex gap-2 items-center">
           <TextField
-            type="number"
+            
             className="w-[405px]"
             id="contacts"
             value={floor}
             onChange={(e) => setInfoSettings({ floor: e.target.value })}
             placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">出租樓層＊</InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">出租樓層＊</InputAdornment>
+                ),
               endAdornment: (
-                <InputAdornment position="start">樓</InputAdornment>
-              ),
+                  <InputAdornment position="start">樓</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             id="contacts"
             className="w-[100px]"
             value={subNumber}
             onChange={(e) => setSubNumber(e.target.value)}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">之</InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">之</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             className="w-[158px]"
             id="contacts"
             value={totalFloors}
             onChange={(e) => setInfoSettings({ totalFloors: e.target.value })}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">總樓層</InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="start">樓</InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">總樓層</InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">樓</InputAdornment>
+                ),
+              },
             }}
           />
         </div>
@@ -269,63 +281,71 @@ const InfoSetting = () => {
         <div className="flex gap-2 items-center">
           <p className="text-sm text-[#333333] font-bold">現況格局＊</p>
           <TextField
-            type="number"
+            
             id="contacts"
             value={room}
             onChange={(e) => setInfoSettings({ room: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start"><Bed /></InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start"><Bed /></InputAdornment>
+                ),
               endAdornment: (
-                <InputAdornment position="end">房</InputAdornment>
-              ),
+                  <InputAdornment position="end">房</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             id="contacts"
             value={livingRoom}
             onChange={(e) => setInfoSettings({ livingRoom: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start"><CouchIcon /></InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start"><CouchIcon /></InputAdornment>
+                ),
               endAdornment: (
-                <InputAdornment position="end">廳</InputAdornment>
-              ),
+                  <InputAdornment position="end">廳</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             id="contacts"
             value={bathroom}
             onChange={(e) => setInfoSettings({ bathroom: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start"><TubIcon /></InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">衛</InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start"><TubIcon /></InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">衛</InputAdornment>
+                ),
+              },
             }}
           />
           <TextField
-            type="number"
+            
             id="contacts"
             value={balcony}
             onChange={(e) => setInfoSettings({ balcony: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
-              startAdornment: (
-                <InputAdornment position="start"><GrassIcon /></InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">陽台</InputAdornment>
-              ),
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start"><GrassIcon /></InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">陽台</InputAdornment>
+                ),
+              },
             }}
           />
           <FormControlLabel control={<Checkbox />} label="開放式格局" />
@@ -334,9 +354,9 @@ const InfoSetting = () => {
       {publishType === 'buy' && (
         <SaleHouseInfoSetting />
       )}
-      {/* {publishType === 'rent' && (
+      {publishType === 'rent' && (
         <RentHouseInfoSetting />
-      )} */}
+      )}
     </div>
   );
 };
