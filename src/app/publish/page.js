@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@mui/material/Button';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
 
-import usePublishStore from '@/store/publishStore';
+import usePublishStore from '@/store/usePublishStore';
 
 import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
@@ -114,83 +116,85 @@ const Publish = () => {
   // }, []);
 
   return (
-    <div className="h-screen">
-      <PublishHeader />
-      <div
-        style={{
-          height: '100vh-180px',
-          overflow: 'auto',
-          margin: '24px 80px 0',
-          paddingBottom: '100px',
-        }}
-      >
-        <StepBar step={step} />
-        {step === 0 && <ItemTypeSetting />}
-        {step === 1 && <ItemInfoSetting />}
-        {step === 2 && (
-          <ItemAdvancedInfoSetting
-            itemTypeSettings={itemTypeSettings}
-            infoSettings={infoSettings}
-            advancedInfoSettings={advancedInfoSettings}
-            setAdvancedInfoSettings={setAdvancedInfoSettings}
-          />
-        )}
-        {step === 3 && <ItemPreview />}
-      </div>
-      <div className="z-10 fixed bottom-0 left-0 h-[100px] w-full px-[80px] py-[24px] bg-white flex justify-between">
-        <div>
-          {step > 0 && (
-            <Button
-              variant="contained"
-              startIcon={<ChevronLeft />}
-              sx={{ bgcolor: '#0936D8' }}
-              onClick={() => setStep(step - 1)}
-            >
-              上一步
-            </Button>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <div className="h-screen">
+        <PublishHeader />
+        <div
+          style={{
+            height: '100vh-180px',
+            overflow: 'auto',
+            margin: '24px 80px 0',
+            paddingBottom: '100px',
+          }}
+        >
+          <StepBar step={step} />
+          {step === 0 && <ItemTypeSetting />}
+          {step === 1 && <ItemInfoSetting />}
+          {step === 2 && (
+            <ItemAdvancedInfoSetting
+              itemTypeSettings={itemTypeSettings}
+              infoSettings={infoSettings}
+              advancedInfoSettings={advancedInfoSettings}
+              setAdvancedInfoSettings={setAdvancedInfoSettings}
+            />
           )}
+          {step === 3 && <ItemPreview />}
         </div>
-        <div>
-          {step < 3 && (
-            <Button
-              sx={{ bgcolor: '#0936D8' }}
-              variant="contained"
-              endIcon={<ChevronRight />}
-              onClick={() => {
-                //todo: 檢查當前步驟資料是否齊全，驗證怎麼做
-
-                setStep(step + 1);
-              }}
-            >
-              下一步
-            </Button>
-          )}
-          {step === 3 && (
-            <div className="flex gap-2">
+        <div className="z-10 fixed bottom-0 left-0 h-[100px] w-full px-[80px] py-[24px] bg-white flex justify-between">
+          <div>
+            {step > 0 && (
               <Button
+                variant="contained"
+                startIcon={<ChevronLeft />}
                 sx={{ bgcolor: '#0936D8' }}
-                variant="outlined"
-                startIcon={<Save />}
-                onClick={() => {
-                  itemStatusRef.current = 'draft';
-                  publishProperty(MockRentData);
-                }}
+                onClick={() => setStep(step - 1)}
               >
-                保存不刊登
+                上一步
               </Button>
+            )}
+          </div>
+          <div>
+            {step < 3 && (
               <Button
                 sx={{ bgcolor: '#0936D8' }}
                 variant="contained"
                 endIcon={<ChevronRight />}
-                onClick={() => publishProperty(MockRentData)}
+                onClick={() => {
+                  //todo: 檢查當前步驟資料是否齊全，驗證怎麼做
+
+                  setStep(step + 1);
+                }}
               >
-                完成並刊登
+                下一步
               </Button>
-            </div>
-          )}
+            )}
+            {step === 3 && (
+              <div className="flex gap-2">
+                <Button
+                  sx={{ bgcolor: '#0936D8' }}
+                  variant="outlined"
+                  startIcon={<Save />}
+                  onClick={() => {
+                    itemStatusRef.current = 'draft';
+                    publishProperty(MockRentData);
+                  }}
+                >
+                  保存不刊登
+                </Button>
+                <Button
+                  sx={{ bgcolor: '#0936D8' }}
+                  variant="contained"
+                  endIcon={<ChevronRight />}
+                  onClick={() => publishProperty(MockRentData)}
+                >
+                  完成並刊登
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </LocalizationProvider>
   );
 };
 
