@@ -23,7 +23,6 @@ const Publish = () => {
     infoSettings,
     advancedInfoSettings,
     setItemTypeSettings,
-    setInfoSettings,
     setAdvancedInfoSettings,
   } = usePublishStore();
 
@@ -126,19 +125,8 @@ const Publish = () => {
         }}
       >
         <StepBar step={step} />
-        {step === 0 && (
-          <ItemTypeSetting
-            itemTypeSettings={itemTypeSettings}
-            setItemTypeSettings={setItemTypeSettings}
-          />
-        )}
-        {step === 1 && (
-          <ItemInfoSetting
-            publishType={itemTypeSettings.publishType}
-            infoSettings={infoSettings}
-            setInfoSettings={setInfoSettings}
-          />
-        )}
+        {step === 0 && <ItemTypeSetting />}
+        {step === 1 && <ItemInfoSetting />}
         {step === 2 && (
           <ItemAdvancedInfoSetting
             itemTypeSettings={itemTypeSettings}

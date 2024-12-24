@@ -1,4 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'
+
+import { getCitiesApi } from '../actions';
+import { useQuery } from '@tanstack/react-query';
+
+import Bed from '@/icon/BedIcon/BedIcon'
+import GrassIcon from '@/icon/GrassIcon/GrassIcon'
+import CouchIcon from '@/icon/CouchIcon/CouchIcon'
+import TubIcon from '@/icon/TubIcon/TubIcon'
 
 import {
   Button,
@@ -13,16 +21,57 @@ import {
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import {
-  ElevatorOptions,
-  HouseFormList,
-  ParkingOptions,
-} from './InfoSettingHelper';
+import { HouseFormList } from './InfoSettingHelper';
+
+import SaleHouseInfoSetting from './SaleHouseInfoSetting';
+// import RentHouseInfoSetting from './RentHouseInfoSetting'; // 暫時註解
 
 import clsx from 'clsx';
 
-const InfoSetting = (props) => {
-  const { publishType, infoSettings, setInfoSettings } = props;
+import usePublishStore from '@/store/publishStore';
+
+const InfoSetting = () => {
+  const [lane, setLane] = useState(null);
+  const [alley, setAlley] = useState(null);
+  const [number, setNumber] = useState(null);
+  const [subNumber, setSubNumber] = useState(null);
+
+  const { infoSettings, setInfoSettings, itemTypeSettings } = usePublishStore();
+
+  const publishType = itemTypeSettings.publishType;
+  const {
+    shapeId,
+    title,
+    cityId,
+    districtId,
+    address,
+    floor,
+    totalFloors,
+    room,
+    livingRoom,
+    bathroom,
+    balcony,
+  } = infoSettings;
+
+
+  const { data: citiesOptions } = useQuery({
+    queryKey: ['getCitiesApi'],
+    queryFn: getCitiesApi,
+    initialData: [],
+  });
+  const districtsOptions = citiesOptions.find((city) => city.id === cityId)?.districts || [];
+
+  useEffect(() => {
+    if (cityId && districtId) {
+      setInfoSettings({ districtId: null });
+    }
+  }, [cityId]);
+
+  useEffect(() => {
+    if (lane && alley && number && subNumber) {
+      setInfoSettings({ address: `${lane}巷${alley}弄${number}號` });
+    }
+  }, [lane, alley, number, subNumber]);
 
   return (
     <div className="flex flex-col gap-6 mt-6">
@@ -32,16 +81,13 @@ const InfoSetting = (props) => {
             <Button
               key={item.value}
               className={clsx('h-20 flex-1 text-xl')}
-              color={item.value === infoSettings.shapeId ? 'primary' : ''}
-              variant={
-                item.value === infoSettings.shapeId ? 'contained' : 'outlined'
-              }
+              color={item.value === shapeId ? 'primary' : ''}
+              variant={item.value === shapeId ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() =>
-                setInfoSettings((prev) => ({
-                  ...prev,
+                setInfoSettings({
                   shapeId: item.value,
-                }))
+                })
               }
             >
               {item.text}
@@ -52,16 +98,15 @@ const InfoSetting = (props) => {
       <FieldGroup title="出售名稱＊">
         <TextField
           id="contacts"
-          value={infoSettings.title}
+          value={title}
           placeholder="請輸入物件出售名稱"
           sx={{ width: '80%' }}
           onChange={(e) => {
-            if (infoSettings.title && infoSettings.title.length === 60) return;
+            if (title && title.length === 60) return;
 
-            setInfoSettings((prev) => ({
-              ...prev,
+            setInfoSettings({
               title: e.target.value,
-            }));
+            });
           }}
           slotProps={{
             input: {
@@ -69,7 +114,7 @@ const InfoSetting = (props) => {
                 <InputAdornment position="start">出售名稱＊</InputAdornment>
               ),
               endAdornment: (
-                <InputAdornment position="end">{`${infoSettings.title ? infoSettings.title.length : 0}/60`}</InputAdornment>
+                <InputAdornment position="end">{`${title ? title.length : 0}/60`}</InputAdornment>
               ),
             },
           }}
@@ -77,116 +122,133 @@ const InfoSetting = (props) => {
       </FieldGroup>
       <FieldGroup title="物件位置＊">
         <div className="flex gap-2 items-center">
+          <p className="text-sm text-[#333333] font-bold">出售地址＊</p>
           <FormControl sx={{ minWidth: 134 }}>
             <InputLabel sx={{ bgcolor: 'white' }} id="demo-select-small-label">
-              出售地址＊
+              請選擇縣市
             </InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              placeholder="請選擇縣市"
-              // value={testValue}
+              value={cityId}
               label="Age"
-              // onChange={(e) => setTestValue(e.target.value)}
+              onChange={(e) => setInfoSettings({ cityId: e.target.value })}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {citiesOptions.map((item) => (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.displayName}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl sx={{ minWidth: 134 }}>
+            <InputLabel sx={{ bgcolor: 'white' }} id="demo-select-small-label">
+              請選擇鄉鎮市區
+            </InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              placeholder="請選擇鄉鎮市區"
-              value={''}
+              value={districtId}
               label="Age"
-              // onChange={handleChange}
+              onChange={(e) => setInfoSettings({ districtId: e.target.value })}
+              disabled={!cityId}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {
+                districtsOptions.map((district) => (
+                  <MenuItem key={district.id} value={district.id}>
+                    {district.displayName}
+                  </MenuItem>
+                ))
+              }
             </Select>
           </FormControl>
           <TextField
             id="contacts"
+            value={address}
+            onChange={(e) => setInfoSettings({ address: e.target.value })}
             placeholder="請輸入道路或街名"
-            sx={{ width: '144px' }}
+            sx={{ width: '200px' }}
           />
           <TextField
+            type="number"
             className="w-[100px]"
             id="contacts"
+            value={lane}
+            onChange={(e) => setLane(e.target.value)}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">巷</InputAdornment>
-                ),
-              },
+              endAdornment: (
+                <InputAdornment position="start">巷</InputAdornment>
+              ),
             }}
           />
           <TextField
+            type="number"
             className="w-[100px]"
             id="contacts"
+            value={alley}
+            onChange={(e) => setAlley(e.target.value)}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">弄</InputAdornment>
-                ),
-              },
+              endAdornment: (
+                <InputAdornment position="start">弄</InputAdornment>
+              ),
             }}
           />
           <TextField
+            type="number"
             className="w-[100px]"
             id="contacts"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">號</InputAdornment>
-                ),
-              },
+              endAdornment: (
+                <InputAdornment position="start">號</InputAdornment>
+              ),
             }}
           />
           <p className="text-[#909090]">( 前台只會顯示前半段地址 )</p>
         </div>
         <div className="flex gap-2 items-center">
           <TextField
+            type="number"
             className="w-[405px]"
             id="contacts"
+            value={floor}
+            onChange={(e) => setInfoSettings({ floor: e.target.value })}
             placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
             slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">出租樓層＊</InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="start">樓</InputAdornment>
-                ),
-              },
+              startAdornment: (
+                <InputAdornment position="start">出租樓層＊</InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="start">樓</InputAdornment>
+              ),
             }}
           />
           <TextField
+            type="number"
             id="contacts"
             className="w-[100px]"
+            value={subNumber}
+            onChange={(e) => setSubNumber(e.target.value)}
             slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">之</InputAdornment>
-                ),
-              },
+              startAdornment: (
+                <InputAdornment position="start">之</InputAdornment>
+              ),
             }}
           />
           <TextField
+            type="number"
             className="w-[158px]"
             id="contacts"
+            value={totalFloors}
+            onChange={(e) => setInfoSettings({ totalFloors: e.target.value })}
             slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">總樓層</InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="start">樓</InputAdornment>
-                ),
-              },
+              startAdornment: (
+                <InputAdornment position="start">總樓層</InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="start">樓</InputAdornment>
+              ),
             }}
           />
         </div>
@@ -204,504 +266,77 @@ const InfoSetting = (props) => {
         />
       </FieldGroup>
       <FieldGroup title="物件格局＊">
-        <div className="flex gap-10">
+        <div className="flex gap-2 items-center">
+          <p className="text-sm text-[#333333] font-bold">現況格局＊</p>
           <TextField
+            type="number"
             id="contacts"
-            sx={{ width: '200px' }}
+            value={room}
+            onChange={(e) => setInfoSettings({ room: e.target.value })}
+            sx={{ width: '150px' }}
             slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">現況格局＊</InputAdornment>
-                ),
-              },
+              startAdornment: (
+                <InputAdornment position="start"><Bed /></InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">房</InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            type="number"
+            id="contacts"
+            value={livingRoom}
+            onChange={(e) => setInfoSettings({ livingRoom: e.target.value })}
+            sx={{ width: '150px' }}
+            slotProps={{
+              startAdornment: (
+                <InputAdornment position="start"><CouchIcon /></InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">廳</InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            type="number"
+            id="contacts"
+            value={bathroom}
+            onChange={(e) => setInfoSettings({ bathroom: e.target.value })}
+            sx={{ width: '150px' }}
+            slotProps={{
+              startAdornment: (
+                <InputAdornment position="start"><TubIcon /></InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">衛</InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            type="number"
+            id="contacts"
+            value={balcony}
+            onChange={(e) => setInfoSettings({ balcony: e.target.value })}
+            sx={{ width: '150px' }}
+            slotProps={{
+              startAdornment: (
+                <InputAdornment position="start"><GrassIcon /></InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">陽台</InputAdornment>
+              ),
             }}
           />
           <FormControlLabel control={<Checkbox />} label="開放式格局" />
         </div>
       </FieldGroup>
       {publishType === 'buy' && (
-        <>
-          <FieldGroup title="物件細項">
-            <div className="flex items-center gap-2">
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        主建物坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＋
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        附屬建物坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＋
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        公共設施坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＝
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        建物登記坪數
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-            </div>
-            <div className="flex gap-10">
-              <FormControl sx={{ width: 300 }}>
-                <InputLabel id="demo-select-small-label">法定用途＊</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControlLabel control={<Checkbox />} label="隱藏詳細用途" />
-            </div>
-            <FormControl sx={{ width: 300 }}>
-              <InputLabel id="demo-select-small-label">物件現況＊</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                // value={age}
-                label="Age"
-                // onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-            <div className="flex gap-2">
-              <TextField
-                id="contacts"
-                placeholder="請輸入屋齡"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start"> 屋齡</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">年</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              <FormControl sx={{ minWidth: 196 }}>
-                <InputLabel id="demo-select-small-label">裝潢程度＊</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="flex gap-10">
-              <TextField
-                id="contacts"
-                placeholder="請輸入管理費"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">管理費</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">元/月</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              <FormControlLabel control={<Checkbox />} label="無" />
-            </div>
-            <div className="flex gap-2">
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">帶租約</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">電梯</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={infoSettings.elevator}
-                  label="Age"
-                  onChange={(e) =>
-                    setInfoSettings((prev) => ({
-                      ...prev,
-                      elevator: e.target.value,
-                    }))
-                  }
-                >
-                  {ElevatorOptions.map((item) => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.text}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">車位</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={infoSettings.parkingSpace}
-                  label="Age"
-                  onChange={(e) =>
-                    setInfoSettings((prev) => ({
-                      ...prev,
-                      parkingSpace: e.target.value,
-                    }))
-                  }
-                >
-                  {ParkingOptions.map((item) => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.text}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-          </FieldGroup>
-          <FieldGroup title="物件總價">
-            <TextField
-              id="contacts"
-              placeholder="請輸入物件總價"
-              sx={{ width: '302px' }}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">物件總價＊</InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">元</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </FieldGroup>
-        </>
+        <SaleHouseInfoSetting />
       )}
-      {publishType === 'rent' && (
-        //todo:替換租物件
-        <>
-          <FieldGroup title="物件細項">
-            <div className="flex items-center gap-2">
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        主建物坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＋
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        附屬建物坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＋
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        公共設施坪數 ＊
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              ＝
-              <TextField
-                id="contacts"
-                placeholder="請輸入坪數"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        建物登記坪數
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">坪</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-            </div>
-            <div className="flex gap-10">
-              <FormControl sx={{ width: 300 }}>
-                <InputLabel id="demo-select-small-label">法定用途＊</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControlLabel control={<Checkbox />} label="隱藏詳細用途" />
-            </div>
-            <FormControl sx={{ width: 300 }}>
-              <InputLabel id="demo-select-small-label">物件現況＊</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                // value={age}
-                label="Age"
-                // onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-            <div className="flex gap-2">
-              <TextField
-                id="contacts"
-                placeholder="請輸入屋齡"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start"> 屋齡</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">年</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              <FormControl sx={{ minWidth: 196 }}>
-                <InputLabel id="demo-select-small-label">裝潢程度＊</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="flex gap-10">
-              <TextField
-                id="contacts"
-                placeholder="請輸入管理費"
-                sx={{ width: '302px' }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">管理費</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">元/月</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-              <FormControlLabel control={<Checkbox />} label="無" />
-            </div>
-            <div className="flex gap-2">
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">帶租約</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={age}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">電梯</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={testValue}
-                  label="Age"
-                  // onChange={(e) => setTestValue(e.target.value)}
-                >
-                  <MenuItem value="無">無</MenuItem>
-                  <MenuItem value="有">有</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl className="w-[168px]">
-                <InputLabel id="demo-select-small-label">車位</InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={infoSettings.parkingSpace}
-                  label="Age"
-                  onChange={(e) =>
-                    setInfoSettings((prev) => ({
-                      ...prev,
-                      parkingSpace: e.target.value,
-                    }))
-                  }
-                >
-                  <MenuItem value="">無</MenuItem>
-                  <MenuItem value="planar">平面式</MenuItem>
-                  <MenuItem value="機械">機械式</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-          </FieldGroup>
-          <FieldGroup title="物件總價">
-            <TextField
-              id="contacts"
-              placeholder="請輸入物件總價"
-              sx={{ width: '302px' }}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">物件總價＊</InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">元</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </FieldGroup>
-        </>
-      )}
+      {/* {publishType === 'rent' && (
+        <RentHouseInfoSetting />
+      )} */}
     </div>
   );
 };

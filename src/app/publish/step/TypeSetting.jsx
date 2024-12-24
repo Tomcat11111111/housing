@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Button } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
@@ -10,10 +8,12 @@ import {
   RentHouseTypeList,
 } from './TypeSettingHelper';
 
+import usePublishStore from '@/store/publishStore';
+
 import clsx from 'clsx';
 
-const TypeSetting = (props) => {
-  const { itemTypeSettings, setItemTypeSettings } = props;
+const TypeSetting = () => {
+  const { itemTypeSettings, setItemTypeSettings } = usePublishStore();
 
   const ItemTypeSubList =
     itemTypeSettings.publishType === 'buy'
@@ -38,10 +38,9 @@ const TypeSetting = (props) => {
               }
               startIcon={item.icon}
               onClick={() =>
-                setItemTypeSettings((prev) => ({
-                  ...prev,
+                setItemTypeSettings({
                   publishType: item.value,
-                }))
+                })
               }
               disabled={item.value === ''}
             >
@@ -67,10 +66,9 @@ const TypeSetting = (props) => {
               }
               startIcon={item.icon}
               onClick={() =>
-                setItemTypeSettings((prev) => ({
-                  ...prev,
+                setItemTypeSettings({
                   itemType: item.value,
-                }))
+                })
               }
               disabled={item.value === ''}
             >
@@ -96,10 +94,9 @@ const TypeSetting = (props) => {
               }
               startIcon={item.icon}
               onClick={() =>
-                setItemTypeSettings((prev) => ({
-                  ...prev,
+                setItemTypeSettings({
                   category: item.value,
-                }))
+                })
               }
             >
               {item.text}

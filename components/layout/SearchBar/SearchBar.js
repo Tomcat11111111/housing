@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { find, join, map, propEq } from 'ramda';
-import URI from 'urijs';
 
 import Button from '@/common/Button/Button';
 import Dropdown from '@/common/Dropdown/Dropdown';
@@ -24,7 +23,6 @@ import useSearchStore from '@/store/useSearchStore';
 
 import { RENTAL_CATEGORIES, SALES_CATEGORIES } from '@/utils/tools';
 
-import Remove from '@/icon/Remove/Remove';
 import SearchIcon from '@/icon/SearchIcon/SearchIcon';
 import SmallArrow from '@/icon/SmallArrow/SmallArrow';
 
@@ -89,25 +87,11 @@ const SearchBar = (props) => {
   const [city, setCity] = useState({ id: 1, displayName: '台北市' });
   const [input, setInput] = useState('');
 
-  const mapRef = useRef(null);
+  // const mapRef = useRef(null);
 
-  // const initMap = () => {
-  //   const TWlocation = { lat: 25.033, lng: 121.5654 };
-
-  //   const map = new window.google.maps.Map(mapRef.current, {
-  //     center: { lat: 25.033, lng: 121.5654 },
-  //     zoom: 10,
-  //   });
-
-  //   const markerTW = new google.maps.Marker({
-  //     position: TWlocation,
-  //     map: map,
-  //   });
+  // const toggleOpen = () => {
+  //   setIsOpen((prev) => !prev);
   // };
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev);
-  };
 
   // const handleScroll = () => {
   //   if (window.scrollY > 1069 && isOpen) {
@@ -239,24 +223,6 @@ const SearchBar = (props) => {
               onChange={(value) => setSelectedTab(value)}
             />
             <div className={styles.buttonArea}>
-              {/* <Button
-                buttonText="縮小篩選"
-                buttonType="transparent"
-                iconPosition="left"
-                icon={<Remove />}
-                textStyle={{
-                  color: '#333',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                }}
-                buttonStyle={{
-                  border: '1px solid #E9E9E9',
-                  opacity: 0.6,
-                  padding: '8px 16px 8px 16px',
-                  gap: '8px',
-                }}
-                action={() => setIsOpen((prev) => !prev)}
-              /> */}
               <Button
                 buttonText="篩選更多"
                 buttonType="transparent"
