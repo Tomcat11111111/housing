@@ -55,6 +55,7 @@ const ItemCard = (props) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const cardRef = useRef();
+  const [activeStep, setActiveStep] = useState(0);
 
   const getPropertyInfo = () => {
     let result = '';
@@ -84,6 +85,16 @@ const ItemCard = (props) => {
 
   const cardColor = isHovered ? '#333' : '#666';
 
+  const handleNext = () => {
+    setActiveStep((prevStep) => (prevStep + 1) % images.length);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevStep) =>
+      prevStep === 0 ? images.length - 1 : prevStep - 1
+    );
+  };
+
   return (
     <div
       className={styles.itemCard}
@@ -95,7 +106,11 @@ const ItemCard = (props) => {
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src={images.length > 0 ? images[0].url : '/image/house_item.png'} // TODO: 補上預設圖片（？
+            src={
+              images.length > 0
+                ? images[activeStep]?.url
+                : '/image/house_item.png'
+            } // TODO: 補上預設圖片（？
             alt="house_item"
             fill
           />
@@ -118,12 +133,13 @@ const ItemCard = (props) => {
               />
             </div>
           )} */}
-          {/* {isHovered && (
+          {isHovered && (
             <>
               <button
                 className={`${styles.carouselControl} ${styles.prev}`}
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleBack();
                 }}
               >
                 <Arrow color="#909090" size={12} direction="left" />
@@ -132,12 +148,13 @@ const ItemCard = (props) => {
                 className={`${styles.carouselControl} ${styles.next}`}
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleNext();
                 }}
               >
                 <Arrow color="#909090" size={12} direction="right" />
               </button>
             </>
-          )} */}
+          )}
           {/* {isHovered && (
             <div className={styles.indicators}>
               {firstFiveImages.map((_, index) => (
