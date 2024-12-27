@@ -11,7 +11,7 @@ import styles from './DetailImage.module.scss';
 
 const DetailImage = (props) => {
   const { images } = props;
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -195,12 +195,13 @@ const DetailImage = (props) => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '20px',
             }}
           >
             <Image
               src={images[activeStep]?.url}
-              alt=""
+              alt="image"
               width={1200}
               height={900}
               className=" object-contain"
