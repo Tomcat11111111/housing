@@ -12,35 +12,45 @@ import {
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
+import usePublishStore from '@/store/usePublishStore';
+
 import { uploadImageApi } from '../actions';
 import FieldGroup from './FieldGroup';
+import { HouseFormList } from './InfoSettingHelper';
 import SortableImage from './SortableImage';
+import {
+  ItemTypeList,
+  PublishTypeList,
+  RentHouseTypeList,
+} from './TypeSettingHelper';
 
-const AdvancedInfoSetting = (props) => {
+const AdvancedInfoSetting = () => {
   const {
     advancedInfoSettings,
     setAdvancedInfoSettings,
     itemTypeSettings,
     infoSettings,
-  } = props;
+  } = usePublishStore();
   const [registerFiles, setRegisterFiles] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
-  const MAX_CHAR = 2000;
+  const getTextFromList = (value, list) => {
+    const item = list.find((i) => i.value === value);
+    return item ? item.text : value; // 若沒有找到對應的項目，則回傳原始值
+  };
 
+  const MAX_CHAR = 2000;
   const handleIntroductionChange = (e) => {
     const inputText = e.target.value;
     if (inputText > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
-      setAdvancedInfoSettings((prev) => ({
-        ...prev,
+      setAdvancedInfoSettings({
         introduction: truncatedText,
-      }));
+      });
     } else {
-      setAdvancedInfoSettings((prev) => ({
-        ...prev,
+      setAdvancedInfoSettings({
         introduction: inputText,
-      }));
+      });
     }
   };
 
@@ -57,10 +67,9 @@ const AdvancedInfoSetting = (props) => {
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
       console.log('Response data:', data);
-      setAdvancedInfoSettings((prev) => ({
-        ...prev,
-        images: [...prev.images, ...data],
-      }));
+      setAdvancedInfoSettings({
+        images: [...advancedInfoSettings.images, ...data],
+      });
     },
     onError: (error) => {
       console.error('Upload failed:', error);
@@ -70,62 +79,38 @@ const AdvancedInfoSetting = (props) => {
   const handleItemFileUpload = (e) => {
     const uploadFiles = Array.from(e.target.files);
     uploadMutation(uploadFiles);
-    // setAdvancedInfoSettings((prev) => ({
-    //   ...prev,
-    //   images: [...prev.images, ...uploadFiles],
-    // }));
   };
 
   // 拖拉排序
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    // 確保只有在 active.id 和 over.id 不相等時才更新
     if (active.id !== over.id) {
-      setAdvancedInfoSettings((prev) => {
-        // 找到陣列中 active 和 over 兩個圖片的索引
-        const oldIndex = prev.images.findIndex(
-          (_, idx) => idx === parseInt(active.id)
-        );
-        const newIndex = prev.images.findIndex(
-          (_, idx) => idx === parseInt(over.id)
-        );
+      const oldIndex = parseInt(active.id);
+      const newIndex = parseInt(over.id);
 
-        // 如果索引找到，則進行交換
-        if (oldIndex !== -1 && newIndex !== -1) {
-          const updatedImages = arrayMove(prev.images, oldIndex, newIndex);
-
-          return {
-            ...prev,
-            images: updatedImages, // 更新 images 陣列
-          };
-        }
-
-        return prev; // 如果沒有找到有效索引，則不更新
+      setAdvancedInfoSettings({
+        images: arrayMove(advancedInfoSettings.images, oldIndex, newIndex),
       });
     }
   };
 
   // 拖曳上傳
   const { getRootProps, getInputProps } = useDropzone({
-    // onDrop: (acceptedFiles) => {
-    //   setAdvancedInfoSettings((prev) => ({
-    //     ...prev,
-    //     images: (prev) => [...prev, ...acceptedFiles],
-    //   }));
-    // },
     onDrop: (acceptedFiles) => {
       uploadMutation({ acceptedFiles });
     },
-    accept: 'image/*',
+    accept: '.jpg,.jpeg,.png,.gif',
     multiple: true,
   });
 
   return (
     <div className="flex flex-col gap-6 my-6">
       <div className="text-[#333] text-xl font-bold leading-8 ">
-        {itemTypeSettings.publishType}&gt;{itemTypeSettings.itemType}&gt;
-        {itemTypeSettings.category}&gt;{infoSettings.shapeId}&gt;
+        {getTextFromList(itemTypeSettings.publishType, PublishTypeList)} &gt;
+        {getTextFromList(itemTypeSettings.itemType, ItemTypeList)} &gt;
+        {getTextFromList(itemTypeSettings.category, RentHouseTypeList)} &gt;
+        {getTextFromList(infoSettings.shapeId, HouseFormList)} &gt;
         {infoSettings.title}
       </div>
       <FieldGroup title="物件照片">
@@ -266,7 +251,7 @@ const AdvancedInfoSetting = (props) => {
           <input
             type="file"
             multiple
-            accept="image/*"
+            accept=".jpg,.jpeg,.png,.gif"
             className="hidden"
             ref={RegisterFileRef}
             onChange={handleRegisterFileUpload}
@@ -297,10 +282,9 @@ const AdvancedInfoSetting = (props) => {
             value={advancedInfoSettings.contact}
             onChange={(e) => {
               const contact = e.target.value;
-              setAdvancedInfoSettings((prev) => ({
-                ...prev,
+              setAdvancedInfoSettings({
                 contact: contact,
-              }));
+              });
             }}
             placeholder="請輸入姓名"
             sx={{ width: '258px' }}
@@ -319,10 +303,9 @@ const AdvancedInfoSetting = (props) => {
               value={advancedInfoSettings.mobilePhone}
               onChange={(e) => {
                 const mobilePhone = e.target.value;
-                setAdvancedInfoSettings((prev) => ({
-                  ...prev,
+                setAdvancedInfoSettings({
                   mobilePhone: mobilePhone,
-                }));
+                });
               }}
               sx={{ width: '324px' }}
               slotProps={{
@@ -339,10 +322,9 @@ const AdvancedInfoSetting = (props) => {
               value={advancedInfoSettings.phone}
               onChange={(e) => {
                 const phone = e.target.value;
-                setAdvancedInfoSettings((prev) => ({
-                  ...prev,
+                setAdvancedInfoSettings({
                   phone: phone,
-                }));
+                });
               }}
               sx={{ width: '288px' }}
               slotProps={{
@@ -360,10 +342,9 @@ const AdvancedInfoSetting = (props) => {
             value={advancedInfoSettings.email}
             onChange={(e) => {
               const email = e.target.value;
-              setAdvancedInfoSettings((prev) => ({
-                ...prev,
+              setAdvancedInfoSettings({
                 email: email,
-              }));
+              });
             }}
             sx={{ width: '240px' }}
             slotProps={{

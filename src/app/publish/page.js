@@ -23,12 +23,21 @@ const Publish = () => {
   const {
     itemTypeSettings,
     infoSettings,
-    advancedInfoSettings,
+    // advancedInfoSettings,
     setItemTypeSettings,
-    setAdvancedInfoSettings,
+    // setAdvancedInfoSettings,
   } = usePublishStore();
 
   const itemStatusRef = useRef('');
+
+  const [advancedInfoSettings, setAdvancedInfoSettings] = useState({
+    images: [],
+    introduction: '',
+    contact: '',
+    mobilePhone: null,
+    phone: null,
+    email: '',
+  });
 
   const MockSaleData = {
     property: {
@@ -130,14 +139,7 @@ const Publish = () => {
           <StepBar step={step} />
           {step === 0 && <ItemTypeSetting />}
           {step === 1 && <ItemInfoSetting />}
-          {step === 2 && (
-            <ItemAdvancedInfoSetting
-              itemTypeSettings={itemTypeSettings}
-              infoSettings={infoSettings}
-              advancedInfoSettings={advancedInfoSettings}
-              setAdvancedInfoSettings={setAdvancedInfoSettings}
-            />
-          )}
+          {step === 2 && <ItemAdvancedInfoSetting />}
           {step === 3 && <ItemPreview />}
         </div>
         <div className="z-10 fixed bottom-0 left-0 h-[100px] w-full px-[80px] py-[24px] bg-white flex justify-between">

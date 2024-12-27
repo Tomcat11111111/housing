@@ -6,8 +6,8 @@ export const createSalePropertyApi = async (data) => {
     data,
     {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}`,
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
       },
     }
   );
@@ -20,8 +20,8 @@ export const createRentPropertyApi = async (data) => {
     data,
     {
       headers: {
-        // Authorization: `Bearer ${localStorage.getItem('token')}`,
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
       },
     }
   );
@@ -40,8 +40,8 @@ export const uploadImageApi = async (images) => {
       formData,
       {
         headers: {
-          // Authorization: `Bearer ${localStorage.getItem('token')}`,
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
           'Content-Type': 'multipart/form-data',
         },
       }
@@ -59,7 +59,8 @@ export const getCitiesApi = async () => {
     'https://jzj-api.zeabur.app/locations/cities',
     {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzUwMDg1ODQsImV4cCI6MTczNTA5NDk4NH0.-sLhQKOG3MGLK7HXeyrpr9S7nInKrrsOth16F3CUsJo`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzUwMDg1ODQsImV4cCI6MTczNTA5NDk4NH0.-sLhQKOG3MGLK7HXeyrpr9S7nInKrrsOth16F3CUsJo`,
       },
     }
   );
