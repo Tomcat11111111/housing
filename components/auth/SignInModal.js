@@ -5,6 +5,7 @@ import {
   Divider,
   IconButton,
   InputAdornment,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -12,6 +13,7 @@ import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
+import { useToastStore } from '@/store/useToastStore';
 
 import ModalHeader from './ModalHeader';
 import { signinApi } from './actions';
@@ -28,6 +30,8 @@ const SignInModal = ({ setOpen }) => {
     setAccessToken,
   } = useSigninStore();
   const { setAuthType } = useAuthTypeStore();
+  const { setSuccess, setSuccessText, setError, setErrorText } =
+    useToastStore();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -44,9 +48,13 @@ const SignInModal = ({ setOpen }) => {
         secure: true,
         sameSite: 'Strict',
       });
+      setSuccess(true);
+      setSuccessText('登入成功');
       setOpen(false);
     },
     onError: (error) => {
+      setError(true);
+      setErrorText('信箱/密碼錯誤');
       console.log('Error Signing in', error);
     },
   });

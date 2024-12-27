@@ -2,7 +2,6 @@ import { create } from 'zustand';
 
 export const useAuthTypeStore = create((set) => ({
   authType: '',
-
   setAuthType: (type) => {
     set(() => ({ authType: type }));
   },

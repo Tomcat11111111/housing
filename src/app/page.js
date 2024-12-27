@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleIcon, ShieldAlert } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import Carousel from '@/common/Carousel/Carousel';
@@ -13,6 +15,7 @@ import SearchBar from '@/layout/SearchBar/SearchBar';
 import RecommendList from '@/components/RecommendList/RecommendList';
 
 import useSearchStore from '@/store/useSearchStore';
+import { useToastStore } from '@/store/useToastStore';
 
 import Arrow from '@/icon/Arrow/Arrow';
 import Domain from '@/icon/Domain/Domain';
@@ -27,6 +30,8 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const { success, setSuccess, error, setError, errorText, successText } =
+    useToastStore();
 
   const router = useRouter();
 
@@ -141,6 +146,47 @@ export default function Home() {
         <RecommendList type="rent" queryKey="home_1" />
       </div>
       <Footer />
+      {/* Toast訊息 */}
+      <Snackbar
+        open={success || error}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSuccess(false);
+          setError(false);
+        }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        sx={{
+          '& .MuiSnackbarContent-root': {
+            backgroundColor: success ? '#0ABD13' : '#F44336',
+            color: '#FFFFFF',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+        }}
+      >
+        <SnackbarContent
+          message={
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              {success ? (
+                <CheckCircleIcon style={{ color: '#FFFFFF' }} />
+              ) : (
+                <ShieldAlert style={{ color: '#FFFFFF' }} />
+              )}
+              <span>{success ? successText : errorText}</span>
+            </div>
+          }
+        />
+      </Snackbar>
+      ;
     </main>
   );
 }
