@@ -13,31 +13,23 @@ import usePublishStore from '@/store/usePublishStore';
 import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 import { createRentPropertyApi, createSalePropertyApi } from './actions';
+import { formatPropertyData } from './publishHelper';
 import ItemAdvancedInfoSetting from './step/AdvancedInfoSetting';
 import ItemInfoSetting from './step/InfoSetting';
 import ItemPreview from './step/ItemPreview';
 import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const {
     itemTypeSettings,
     infoSettings,
-    // advancedInfoSettings,
+    advancedInfoSettings,
     setItemTypeSettings,
-    // setAdvancedInfoSettings,
+    setAdvancedInfoSettings,
   } = usePublishStore();
 
   const itemStatusRef = useRef('');
-
-  const [advancedInfoSettings, setAdvancedInfoSettings] = useState({
-    images: [],
-    introduction: '',
-    contact: '',
-    mobilePhone: null,
-    phone: null,
-    email: '',
-  });
 
   const MockSaleData = {
     property: {
@@ -119,10 +111,9 @@ const Publish = () => {
     },
   });
 
-  // useEffect(() => {
-  //   // 切換步驟時，將滾動條移到最上方
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -178,7 +169,13 @@ const Publish = () => {
                   startIcon={<Save />}
                   onClick={() => {
                     itemStatusRef.current = 'draft';
-                    publishProperty(MockRentData);
+                    publishProperty(
+                      formatPropertyData({
+                        itemTypeSettings: itemTypeSettings,
+                        infoSettings: infoSettings,
+                        advancedInfoSettings: advancedInfoSettings,
+                      })
+                    );
                   }}
                 >
                   保存不刊登
@@ -187,7 +184,15 @@ const Publish = () => {
                   sx={{ bgcolor: '#0936D8' }}
                   variant="contained"
                   endIcon={<ChevronRight />}
-                  onClick={() => publishProperty(MockRentData)}
+                  onClick={() => {
+                    publishProperty(
+                      formatPropertyData({
+                        itemTypeSettings: itemTypeSettings,
+                        infoSettings: infoSettings,
+                        advancedInfoSettings: advancedInfoSettings,
+                      })
+                    );
+                  }}
                 >
                   完成並刊登
                 </Button>
