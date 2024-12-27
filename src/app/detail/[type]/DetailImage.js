@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Button from '@/components/common/Button/Button';
 import Photo from '@/components/icon/Photo/Photo';
 
+import CustomStepper from '../../../../components/common/Stepper/Stepper';
 import styles from './DetailImage.module.scss';
 
 const DetailImage = (props) => {
@@ -206,24 +207,11 @@ const DetailImage = (props) => {
               height={900}
               className=" object-contain"
             />
-            <div className="flex flex-col justify-center items-center">
-              <MobileStepper
-                variant="dots"
+            <div className="flex flex-col justify-center items-center gap-2">
+              <CustomStepper
                 steps={images.length}
-                position="static"
                 activeStep={activeStep}
-                sx={{
-                  maxWidth: 400,
-                  background: 'none',
-                  '& .MuiMobileStepper-dot': {
-                    backgroundColor: '#ccc',
-                    width: 10,
-                    height: 10,
-                  },
-                  '& .MuiMobileStepper-dotActive': {
-                    backgroundColor: '#ffffff',
-                  },
-                }}
+                maxDots={3}
               />
               <div className=" text-base font-bold text-[#FFFFFF]">
                 {activeStep + 1} / {images.length}

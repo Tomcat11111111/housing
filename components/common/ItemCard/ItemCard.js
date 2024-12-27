@@ -8,6 +8,8 @@ import Bookmark from '@/common/Bookmark/Bookmark';
 import Carousel from '@/common/Carousel/Carousel';
 import Tag from '@/common/Tag/Tag';
 
+import CustomStepper from '@/components/common/Stepper/Stepper';
+
 import { getPriceStatusInfo, getSalePriceDisplay } from '@/utils/tools';
 
 import Arrow from '@/icon/Arrow/Arrow';
@@ -154,6 +156,15 @@ const ItemCard = (props) => {
                 <Arrow color="#909090" size={12} direction="right" />
               </button>
             </>
+          )}
+          {isHovered && (
+            <div className=" absolute bottom-2 left-1/2 -translate-x-1/2">
+              <CustomStepper
+                steps={images.length}
+                activeStep={activeStep}
+                maxDots={3}
+              />
+            </div>
           )}
           {/* {isHovered && (
             <div className={styles.indicators}>
