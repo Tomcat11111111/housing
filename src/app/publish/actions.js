@@ -6,13 +6,8 @@ export const createSalePropertyApi = async (data) => {
     data,
     {
       headers: {
-<<<<<<< HEAD
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
-=======
-        // Authorization: `Bearer ${localStorage.getItem('token')}`,
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzUwMDg1ODQsImV4cCI6MTczNTA5NDk4NH0.-sLhQKOG3MGLK7HXeyrpr9S7nInKrrsOth16F3CUsJo`,
->>>>>>> 83539fcd0c65feb829b03c986c0e55b9509ce262
       },
     }
   );
@@ -25,13 +20,8 @@ export const createRentPropertyApi = async (data) => {
     data,
     {
       headers: {
-<<<<<<< HEAD
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
-=======
-        // Authorization: `Bearer ${localStorage.getItem('token')}`,
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzUwMDg1ODQsImV4cCI6MTczNTA5NDk4NH0.-sLhQKOG3MGLK7HXeyrpr9S7nInKrrsOth16F3CUsJo`,
->>>>>>> 83539fcd0c65feb829b03c986c0e55b9509ce262
       },
     }
   );
