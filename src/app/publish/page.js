@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import Button from '@mui/material/Button';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -20,84 +21,42 @@ import ItemPreview from './step/ItemPreview';
 import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(3);
   const {
     itemTypeSettings,
-    infoSettings,
-    advancedInfoSettings,
-    setItemTypeSettings,
-    setAdvancedInfoSettings,
+    property,
+    saleInfo,
+    rentInfo,
+    location,
+    setPorperty,
   } = usePublishStore();
 
   const itemStatusRef = useRef('');
 
-  const MockSaleData = {
-    property: {
-      title: '中正區臨沂街巷內溫馨小宅（含坡平車位)',
-      age: 8,
-      squareMeters: 52,
-      floor: 1,
-      totalFloors: 17,
-      room: 0,
-      livingRoom: 0,
-      bathroom: 0,
-      balcony: 0,
-      views: 0,
-      shapeId: 2,
-      decorLevelId: 4,
-      images: [
-        'https://jzj-storage.zeabur.app/uploads/67bab49a-f821-4a14-a5ac-29319675354f',
-      ],
-      status: 'draft',
+  const {
+    formState: { errors },
+    trigger,
+  } = useForm({
+    defaultValues: {
+      ...itemTypeSettings,
+      ...property,
+      ...saleInfo,
     },
-    saleInfo: {
-      category: 'residential',
-      totalPrice: 88888888,
-      unitPrice: 1720100,
-      direction: 'southwest_to_northeast',
-      source: 'platform',
-      parkingSpace: 'planar',
-      ownership: 42,
-      surroundingIds: [],
-    },
-    location: {
-      cityId: 1,
-      districtId: 1,
-      address: '台北市中正區臨沂街',
-    },
-  };
-  const MockRentData = {
-    property: {
-      title: '忠孝國小學區旁近華山',
-      age: 25,
-      squareMeters: 5,
-      floor: 5,
-      totalFloors: 8,
-      room: 1,
-      livingRoom: 1,
-      bathroom: 1,
-      balcony: 1,
-      type: 'rental',
-      views: 120,
-      shapeId: 2,
-      decorLevelId: 1,
-    },
-    rentalInfo: {
-      category: 'private_study',
-      price: 87000,
-      type: 'room_to_share',
-      featureIds: [1],
-      includedInRentIds: [3],
-      offerIds: [4],
-      ruleIds: [3, 4],
-      materialId: 1,
-      introduction: '<p>測試介紹</p>',
-    },
-    location: {
-      cityId: 1,
-      districtId: 1,
-      address: '台北市中正區臨沂街',
-    },
+  });
+
+  const handleNextStep = async () => {
+    const isStepValid = await trigger();
+
+    if (!isStepValid) {
+      const firstError = Object.keys(errors)[0];
+      const errorElement = document.querySelector(`[name="${firstError}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    setStep(step + 1);
   };
 
   const { mutate: publishProperty } = useMutation({
@@ -106,14 +65,37 @@ const Publish = () => {
         ? createSalePropertyApi
         : createRentPropertyApi,
     onSuccess: () => {
-      // 刊登成功後續行為，提示、導頁
-      alert('刊登成功');
+      alert('刊登成功'); // 刊登成功後續行為，提示、導頁
     },
   });
+
+  const onPublishProperty = () => {
+    const publishType =
+      itemTypeSettings.publishType === 'buy' ? 'saleInfo' : 'rentInfo';
+
+    publishProperty({
+      property,
+      location,
+      [publishType]:
+        itemTypeSettings.publishType === 'buy' ? saleInfo : rentInfo,
+    });
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
+
+  const onPageBeforeunload = (e) => {
+    e.returnValue = 'onbeforeunload';
+    return 'onbeforeunload';
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onPageBeforeunload);
+    return () => {
+      window.removeEventListener('beforeunload', onPageBeforeunload);
+    };
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -152,11 +134,7 @@ const Publish = () => {
                 sx={{ bgcolor: '#0936D8' }}
                 variant="contained"
                 endIcon={<ChevronRight />}
-                onClick={() => {
-                  //todo: 檢查當前步驟資料是否齊全，驗證怎麼做
-
-                  setStep(step + 1);
-                }}
+                onClick={handleNextStep}
               >
                 下一步
               </Button>
@@ -168,14 +146,8 @@ const Publish = () => {
                   variant="outlined"
                   startIcon={<Save />}
                   onClick={() => {
-                    itemStatusRef.current = 'draft';
-                    publishProperty(
-                      formatPropertyData({
-                        itemTypeSettings: itemTypeSettings,
-                        infoSettings: infoSettings,
-                        advancedInfoSettings: advancedInfoSettings,
-                      })
-                    );
+                    setPorperty({ status: 'draft' });
+                    onPublishProperty();
                   }}
                 >
                   保存不刊登
@@ -185,13 +157,7 @@ const Publish = () => {
                   variant="contained"
                   endIcon={<ChevronRight />}
                   onClick={() => {
-                    publishProperty(
-                      formatPropertyData({
-                        itemTypeSettings: itemTypeSettings,
-                        infoSettings: infoSettings,
-                        advancedInfoSettings: advancedInfoSettings,
-                      })
-                    );
+                    onPublishProperty();
                   }}
                 >
                   完成並刊登

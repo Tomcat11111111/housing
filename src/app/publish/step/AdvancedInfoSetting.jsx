@@ -16,22 +16,25 @@ import usePublishStore from '@/store/usePublishStore';
 
 import { uploadImageApi } from '../actions';
 import FieldGroup from './FieldGroup';
-import { HouseFormList } from './InfoSettingHelper';
-import SortableImage from './SortableImage';
-import {
+import { HouseFormList,
   ItemTypeList,
   PublishTypeList,
   RentHouseTypeList,
-} from './TypeSettingHelper';
+ } from './publishHelper';
+import SortableImage from './SortableImage';
 
 const AdvancedInfoSetting = () => {
   const {
-    advancedInfoSettings,
-    setAdvancedInfoSettings,
     itemTypeSettings,
-    infoSettings,
+    // advancedInfoSettings,
+    // setAdvancedInfoSettings,
+    property,
+    setProperty,
+    saleInfo,
+    setSaleInfo,
+    // rentInfo,
+    // setRentInfo,
   } = usePublishStore();
-  const [registerFiles, setRegisterFiles] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
   const getTextFromList = (value, list) => {
@@ -44,11 +47,11 @@ const AdvancedInfoSetting = () => {
     const inputText = e.target.value;
     if (inputText > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
-      setAdvancedInfoSettings({
+      setSaleInfo({
         introduction: truncatedText,
       });
     } else {
-      setAdvancedInfoSettings({
+      setSaleInfo({
         introduction: inputText,
       });
     }
@@ -68,7 +71,7 @@ const AdvancedInfoSetting = () => {
     onSuccess: (data) => {
       console.log('Response data:', data);
       setAdvancedInfoSettings({
-        images: [...advancedInfoSettings.images, ...data],
+        images: [...property.images, ...data],
       });
     },
     onError: (error) => {
@@ -90,7 +93,7 @@ const AdvancedInfoSetting = () => {
       const newIndex = parseInt(over.id);
 
       setAdvancedInfoSettings({
-        images: arrayMove(advancedInfoSettings.images, oldIndex, newIndex),
+        images: arrayMove(property.images, oldIndex, newIndex),
       });
     }
   };
@@ -110,8 +113,8 @@ const AdvancedInfoSetting = () => {
         {getTextFromList(itemTypeSettings.publishType, PublishTypeList)} &gt;
         {getTextFromList(itemTypeSettings.itemType, ItemTypeList)} &gt;
         {getTextFromList(itemTypeSettings.category, RentHouseTypeList)} &gt;
-        {getTextFromList(infoSettings.shapeId, HouseFormList)} &gt;
-        {infoSettings.title}
+        {getTextFromList(property.shapeId, HouseFormList)} &gt;
+        {property.title}
       </div>
       <FieldGroup title="物件照片">
         <div className=" text-[#909090] ">
@@ -131,11 +134,11 @@ const AdvancedInfoSetting = () => {
                 onDragEnd={handleDragEnd}
               >
                 <SortableContext
-                  items={advancedInfoSettings.images.map((_, index) =>
+                  items={property.images.map((_, index) =>
                     index.toString()
                   )}
                 >
-                  {advancedInfoSettings.images.map((file, index) => (
+                  {property.images.map((file, index) => (
                     <SortableImage
                       key={index}
                       id={index.toString()}
@@ -190,7 +193,7 @@ const AdvancedInfoSetting = () => {
             multiline
             rows={6}
             placeholder="可以描述物件特色或現況"
-            value={advancedInfoSettings.introduction}
+            value={saleInfo.introduction}
             onChange={handleIntroductionChange}
             fullWidth
             sx={{
@@ -201,11 +204,10 @@ const AdvancedInfoSetting = () => {
           />
 
           <div className="absolute bottom-2 right-2 text-[#333333] text-sm font-bold">
-            {`${advancedInfoSettings.introduction.length}/${MAX_CHAR}`}
+            {`${saleInfo.introduction.length}/${MAX_CHAR}`}
           </div>
         </div>
       </FieldGroup>
-
       <FieldGroup title="核實信息*">
         <div className="px-4">
           <FormControlLabel
@@ -273,17 +275,14 @@ const AdvancedInfoSetting = () => {
           </Button>
         </div>
       </FieldGroup>
-
-      {/* 寫死，之後直接帶入資料 */}
       <FieldGroup title="聯絡人資料">
         <div className=" flex flex-col gap-4">
           <TextField
             id="contacts"
-            value={advancedInfoSettings.contact}
+            value={property.contactName}
             onChange={(e) => {
-              const contact = e.target.value;
-              setAdvancedInfoSettings({
-                contact: contact,
+              setProperty({
+                contactName: e.target.value,
               });
             }}
             placeholder="請輸入姓名"
@@ -300,11 +299,10 @@ const AdvancedInfoSetting = () => {
             <TextField
               id="contacts"
               placeholder="請輸入行動電話"
-              value={advancedInfoSettings.mobilePhone}
+              value={property.contactNumber}
               onChange={(e) => {
-                const mobilePhone = e.target.value;
-                setAdvancedInfoSettings({
-                  mobilePhone: mobilePhone,
+                setProperty({
+                  contactNumber: e.target.value,
                 });
               }}
               sx={{ width: '324px' }}
@@ -319,11 +317,10 @@ const AdvancedInfoSetting = () => {
             <TextField
               id="contacts"
               placeholder="請輸入固定電話"
-              value={advancedInfoSettings.phone}
+              value={property.landline}
               onChange={(e) => {
-                const phone = e.target.value;
-                setAdvancedInfoSettings({
-                  phone: phone,
+                setProperty({
+                  landline: e.target.value,
                 });
               }}
               sx={{ width: '288px' }}
@@ -339,11 +336,10 @@ const AdvancedInfoSetting = () => {
           <TextField
             id="contacts"
             placeholder="請輸入電子信箱"
-            value={advancedInfoSettings.email}
+            value={property.contactEmail}
             onChange={(e) => {
-              const email = e.target.value;
-              setAdvancedInfoSettings({
-                email: email,
+              setProperty({
+                contactEmail:e.target.value,
               });
             }}
             sx={{ width: '240px' }}

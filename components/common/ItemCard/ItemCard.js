@@ -28,7 +28,7 @@ const ItemCard = (props) => {
   const {
     id = '',
     title,
-    views = 0,
+    views,
     updatedAt = '',
     squareMeters,
     floor,
@@ -116,7 +116,6 @@ const ItemCard = (props) => {
             alt="house_item"
             fill
           />
-
           {/* 
           //TODO:之後補上tag
           {isHovered && (
@@ -187,21 +186,25 @@ const ItemCard = (props) => {
         <div className={styles.address} style={{ color: cardColor }}>
           {title}
         </div>
-        <div className={styles.browse}>
-          <Tag
-            text={`${views}人瀏覽`}
-            icon={<Eye />}
-            gap="4px"
-            iconPosition="left"
-          />
-          |
-          <Tag
-            text="10小時內更新"
-            icon={<Clock />}
-            gap="4px"
-            iconPosition="left"
-          />
-        </div>
+        {views && updatedAt && (
+          <div className={styles.browse}>
+            {views && (
+              <Tag
+                text={`${views}人瀏覽`}
+                icon={<Eye />}
+                gap="4px"
+                iconPosition="left"
+              />
+            )}
+            |
+            <Tag
+              text={`${updatedAt}小時內更新`}
+              icon={<Clock />}
+              gap="4px"
+              iconPosition="left"
+            />
+          </div>
+        )}
         <div className={styles.propertyInfo} style={{ color: cardColor }}>
           {getPropertyInfo()}
         </div>

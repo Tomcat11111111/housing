@@ -8,7 +8,6 @@ import Button from '@/components/common/Button/Button';
 import Counter from '@/components/common/Counter/Counter';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import RangeSlider from '@/components/common/RangeSlider/RangeSlider';
-import Arrow from '@/components/icon/Arrow/Arrow';
 import BedIcon from '@/components/icon/BedIcon/BedIcon';
 import CouchIcon from '@/components/icon/CouchIcon/CouchIcon';
 import GrassIcon from '@/components/icon/GrassIcon/GrassIcon';

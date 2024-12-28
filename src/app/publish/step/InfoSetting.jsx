@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import { HouseFormList } from './InfoSettingHelper';
+import { HouseFormList } from './publishHelper';
 
 import SaleHouseInfoSetting from './SaleHouseInfoSetting';
 import RentHouseInfoSetting from './RentHouseInfoSetting';
@@ -31,47 +31,23 @@ import clsx from 'clsx';
 import usePublishStore from '@/store/usePublishStore';
 
 const InfoSetting = () => {
-  const [lane, setLane] = useState(null);
-  const [alley, setAlley] = useState(null);
-  const [number, setNumber] = useState(null);
-  const [subNumber, setSubNumber] = useState(null);
+  const { property, setProperty, location, setLocation, itemTypeSettings } = usePublishStore();
 
-  const { infoSettings, setInfoSettings, itemTypeSettings } = usePublishStore();
-
-  const publishType = itemTypeSettings.publishType;
-  const {
-    shapeId,
-    title,
-    cityId,
-    districtId,
-    address,
-    floor,
-    totalFloors,
-    room,
-    livingRoom,
-    bathroom,
-    balcony,
-  } = infoSettings;
-
-
+  
   const { data: citiesOptions } = useQuery({
     queryKey: ['getCitiesApi'],
     queryFn: getCitiesApi,
     initialData: [],
   });
-  const districtsOptions = citiesOptions.find((city) => city.id === cityId)?.districts || [];
+  
+  const publishType = itemTypeSettings.publishType;
+  const districtsOptions = citiesOptions.find((city) => city.id === location.cityId)?.districts || [];
 
   useEffect(() => {
-    if (cityId && districtId) {
-      setInfoSettings({ districtId: null });
+    if (location.cityId && location.districtId) {
+      setLocation({ districtId: null });
     }
-  }, [cityId]);
-
-  useEffect(() => {
-    if (lane && alley && number && subNumber) {
-      setInfoSettings({ address: `${lane}巷${alley}弄${number}號` });
-    }
-  }, [lane, alley, number, subNumber]);
+  }, [location.cityId]);
 
   return (
     <div className="flex flex-col gap-6 my-6">
@@ -81,11 +57,11 @@ const InfoSetting = () => {
             <Button
               key={item.value}
               className={clsx('h-20 flex-1 text-xl')}
-              color={item.value === shapeId ? 'primary' : ''}
-              variant={item.value === shapeId ? 'contained' : 'outlined'}
+              color={item.value === property.shapeId ? 'primary' : ''}
+              variant={item.value === property.shapeId ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() =>
-                setInfoSettings({
+                setProperty({
                   shapeId: item.value,
                 })
               }
@@ -98,13 +74,13 @@ const InfoSetting = () => {
       <FieldGroup title="出售名稱＊">
         <TextField
           id="contacts"
-          value={title}
+          value={property.title}
           placeholder="請輸入物件出售名稱"
           sx={{ width: '80%' }}
           onChange={(e) => {
-            if (title && title.length === 60) return;
+            if (property.title && property.title.length === 60) return;
 
-            setInfoSettings({
+            setProperty({
               title: e.target.value,
             });
           }}
@@ -114,7 +90,7 @@ const InfoSetting = () => {
                 <InputAdornment position="start">出售名稱＊</InputAdornment>
               ),
               endAdornment: (
-                <InputAdornment position="end">{`${title ? title.length : 0}/60`}</InputAdornment>
+                <InputAdornment position="end">{`${property.title ? property.title.length : 0}/60`}</InputAdornment>
               ),
             },
           }}
@@ -124,15 +100,14 @@ const InfoSetting = () => {
         <div className="flex gap-2 items-center">
           <p className="text-sm text-[#333333] font-bold">出售地址＊</p>
           <FormControl sx={{ minWidth: 134 }}>
-            <InputLabel sx={{ bgcolor: 'white' }} id="demo-select-small-label">
+            <InputLabel sx={{ bgcolor: 'white' }}>
               請選擇縣市
             </InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              value={cityId}
-              label="Age"
-              onChange={(e) => setInfoSettings({ cityId: e.target.value })}
+              value={location.cityId}
+              onChange={(e) => setLocation({ cityId: e.target.value })}
             >
               {citiesOptions.map((item) => (
                 <MenuItem key={item.id} value={item.id}>
@@ -142,16 +117,15 @@ const InfoSetting = () => {
             </Select>
           </FormControl>
           <FormControl sx={{ minWidth: 134 }}>
-            <InputLabel sx={{ bgcolor: 'white' }} id="demo-select-small-label">
+            <InputLabel sx={{ bgcolor: 'white' }}>
               請選擇鄉鎮市區
             </InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
-              value={districtId}
-              label="Age"
-              onChange={(e) => setInfoSettings({ districtId: e.target.value })}
-              disabled={!cityId}
+              value={location.districtId}
+              onChange={(e) => setLocation({ districtId: e.target.value })}
+              disabled={!location.cityId}
             >
               {
                 districtsOptions.map((district) => (
@@ -164,17 +138,16 @@ const InfoSetting = () => {
           </FormControl>
           <TextField
             id="contacts"
-            value={address}
-            onChange={(e) => setInfoSettings({ address: e.target.value })}
+            value={location.address}
+            onChange={(e) => setLocation({ address: e.target.value })}
             placeholder="請輸入道路或街名"
             sx={{ width: '200px' }}
           />
           <TextField
-            
             className="w-[100px]"
             id="contacts"
-            value={lane}
-            onChange={(e) => setLane(e.target.value)}
+            value={location.lane}
+            onChange={(e) => setLocation({ lane: e.target.value })}
             slotProps={{
               input: {
                 endAdornment: (
@@ -184,11 +157,10 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
             className="w-[100px]"
             id="contacts"
-            value={alley}
-            onChange={(e) => setAlley(e.target.value)}
+            value={location.alley}
+            onChange={(e) => setLocation({ alley: e.target.value })}
             slotProps={{
               input: {
                 endAdornment: (
@@ -198,11 +170,10 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
             className="w-[100px]"
             id="contacts"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            value={location.number}
+            onChange={(e) => setLocation({ number: e.target.value })}
             slotProps={{
               input: {
                 endAdornment: (
@@ -215,11 +186,10 @@ const InfoSetting = () => {
         </div>
         <div className="flex gap-2 items-center">
           <TextField
-            
             className="w-[405px]"
             id="contacts"
-            value={floor}
-            onChange={(e) => setInfoSettings({ floor: e.target.value })}
+            value={property.floor}
+            onChange={(e) => setProperty({ floor: e.target.value })}
             placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
             slotProps={{
               input: {
@@ -233,11 +203,9 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
-            id="contacts"
             className="w-[100px]"
-            value={subNumber}
-            onChange={(e) => setSubNumber(e.target.value)}
+            value={location.houseRoom}
+            onChange={(e) => setLocation({ houseRoom: e.target.value })}
             slotProps={{
               input: {
                 startAdornment: (
@@ -247,11 +215,9 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
             className="w-[158px]"
-            id="contacts"
-            value={totalFloors}
-            onChange={(e) => setInfoSettings({ totalFloors: e.target.value })}
+            value={property.totalFloors}
+            onChange={(e) => setProperty({ totalFloors: e.target.value })}
             slotProps={{
               input: {
                 startAdornment: (
@@ -264,8 +230,8 @@ const InfoSetting = () => {
             }}
           />
         </div>
-        <TextField
-          id="contacts"
+        {/* <TextField
+          id="neightborhood"
           sx={{ width: '300px' }}
           placeholder="請輸入物件所在的社區名稱"
           slotProps={{
@@ -275,16 +241,15 @@ const InfoSetting = () => {
               ),
             },
           }}
-        />
+        /> */}
       </FieldGroup>
       <FieldGroup title="物件格局＊">
         <div className="flex gap-2 items-center">
           <p className="text-sm text-[#333333] font-bold">現況格局＊</p>
           <TextField
-            
-            id="contacts"
-            value={room}
-            onChange={(e) => setInfoSettings({ room: e.target.value })}
+            id="room"
+            value={property.room}
+            onChange={(e) => setProperty({ room: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -298,10 +263,9 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
-            id="contacts"
-            value={livingRoom}
-            onChange={(e) => setInfoSettings({ livingRoom: e.target.value })}
+            id="livingRoom"
+            value={property.livingRoom}
+            onChange={(e) => setProperty({ livingRoom: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -315,10 +279,9 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
-            id="contacts"
-            value={bathroom}
-            onChange={(e) => setInfoSettings({ bathroom: e.target.value })}
+            id="bathroom"
+            value={property.bathroom}
+            onChange={(e) => setProperty({ bathroom: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -332,10 +295,9 @@ const InfoSetting = () => {
             }}
           />
           <TextField
-            
-            id="contacts"
-            value={balcony}
-            onChange={(e) => setInfoSettings({ balcony: e.target.value })}
+            id="balcony"
+            value={property.balcony}
+            onChange={(e) => setProperty({ balcony: e.target.value })}
             sx={{ width: '150px' }}
             slotProps={{
               input: {

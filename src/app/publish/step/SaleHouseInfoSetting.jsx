@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   FormControl,
   FormControlLabel,
@@ -15,20 +17,27 @@ import usePublishStore from '@/store/usePublishStore';
 import {
   ElevatorOptions,
   ParkingOptions,
-} from './InfoSettingHelper';
+  LegalUsageOptions,
+  CurrentStatusOptions,
+  DecorLevelOptions,
+  LeaseStatusOptions,
+} from './publishHelper';
 
 const SaleHouseInfoSetting = () => {
-  const { infoSettings, setInfoSettings } = usePublishStore();
-  const { squareMeters, subSquareMeters, enrollSquareMeters, decorLevelId, age, totalPrice, parkingSpace, elevator } = infoSettings;
+  const {  property, setProperty, saleInfo, setSaleInfo } = usePublishStore();
 
+  const buildingRegistrationArea = useMemo(() => {
+    return (saleInfo.mainBuildingArea + saleInfo.accessoryBuildingArea + saleInfo.publicFacilityArea);
+  }, [saleInfo.mainBuildingArea, saleInfo.accessoryBuildingArea, saleInfo.publicFacilityArea]);
+  
   return <>
   <FieldGroup title="物件細項">
     <div className="flex items-center gap-2">
       <TextField
         type="number"
         id="contacts"
-        value={squareMeters}
-        onChange={(e) => setInfoSettings({ squareMeters: e.target.value })}
+        value={saleInfo.mainBuildingArea}
+        onChange={(e) => setInfoSettings({ mainBuildingArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -48,8 +57,8 @@ const SaleHouseInfoSetting = () => {
       <TextField
         type="number"
         id="contacts"
-        value={subSquareMeters}
-        onChange={(e) => setInfoSettings({ subSquareMeters: e.target.value })}
+        value={saleInfo.accessoryBuildingArea}
+        onChange={(e) => setInfoSettings({ accessoryBuildingArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -68,9 +77,9 @@ const SaleHouseInfoSetting = () => {
       ＋
       <TextField
         type="number"
-        id="contacts"
-        value={subSquareMeters}
-        onChange={(e) => setInfoSettings({ subSquareMeters: e.target.value })}
+        id="publicFacilityArea"
+        value={saleInfo.publicFacilityArea}
+        onChange={(e) => setInfoSettings({ publicFacilityArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -89,8 +98,9 @@ const SaleHouseInfoSetting = () => {
       ＝
       <TextField
         type="number"
-        id="contacts"
-        value={enrollSquareMeters}
+        id="ownership"
+        disabled
+        value={buildingRegistrationArea}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -109,41 +119,44 @@ const SaleHouseInfoSetting = () => {
     </div>
     <div className="flex gap-10">
       <FormControl sx={{ width: 300 }}>
-        <InputLabel id="demo-select-small-label">法定用途＊</InputLabel>
+        <InputLabel>法定用途＊</InputLabel>
         <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          // value={age}
-          // onChange={handleChange}
-          label="Age"
+          id="legalUsage"
+          value={saleInfo.legalUsage}
+          onChange={(e) => setInfoSettings({ legalUsage: e.target.value })}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {LegalUsageOptions.map((item) => (
+            <MenuItem key={item.value} value={item.value}>
+              {item.text}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
-      <FormControlLabel control={<Checkbox />} label="隱藏詳細用途" />
+      <FormControlLabel control={<Checkbox
+        checked={saleInfo.hiddenLegalUsage}
+        onChange={(e) => setInfoSettings({ hiddenLegalUsage: !saleInfo.hiddenLegalUsage })}
+      />} label="隱藏詳細用途" />
     </div>
     <FormControl sx={{ width: 300 }}>
-      <InputLabel id="demo-select-small-label">物件現況＊</InputLabel>
+      <InputLabel>物件現況＊</InputLabel>
       <Select
-        labelId="demo-select-small-label"
-        id="demo-select-small"
-        // value={age}
-        // onChange={handleChange}
-        label="Age"
+        id="status"
+        value={saleInfo.status}
+        onChange={(e) => setInfoSettings({ status: e.target.value })}
       >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        {CurrentStatusOptions.map((item) => (
+          <MenuItem key={item.value} value={item.value}>
+            {item.text}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
     <div className="flex gap-2">
       <TextField
         type="number"
-        id="contacts"
-        value={age}
-        onChange={(e) => setInfoSettings({ age: e.target.value })}
+        id="age"
+        value={property.age}
+        onChange={(e) => setProperty({ age: e.target.value })}
         placeholder="請輸入屋齡"
         sx={{ width: '302px' }}
         slotProps={{  
@@ -158,24 +171,26 @@ const SaleHouseInfoSetting = () => {
           }}
       />
       <FormControl sx={{ minWidth: 196 }}>
-        <InputLabel id="demo-select-small-label">裝潢程度＊</InputLabel>
+        <InputLabel>裝潢程度＊</InputLabel>
         <Select
-          value={decorLevelId}
-          onChange={(e) => setInfoSettings({ decorLevelId: e.target.value })}
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          label="Age"
+          value={property.decorLevelId}
+          onChange={(e) => setProperty({ decorLevelId: e.target.value })}
+          id="decorLevelId"
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {DecorLevelOptions.map((item) => (
+            <MenuItem key={item.value} value={item.value}>
+              {item.text}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
     <div className="flex gap-10">
       <TextField
         type="number"
-        id="contacts"
+        id="managementFee"
+        value={saleInfo.managementFee}
+        onChange={(e) => setSaleInfo({ managementFee: e.target.value })}
         placeholder="請輸入管理費"
         sx={{ width: '302px' }}
         slotProps={{
@@ -193,27 +208,27 @@ const SaleHouseInfoSetting = () => {
     </div>
     <div className="flex gap-2">
       <FormControl className="w-[168px]">
-        <InputLabel id="demo-select-small-label">帶租約</InputLabel>
+        <InputLabel>帶租約</InputLabel>
         <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          label="Age"
+          id="leaseStatus"
+          value={saleInfo.leaseStatus}
+          onChange={(e) => setSaleInfo({ leaseStatus: e.target.value })}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {LeaseStatusOptions.map((item) => (
+            <MenuItem key={item.value} value={item.value}>
+              {item.text}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl className="w-[168px]">
-        <InputLabel id="demo-select-small-label">電梯</InputLabel>
+        <InputLabel>電梯</InputLabel>
         <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={elevator}
-          label="Age"
+          id="elevator"
+          value={property.hasElevator}
           onChange={(e) =>
-            setInfoSettings({
-              elevator: e.target.value,
+            setProperty({
+              hasElevator: !property.hasElevator,
             })
           }
         >
@@ -225,15 +240,13 @@ const SaleHouseInfoSetting = () => {
         </Select>
       </FormControl>
       <FormControl className="w-[168px]">
-        <InputLabel id="demo-select-small-label">車位</InputLabel>
+        <InputLabel>車位</InputLabel>
         <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={parkingSpace}
-          label="Age"
+          id="parkingSpace"
+          value={property.parkingSpace}
           onChange={(e) =>
-            setInfoSettings({
-              parkingSpace: e.target.value,
+            setProperty({
+              parkingSpace: !property.parkingSpace,
             })
           }
         >
@@ -249,9 +262,9 @@ const SaleHouseInfoSetting = () => {
   <FieldGroup title="物件總價">
     <TextField
       type="number"
-      id="contacts"
-      value={totalPrice}
-      onChange={(e) => setInfoSettings({ totalPrice: e.target.value })}
+      id="totalPrice"
+      value={saleInfo.totalPrice}
+      onChange={(e) => setSaleInfo({ totalPrice: e.target.value })}
       placeholder="請輸入物件總價"
       sx={{ width: '302px' }}
       slotProps={{

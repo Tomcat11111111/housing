@@ -27,7 +27,9 @@ import {
   ParkingOptions,
   RentIncludeOptions,
   DepositOptions,
-} from './InfoSettingHelper';
+} from './publishHelper';
+
+import { DIRECTION_OPTIONS } from '@/utils/tools';
 
 import FieldGroup from './FieldGroup';
 
@@ -80,8 +82,8 @@ const RentHouseInfoSetting = () => {
             onChange={(e) => setInfoSettings({ direction: e.target.value })}
             label="物件朝向"
           >
-            {DirectionOptions.map((item) => (
-              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            {DIRECTION_OPTIONS.map((item) => (
+              <MenuItem key={item.value} value={item.value}>{item.displayName}</MenuItem>
             ))}
           </Select>
         </FormControl>

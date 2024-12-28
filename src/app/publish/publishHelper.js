@@ -1,15 +1,25 @@
 const checkStepData = (step, data) => {
-  switch (step) {
-    case 0:
-      return data.title && data.description && data.price;
-    case 1:
-      return data.city && data.district && data.address;
-    case 2:
-      return data.features && data.shapes && data.decorLevel;
-    case 3:
-      return true;
-    default:
-      return false;
+  const { itemTypeSettings, infoSettings, advancedInfoSettings } = data;
+
+  if (step === 0) {
+    return (
+      !!itemTypeSettings.publishType &&
+      !!itemTypeSettings.itemType &&
+      !!itemTypeSettings.category
+    );
+  }
+
+  if (step === 1) {
+    return (
+      infoSettings.title &&
+      infoSettings.cityId &&
+      infoSettings.districtId &&
+      infoSettings.address
+    );
+  }
+
+  if (step === 2) {
+    return true;
   }
 };
 
@@ -84,33 +94,60 @@ const checkStepData = (step, data) => {
 // };
 
 export const formatPropertyData = (data) => {
-  const { itemTypeSettings, infoSettings, advancedInfoSettings } = data;
-  console.log('🚀 ~ formatPropertyData ~ itemTypeSettings:', itemTypeSettings);
+  const { property, saleInfo, location } = data;
 
   return {
     property: {
-      title: infoSettings.title,
-      age: infoSettings.age,
-      squareMeters: infoSettings.squareMeters,
-      floor: infoSettings.floor,
-      totalFloors: infoSettings.totalFloors,
-      room: infoSettings.room,
-      livingRoom: infoSettings.livingRoom,
-      bathroom: infoSettings.bathroom,
-      balcony: infoSettings.balcony,
-      views: 0,
-      shapeId: advancedInfoSettings.shapeId,
-      decorLevelId: advancedInfoSettings.decorLevelId,
-      status: 'draft',
+      title: property.title,
+      age: property.age,
+      squareMeters: property.squareMeters,
+      floor: property.floor,
+      totalFloors: property.totalFloors,
+      room: property.room,
+      livingRoom: property.livingRoom,
+      bathroom: property.bathroom,
+      balcony: property.balcony,
+      type: property.type,
+      views: property.views || 0,
+      shapeId: property.shapeId,
+      decorLevelId: property.decorLevelId,
+      contactName: property.contactName || '',
+      contactNumber: property.contactNumber || '',
+      contactEmail: property.contactEmail || '',
+      landline: property.landline || '',
+      hasElevator: property.hasElevator || false,
+      hasParking: property.hasParking || false,
+      images: property.images || [],
+      status: property.status || 'draft',
     },
-    [itemTypeSettings.publishType === 'buy' ? 'saleInfo' : 'rentalInfo']: {
-      ...infoSettings,
-      ...advancedInfoSettings,
+    saleInfo: {
+      totalPrice: saleInfo.totalPrice,
+      parkingSpace: saleInfo.parkingSpace,
+      direction: saleInfo.direction,
+      source: saleInfo.source || 'platform',
+      surroundingIds: saleInfo.surroundingIds || [],
+      category: saleInfo.category,
+      status: saleInfo.status,
+      publicFacilityRatio: saleInfo.publicFacilityRatio || 0,
+      legalUsage: saleInfo.legalUsage || '',
+      hiddenLegalUsage: saleInfo.hiddenLegalUsage || false,
+      managementFee: saleInfo.managementFee || 0,
+      leaseStatus: saleInfo.leaseStatus || '',
+      mainBuildingArea: saleInfo.mainBuildingArea || 0,
+      accessoryBuildingArea: saleInfo.accessoryBuildingArea || 0,
+      publicFacilityArea: saleInfo.publicFacilityArea || 0,
+      introduction: saleInfo.introduction || '',
     },
     location: {
-      cityId: infoSettings.cityId,
-      districtId: infoSettings.districtId,
-      address: infoSettings.address,
+      cityId: location.cityId,
+      districtId: location.districtId,
+      address: location.address,
+      street: location.street || '',
+      alley: location.alley || '',
+      lane: location.lane || '',
+      number: location.number || '',
+      floor: location.floor || '',
+      room: location.room || '',
     },
   };
 };
