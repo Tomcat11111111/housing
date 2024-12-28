@@ -14,7 +14,6 @@ import usePublishStore from '@/store/usePublishStore';
 import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 import { createRentPropertyApi, createSalePropertyApi } from './actions';
-import { formatPropertyData } from './publishHelper';
 import ItemAdvancedInfoSetting from './step/AdvancedInfoSetting';
 import ItemInfoSetting from './step/InfoSetting';
 import ItemPreview from './step/ItemPreview';

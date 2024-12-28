@@ -109,7 +109,11 @@ export default function Detail({ params }) {
           setInput={(value) => setSearch(value)}
         />
       </div>
-      {isSuccess && <Main type={type} detailData={detailData} />}
+      {isSuccess && (
+        <div className="bg-white px-[172px] py-6 border-b border-[#E9E9E9]">
+          <Main type={type} detailData={detailData} />
+        </div>
+      )}
       {!isSuccess && (
         <div className={styles.loadingContainer}>
           <Loading text="資料讀取中" />

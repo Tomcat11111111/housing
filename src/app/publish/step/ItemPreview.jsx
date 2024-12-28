@@ -3,6 +3,8 @@ import { Maximize } from 'lucide-react';
 
 import ItemCard from '@/components/common/ItemCard/ItemCard';
 
+import DetailPreview from './DetailPreview';
+
 import usePublishStore from '@/store/usePublishStore';
 
 const ItemPreview = () => {
@@ -38,7 +40,9 @@ const ItemPreview = () => {
             />
           </div>
         </div>
-        <div className=" w-[40%]"></div>
+        <div className=" w-[40%]">
+          <DetailPreview/>
+        </div>
         <div className="flex flex-col justify-end items-end w-[30%]">
           <Button
             variant="contained"
