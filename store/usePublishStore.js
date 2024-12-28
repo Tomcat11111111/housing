@@ -23,8 +23,8 @@ const usePublishStore = create((set) => ({
     contactNumber: '0912345678',
     contactEmail: 'test@gmail.com',
     landline: '0226666666',
-    hasElevator: false, // 根據 elevator: '無'
-    hasParking: false, // 根據 parkingSpace
+    hasElevator: false,
+    hasParking: false,
     images: [],
     status: 'available',
   },

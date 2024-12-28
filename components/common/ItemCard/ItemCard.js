@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { slice } from 'ramda';
 
 import Bookmark from '@/common/Bookmark/Bookmark';
-import Carousel from '@/common/Carousel/Carousel';
 import Tag from '@/common/Tag/Tag';
 
 import CustomStepper from '@/components/common/Stepper/Stepper';
@@ -165,13 +164,6 @@ const ItemCard = (props) => {
               />
             </div>
           )}
-          {/* {isHovered && (
-            <div className={styles.indicators}>
-              {firstFiveImages.map((_, index) => (
-                <button key={index} className={styles.indicator} />
-              ))}
-            </div>
-          )} */}
           {isHovered && (
             <div className={styles.bookmark}>
               <Bookmark
