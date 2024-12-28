@@ -30,7 +30,7 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const { success, setSuccess, error, setError, errorText, successText } =
+  const { toastOpen, setToastOpen, status, errorText, successText } =
     useToastStore();
 
   const router = useRouter();
@@ -148,11 +148,10 @@ export default function Home() {
       <Footer />
       {/* Toast訊息 */}
       <Snackbar
-        open={success || error}
-        autoHideDuration={3000}
+        open={toastOpen}
+        autoHideDuration={2000}
         onClose={() => {
-          setSuccess(false);
-          setError(false);
+          setToastOpen(false);
         }}
         anchorOrigin={{
           vertical: 'top',
@@ -160,7 +159,7 @@ export default function Home() {
         }}
         sx={{
           '& .MuiSnackbarContent-root': {
-            backgroundColor: success ? '#0ABD13' : '#F44336',
+            backgroundColor: status === 'success' ? '#0ABD13' : '#F44336',
             color: '#FFFFFF',
             alignItems: 'center',
             justifyContent: 'center',
@@ -176,12 +175,14 @@ export default function Home() {
                 gap: '8px',
               }}
             >
-              {success ? (
+              {status === 'success' && (
                 <CheckCircleIcon style={{ color: '#FFFFFF' }} />
-              ) : (
+              )}
+              {status === 'error' && (
                 <ShieldAlert style={{ color: '#FFFFFF' }} />
               )}
-              <span>{success ? successText : errorText}</span>
+              <span>{status === 'success' && successText}</span>
+              <span>{status === 'error' && errorText}</span>
             </div>
           }
         />

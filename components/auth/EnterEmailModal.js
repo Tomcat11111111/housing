@@ -14,7 +14,7 @@ import { sendVerificationCodeApi } from './actions';
 const EnterEmailModal = ({ setOpen }) => {
   const { setAuthType } = useAuthTypeStore();
   const { email, name, setEmail, setName } = useRegisterStore();
-  const { setError, setErrorText } = useToastStore();
+  const { setStatus, setToastOpen, setErrorText } = useToastStore();
 
   const { mutate: sendVerificationCode } = useMutation({
     mutationFn: sendVerificationCodeApi,
@@ -22,8 +22,9 @@ const EnterEmailModal = ({ setOpen }) => {
       setAuthType('verifyEmail');
     },
     onError: (error) => {
-      setError(true);
+      setStatus('error');
       setErrorText('已註冊過');
+      setToastOpen(true);
       console.error('Sent Verification Code failed:', error);
     },
   });

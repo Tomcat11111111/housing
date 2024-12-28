@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 
 export const useToastStore = create((set) => ({
-  success: false,
-  error: false,
+  toastOpen: false,
+  status: '',
   successText: '',
   errorText: '',
-  setSuccess: (status) => {
-    set(() => ({ success: status }));
+  setToastOpen: (status) => {
+    set(() => ({ toastOpen: status }));
   },
-  setError: (status) => {
-    set(() => ({ error: status }));
+  setStatus: (status) => {
+    set(() => ({ status }));
   },
   setSuccessText: (text) => {
     set(() => ({ successText: text }));

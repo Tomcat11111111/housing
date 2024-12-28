@@ -30,7 +30,7 @@ const SignInModal = ({ setOpen }) => {
     setAccessToken,
   } = useSigninStore();
   const { setAuthType } = useAuthTypeStore();
-  const { setSuccess, setSuccessText, setError, setErrorText } =
+  const { setToastOpen, setStatus, setSuccessText, setErrorText } =
     useToastStore();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
@@ -48,13 +48,16 @@ const SignInModal = ({ setOpen }) => {
         secure: true,
         sameSite: 'Strict',
       });
-      setSuccess(true);
+
+      setStatus('success');
       setSuccessText('登入成功');
+      setToastOpen(true);
       setOpen(false);
     },
     onError: (error) => {
-      setError(true);
+      setStatus('error');
       setErrorText('信箱/密碼錯誤');
+      setToastOpen(true);
       console.log('Error Signing in', error);
     },
   });

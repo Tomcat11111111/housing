@@ -14,7 +14,7 @@ import { sendVerificationCodeApi, verifyEmailApi } from './actions';
 const VerifyEmailModal = ({ setOpen }) => {
   const [countdown, setCountdown] = useState(0);
   const { setAuthType } = useAuthTypeStore();
-  const { setError, setErrorText } = useToastStore();
+  const { setToastOpen, setStatus, setErrorText } = useToastStore();
   const {
     email,
     verificationCode,
@@ -44,8 +44,9 @@ const VerifyEmailModal = ({ setOpen }) => {
       setAuthType('verifyEmail');
     },
     onError: (error) => {
-      setError(true);
+      setStatus('error');
       setErrorText('驗證碼錯誤');
+      setToastOpen(true);
       console.error('Sent Verification Code failed:', error);
     },
   });
