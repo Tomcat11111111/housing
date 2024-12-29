@@ -187,3 +187,17 @@ export const SOURCE_OPTIONS = [
 
 //   return throttledFunction;
 // }
+
+// 因應圖片資料上架、前台格式不同
+// todo: 看看格式遙不要統一
+export const getImageurl = (images, activeStep) => {
+  if (images.length > 0) {
+    if (images[activeStep]?.url) {
+      return images[activeStep]?.url;
+    }
+
+    return images[activeStep];
+  }
+
+  return '/image/house_item.png';
+};

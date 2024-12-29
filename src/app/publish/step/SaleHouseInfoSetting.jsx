@@ -24,11 +24,11 @@ import {
 } from './publishHelper';
 
 const SaleHouseInfoSetting = () => {
-  const {  property, setProperty, saleInfo, setSaleInfo } = usePublishStore();
+  const {  property, setProperty, salesInfo, setsalesInfo } = usePublishStore();
 
   const buildingRegistrationArea = useMemo(() => {
-    return (saleInfo.mainBuildingArea + saleInfo.accessoryBuildingArea + saleInfo.publicFacilityArea);
-  }, [saleInfo.mainBuildingArea, saleInfo.accessoryBuildingArea, saleInfo.publicFacilityArea]);
+    return (salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea);
+  }, [salesInfo.mainBuildingArea, salesInfo.accessoryBuildingArea, salesInfo.publicFacilityArea]);
   
   return <>
   <FieldGroup title="物件細項">
@@ -36,7 +36,7 @@ const SaleHouseInfoSetting = () => {
       <TextField
         type="number"
         id="contacts"
-        value={saleInfo.mainBuildingArea}
+        value={salesInfo.mainBuildingArea}
         onChange={(e) => setInfoSettings({ mainBuildingArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
@@ -57,7 +57,7 @@ const SaleHouseInfoSetting = () => {
       <TextField
         type="number"
         id="contacts"
-        value={saleInfo.accessoryBuildingArea}
+        value={salesInfo.accessoryBuildingArea}
         onChange={(e) => setInfoSettings({ accessoryBuildingArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
@@ -78,7 +78,7 @@ const SaleHouseInfoSetting = () => {
       <TextField
         type="number"
         id="publicFacilityArea"
-        value={saleInfo.publicFacilityArea}
+        value={salesInfo.publicFacilityArea}
         onChange={(e) => setInfoSettings({ publicFacilityArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
@@ -122,7 +122,7 @@ const SaleHouseInfoSetting = () => {
         <InputLabel>法定用途＊</InputLabel>
         <Select
           id="legalUsage"
-          value={saleInfo.legalUsage}
+          value={salesInfo.legalUsage}
           onChange={(e) => setInfoSettings({ legalUsage: e.target.value })}
         >
           {LegalUsageOptions.map((item) => (
@@ -133,15 +133,15 @@ const SaleHouseInfoSetting = () => {
         </Select>
       </FormControl>
       <FormControlLabel control={<Checkbox
-        checked={saleInfo.hiddenLegalUsage}
-        onChange={(e) => setInfoSettings({ hiddenLegalUsage: !saleInfo.hiddenLegalUsage })}
+        checked={salesInfo.hiddenLegalUsage}
+        onChange={(e) => setInfoSettings({ hiddenLegalUsage: !salesInfo.hiddenLegalUsage })}
       />} label="隱藏詳細用途" />
     </div>
     <FormControl sx={{ width: 300 }}>
       <InputLabel>物件現況＊</InputLabel>
       <Select
         id="status"
-        value={saleInfo.status}
+        value={salesInfo.status}
         onChange={(e) => setInfoSettings({ status: e.target.value })}
       >
         {CurrentStatusOptions.map((item) => (
@@ -189,8 +189,8 @@ const SaleHouseInfoSetting = () => {
       <TextField
         type="number"
         id="managementFee"
-        value={saleInfo.managementFee}
-        onChange={(e) => setSaleInfo({ managementFee: e.target.value })}
+        value={salesInfo.managementFee}
+        onChange={(e) => setsalesInfo({ managementFee: e.target.value })}
         placeholder="請輸入管理費"
         sx={{ width: '302px' }}
         slotProps={{
@@ -211,8 +211,8 @@ const SaleHouseInfoSetting = () => {
         <InputLabel>帶租約</InputLabel>
         <Select
           id="leaseStatus"
-          value={saleInfo.leaseStatus}
-          onChange={(e) => setSaleInfo({ leaseStatus: e.target.value })}
+          value={salesInfo.leaseStatus}
+          onChange={(e) => setsalesInfo({ leaseStatus: e.target.value })}
         >
           {LeaseStatusOptions.map((item) => (
             <MenuItem key={item.value} value={item.value}>
@@ -263,8 +263,8 @@ const SaleHouseInfoSetting = () => {
     <TextField
       type="number"
       id="totalPrice"
-      value={saleInfo.totalPrice}
-      onChange={(e) => setSaleInfo({ totalPrice: e.target.value })}
+      value={salesInfo.totalPrice}
+      onChange={(e) => setsalesInfo({ totalPrice: e.target.value })}
       placeholder="請輸入物件總價"
       sx={{ width: '302px' }}
       slotProps={{

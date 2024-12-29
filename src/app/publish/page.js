@@ -24,8 +24,8 @@ const Publish = () => {
   const {
     itemTypeSettings,
     property,
-    saleInfo,
-    rentInfo,
+    salesInfo,
+    rentalInfo,
     location,
     setPorperty,
   } = usePublishStore();
@@ -39,7 +39,7 @@ const Publish = () => {
     defaultValues: {
       ...itemTypeSettings,
       ...property,
-      ...saleInfo,
+      ...salesInfo,
     },
   });
 
@@ -70,13 +70,13 @@ const Publish = () => {
 
   const onPublishProperty = () => {
     const publishType =
-      itemTypeSettings.publishType === 'buy' ? 'saleInfo' : 'rentInfo';
+      itemTypeSettings.publishType === 'buy' ? 'salesInfo' : 'rentalInfo';
 
     publishProperty({
       property,
       location,
       [publishType]:
-        itemTypeSettings.publishType === 'buy' ? saleInfo : rentInfo,
+        itemTypeSettings.publishType === 'buy' ? salesInfo : rentalInfo,
     });
   };
 

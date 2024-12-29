@@ -10,15 +10,19 @@ import DetailSideBar from '@/app/detail/[type]/DetailSideBar';
 
 import usePublishStore from '@/store/usePublishStore';
 
-const DetailPreview = () => {
-  const { property, itemTypeSettings } = usePublishStore();
+const PreviewDetailPage = () => {
+  const { property, itemTypeSettings, rentalInfo, salesInfo } = usePublishStore();
   const type = itemTypeSettings.publishType;
 
-  const firstFiveImages = slice(0, 5, property.images);
+  const firstFiveImages = slice(property.images, 0, 5);
+
 
   return (
-    <div className="bg-[#CCC] rounded-2xl p-2">
-      <DetailImage images={firstFiveImages} />
+    <div className="bg-[#FFF] rounded-2xl p-2 h-[100%] overflow-hidden relative">
+        <div className='h-[100%] z-10 w-full absolute top-0 left-0'></div>
+      <div className="h-[400px] my-4">
+        <DetailImage images={firstFiveImages} />
+      </div>
       <div className="flex justify-between mx-4 gap-9">
         <article className="w-[60%] flex flex-col gap-4">
           <PropertyInfo
@@ -48,9 +52,9 @@ const DetailPreview = () => {
           {property.introduction && <Introduction introduction={property.introduction} />}
         </article>
         <DetailSideBar
-          price={displayPrice}
-          unitPrice={unitPrice}
-          views={views}
+          price={type === 'buy' ? salesInfo?.totalPrice : rentalInfo?.price}
+          unitPrice={salesInfo?.unitPrice}
+          views={property?.views}
           type={type}
           id={property?.id}
         />
@@ -59,4 +63,4 @@ const DetailPreview = () => {
   );
 };
 
-export default DetailPreview;
+export default PreviewDetailPage;

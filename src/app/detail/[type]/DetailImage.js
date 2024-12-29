@@ -1,13 +1,15 @@
 import { useState } from 'react';
 
-import { MobileStepper, Modal, StepButton } from '@mui/material';
+import { Modal, StepButton } from '@mui/material';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 import Button from '@/components/common/Button/Button';
+import CustomStepper from '@/components/common/Stepper/Stepper';
 import Photo from '@/components/icon/Photo/Photo';
 
-import CustomStepper from '../../../../components/common/Stepper/Stepper';
+import { getImageurl } from '@/utils/tools';
+
 import styles from './DetailImage.module.scss';
 
 const DetailImage = (props) => {
@@ -33,7 +35,7 @@ const DetailImage = (props) => {
     setActiveStep(index);
     setOpen(true);
   };
-  //TODO:接物件的圖片
+
   return (
     <>
       <figure className={styles.imgArea}>
@@ -41,7 +43,7 @@ const DetailImage = (props) => {
           style={{
             position: 'relative',
             width: '50%',
-            height: '400px',
+            height: '100%',
             cursor: 'pointer',
           }}
         >
@@ -49,7 +51,7 @@ const DetailImage = (props) => {
             style={{
               borderRadius: '16px 0 0 16px',
             }}
-            src={images[0] ? images[0].url : '/image/house_item.png'}
+            src={getImageurl(images, 0)}
             alt={1}
             fill
             onClick={() => handleImageClick(0)}
@@ -61,24 +63,26 @@ const DetailImage = (props) => {
             flexDirection: 'column',
             gap: '8px',
             flexGrow: 1,
+            height: '100%',
           }}
         >
           <div
             style={{
               display: 'flex',
               gap: '8px',
+              height: 'calc(50% - 4px)',
             }}
           >
             <div
               style={{
                 position: 'relative',
                 width: '50%',
-                height: '196px',
+                height: '100%',
                 cursor: 'pointer',
               }}
             >
               <Image
-                src={images[1] ? images[1].url : '/image/house_item.png'}
+                src={getImageurl(images, 1)}
                 alt={1}
                 fill
                 onClick={() => handleImageClick(1)}
@@ -88,7 +92,7 @@ const DetailImage = (props) => {
               style={{
                 position: 'relative',
                 width: '50%',
-                height: '196px',
+                height: '100%',
                 cursor: 'pointer',
               }}
             >
@@ -96,24 +100,30 @@ const DetailImage = (props) => {
                 style={{
                   borderRadius: '0 16px 0 0',
                 }}
-                src={images[2] ? images[2].url : '/image/house_item.png'}
+                src={getImageurl(images, 2)}
                 alt={1}
                 fill
                 onClick={() => handleImageClick(2)}
               />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              height: 'calc(50% - 4px)',
+            }}
+          >
             <div
               style={{
                 position: 'relative',
                 width: '50%',
-                height: '196px',
+                height: '100%',
                 cursor: 'pointer',
               }}
             >
               <Image
-                src={images[3] ? images[3].url : '/image/house_item.png'}
+                src={getImageurl(images, 3)}
                 alt={1}
                 fill
                 onClick={() => handleImageClick(3)}
@@ -123,7 +133,7 @@ const DetailImage = (props) => {
               style={{
                 position: 'relative',
                 width: '50%',
-                height: '196px',
+                height: '100%',
                 cursor: 'pointer',
               }}
             >
@@ -131,7 +141,7 @@ const DetailImage = (props) => {
                 style={{
                   borderRadius: '0 0 16px 0',
                 }}
-                src={images[4] ? images[4].url : '/image/house_item.png'}
+                src={getImageurl(images, 4)}
                 alt={1}
                 fill
                 onClick={() => handleImageClick(4)}
@@ -139,26 +149,28 @@ const DetailImage = (props) => {
             </div>
           </div>
         </div>
-        <div className={styles.imgCount} onClick={() => handleImageClick(0)}>
-          <Button
-            buttonText="53+"
-            textStyle={{
-              color: '#FFF',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-            }}
-            buttonStyle={{
-              borderRadius: '8px',
-              opacity: 0.8,
-              background: '#333',
-              padding: '16px',
-              gap: '8px',
-            }}
-            icon={<Photo />}
-            iconPosition="left"
-          />
-        </div>
+        {images.length > 5 && (
+          <div className={styles.imgCount} onClick={() => handleImageClick(0)}>
+            <Button
+              buttonText={`${images.length - 5}+`}
+              textStyle={{
+                color: '#FFF',
+                fontSize: '16px',
+                fontWeight: 700,
+                lineHeight: '24px',
+              }}
+              buttonStyle={{
+                borderRadius: '8px',
+                opacity: 0.8,
+                background: '#333',
+                padding: '16px',
+                gap: '8px',
+              }}
+              icon={<Photo />}
+              iconPosition="left"
+            />
+          </div>
+        )}
       </figure>
       <Modal open={open} onClose={handleClose}>
         <div
@@ -201,7 +213,7 @@ const DetailImage = (props) => {
             }}
           >
             <Image
-              src={images[activeStep]?.url}
+              src={getImageurl(images, activeStep)}
               alt="image"
               width={1200}
               height={900}

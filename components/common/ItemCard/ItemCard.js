@@ -47,7 +47,6 @@ const ItemCard = (props) => {
 
   const router = useRouter();
 
-  const firstFiveImages = slice(0, 5, images); // TODO: 暫時只取前五張圖片，為了點點點
   const tempAveragePrice = type === 'buy' ? 25000000 : 50000; // TODO: 先寫死，之後要改成從API取得
 
   const displayPrice = type === 'buy' ? totalPrice : price;
@@ -68,6 +67,30 @@ const ItemCard = (props) => {
     return result;
   };
 
+  const cardColor = isHovered ? '#333' : '#666';
+
+  const handleNext = () => {
+    setActiveStep((prevStep) => (prevStep + 1) % images.length);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevStep) =>
+      prevStep === 0 ? images.length - 1 : prevStep - 1
+    );
+  };
+
+  const getImageurl = (images) => {
+    if (images.length > 0) {
+      if (images[activeStep]?.url) {
+        return images[activeStep]?.url;
+      }
+
+      return images[activeStep];
+    }
+
+    return '/image/house_item.png';
+  };
+
   useEffect(() => {
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
@@ -84,18 +107,6 @@ const ItemCard = (props) => {
     }
   }, [cardRef]);
 
-  const cardColor = isHovered ? '#333' : '#666';
-
-  const handleNext = () => {
-    setActiveStep((prevStep) => (prevStep + 1) % images.length);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevStep) =>
-      prevStep === 0 ? images.length - 1 : prevStep - 1
-    );
-  };
-
   return (
     <div
       className={styles.itemCard}
@@ -107,11 +118,7 @@ const ItemCard = (props) => {
       <div className={styles.imgContainer}>
         <div className={styles.imgBox}>
           <Image
-            src={
-              images.length > 0
-                ? images[activeStep]?.url
-                : '/image/house_item.png'
-            } // TODO: 補上預設圖片（？
+            src={getImageurl(images)} // TODO: 補上預設圖片（？
             alt="house_item"
             fill
           />

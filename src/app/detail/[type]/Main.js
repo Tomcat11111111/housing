@@ -13,7 +13,6 @@ import DetailSideBar from './DetailSideBar';
 import FacilityRules from './FacilityRules';
 import Introduction from './Introduction';
 import LocationSection from './LocationSection';
-import styles from './Main.module.scss';
 import PropertyInfo from './PropertyInfo';
 import PropertySummary from './PropertySummary';
 import ToolBar from './ToolBar';
@@ -38,14 +37,6 @@ const Main = ({ type, detailData }) => {
     propertySummary = [],
   } = detailData;
 
-  const displayPrice = useMemo(() => {
-    // TODO: 需要用useMemo嗎？
-    if (type === 'buy') {
-      return totalPrice;
-    }
-    return price;
-  }, [price, totalPrice, type]);
-
   const {
     location = {},
     views,
@@ -66,7 +57,7 @@ const Main = ({ type, detailData }) => {
 
   return (
     <>
-      <nav className={styles.toolbar}>
+      <nav className="flex justify-between items-cente">
         <Breadcrumb
           type={type}
           city={city}
@@ -82,7 +73,9 @@ const Main = ({ type, detailData }) => {
           setIsBookmarked={setIsBookmarked}
         />
       </nav>
-      <DetailImage images={firstFiveImages} />
+      <div className="h-[400px] my-4">
+        <DetailImage images={firstFiveImages} />
+      </div>
       <div className="flex justify-between mx-4 gap-9">
         <article className="w-[60%] flex flex-col gap-4">
           <PropertyInfo
@@ -112,7 +105,7 @@ const Main = ({ type, detailData }) => {
           {introduction && <Introduction introduction={introduction} />}
         </article>
         <DetailSideBar
-          price={displayPrice}
+          price={type === 'buy' ? totalPrice : price}
           unitPrice={unitPrice}
           views={views}
           type={type}

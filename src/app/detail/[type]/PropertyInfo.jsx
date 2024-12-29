@@ -2,16 +2,17 @@ import styles from './Main.module.scss';
 
 const PropertyInfo = ({ 
   title,
-  categoryStr,
-  room,
-  livingRoom,
-  bathroom,
-  balcony,
-  squareMeters,
-  floor,
-  totalFloors,
-  shape
+  categoryStr = '',
+  room = 0,
+  livingRoom = 0,
+  bathroom = 0,
+  balcony = 0,
+  squareMeters = 0,
+  floor = 0,
+  totalFloors = 0,
+  shape = {},
 }) => {
+
   return (
     <div className={styles.titleArea}>
       <span className={styles.title}>{title}</span>

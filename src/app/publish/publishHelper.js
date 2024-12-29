@@ -42,7 +42,7 @@ const checkStepData = (step, data) => {
 //     ],
 //     status: 'draft',
 //   },
-//   saleInfo: {
+//   salesInfo: {
 //     category: 'residential',
 //     totalPrice: 88888888,
 //     unitPrice: 1720100,

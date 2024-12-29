@@ -28,8 +28,8 @@ const AdvancedInfoSetting = () => {
     itemTypeSettings,
     property,
     setProperty,
-    saleInfo,
-    setSaleInfo,
+    salesInfo,
+    setsalesInfo,
     // rentInfo,
     // setRentInfo,
   } = usePublishStore();
@@ -45,11 +45,11 @@ const AdvancedInfoSetting = () => {
     const inputText = e.target.value;
     if (inputText > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
-      setSaleInfo({
+      setsalesInfo({
         introduction: truncatedText,
       });
     } else {
-      setSaleInfo({
+      setsalesInfo({
         introduction: inputText,
       });
     }
@@ -67,7 +67,6 @@ const AdvancedInfoSetting = () => {
   const { mutate: uploadMutation } = useMutation({
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
-      console.log('Response data:', data);
       setProperty({
         images: [...property.images, ...data],
       });
@@ -191,7 +190,7 @@ const AdvancedInfoSetting = () => {
             multiline
             rows={6}
             placeholder="可以描述物件特色或現況"
-            value={saleInfo.introduction}
+            value={salesInfo.introduction}
             onChange={handleIntroductionChange}
             fullWidth
             sx={{
@@ -202,7 +201,7 @@ const AdvancedInfoSetting = () => {
           />
 
           <div className="absolute bottom-2 right-2 text-[#333333] text-sm font-bold">
-            {`${saleInfo.introduction.length}/${MAX_CHAR}`}
+            {`${salesInfo.introduction.length}/${MAX_CHAR}`}
           </div>
         </div>
       </FieldGroup>

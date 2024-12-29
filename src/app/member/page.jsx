@@ -74,7 +74,7 @@ const MemberPage = () => {
                 fontSize: '14px',
               }}
             >
-              選擇地區
+              選擇城市
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"

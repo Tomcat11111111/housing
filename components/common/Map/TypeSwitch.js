@@ -38,7 +38,11 @@ const TYPE_LIST = [
   },
 ];
 
-function TypeSwitch({ places = [], selectedType, setSelectedType }) {
+export default function TypeSwitch({
+  places = [],
+  selectedType,
+  setSelectedType,
+}) {
   // const [isHovered, setIsHovered] = useState(false);
 
   const btnRef = useRef();
@@ -111,5 +115,3 @@ function TypeSwitch({ places = [], selectedType, setSelectedType }) {
     </div>
   );
 }
-
-export default TypeSwitch;

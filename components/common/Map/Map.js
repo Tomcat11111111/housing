@@ -25,57 +25,61 @@ function Map({ coordinates = [] }) {
   useEffect(() => {
     if (!isLoaded) return;
 
-    const map = new window.google.maps.Map(document.getElementById('map'), {
-      center,
-      zoom: 15,
-    });
+    const initMap = async () => {
+      const { AdvancedMarkerElement } =
+        await google.maps.importLibrary('marker');
 
-    new google.maps.Marker({
-      position: center,
-      map: map,
-    });
-
-    const service = new window.google.maps.places.PlacesService(map);
-
-    const request = {
-      location: center,
-      radius: '500',
-      type: [selectedType], // 想搜索的地點類型
-    };
-
-    service.nearbySearch(request, (results, status) => {
-      console.log('status: ', status);
-      console.log(window.google.maps.places.PlacesServiceStatus.OK);
-
-      // if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-      // 計算距離
-      const placesWithDistance = results.map((place) => {
-        const placeLocation = new window.google.maps.LatLng(
-          place.geometry.location.lat(),
-          place.geometry.location.lng()
-        );
-
-        new google.maps.Marker({
-          position: {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-          },
-          map: map,
-        });
-
-        const distance =
-          window.google.maps.geometry.spherical.computeDistanceBetween(
-            new window.google.maps.LatLng(center.lat, center.lng),
-            placeLocation
-          );
-        return { ...place, distance };
+      const map = new window.google.maps.Map(document.getElementById('map'), {
+        center,
+        zoom: 15,
       });
 
-      console.log('placesWithDistance: ', placesWithDistance);
+      new AdvancedMarkerElement({
+        position: center,
+        map: map,
+      });
 
-      setPlaces(placesWithDistance);
-      // }
-    });
+      const service = new window.google.maps.places.PlacesService(map);
+
+      const request = {
+        location: center,
+        radius: '500',
+        type: [selectedType], // 想搜索的地點類型
+      };
+
+      service.nearbySearch(request, (results, status) => {
+        console.log('status: ', status);
+        console.log(window.google.maps.places.PlacesServiceStatus.OK);
+
+        const placesWithDistance = results.map((place) => {
+          const placeLocation = new window.google.maps.LatLng(
+            place.geometry.location.lat(),
+            place.geometry.location.lng()
+          );
+
+          new AdvancedMarkerElement({
+            position: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+            },
+            map: map,
+          });
+
+          const distance =
+            window.google.maps.geometry.spherical.computeDistanceBetween(
+              new window.google.maps.LatLng(center.lat, center.lng),
+              placeLocation
+            );
+          return { ...place, distance };
+        });
+
+        console.log('placesWithDistance: ', placesWithDistance);
+
+        setPlaces(placesWithDistance);
+      });
+    };
+
+    initMap();
   }, [isLoaded, selectedType]);
 
   const twoClosePlaces = slice(0, 2, places);

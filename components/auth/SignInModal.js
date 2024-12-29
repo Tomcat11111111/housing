@@ -39,7 +39,6 @@ const SignInModal = ({ setOpen }) => {
     mutationFn: signinApi,
     onSuccess: (data) => {
       const token = data.access_token;
-      console.log(token);
       setAccessToken(token);
       localStorage.setItem('token', token);
       Cookies.set('token', token, {
@@ -58,7 +57,6 @@ const SignInModal = ({ setOpen }) => {
       setStatus('error');
       setErrorText('信箱/密碼錯誤');
       setToastOpen(true);
-      console.log('Error Signing in', error);
     },
   });
 

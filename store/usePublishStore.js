@@ -43,16 +43,14 @@ const usePublishStore = create((set) => ({
     introduction: '<p>測試介紹</p>',
     parkingSpace: 'mechanical', // mechanical, planar
   },
-  saleInfo: {
+  salesInfo: {
     totalPrice: 88888888,
-    // unitPrice: 1720100,
     parkingSpace: 'planar',
     direction: 'east_to_west',
     source: 'platform',
     surroundingIds: [],
     category: 'house',
     status: null, // 從原始的 status 欄位
-    // publicFacilityRatio: 0,
     legalUsage: null,
     hiddenLegalUsage: false,
     managementFee: null,
@@ -81,9 +79,9 @@ const usePublishStore = create((set) => ({
     set((state) => ({
       property: { ...state.property, ...updates },
     })),
-  setSaleInfo: (updates) =>
+  setsalesInfo: (updates) =>
     set((state) => ({
-      saleInfo: { ...state.saleInfo, ...updates },
+      salesInfo: { ...state.salesInfo, ...updates },
     })),
   setLocation: (updates) =>
     set((state) => ({

@@ -64,7 +64,6 @@ const EnterPasswordModal = ({ setOpen }) => {
     mutationFn: completeRegistrationApi,
     onSuccess: (data) => {
       const token = data.access_token;
-      console.log(token);
       setAccessToken(token);
       localStorage.setItem('token', token);
       Cookies.set('token', token, {

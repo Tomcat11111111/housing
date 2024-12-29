@@ -1,6 +1,6 @@
 import styles from './Main.module.scss';
 
-const PropertySummary = ({ propertySummary }) => {
+const PropertySummary = ({ propertySummary = [] }) => {
   return (
     <div className={styles.area}>
       <span className={styles.title}>物件介紹</span>

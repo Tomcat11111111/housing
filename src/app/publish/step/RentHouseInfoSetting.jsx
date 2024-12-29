@@ -35,37 +35,38 @@ import FieldGroup from './FieldGroup';
 
 
 const RentHouseInfoSetting = () => {
-  const { infoSettings, setInfoSettings } = usePublishStore();
-  const { 
-    squareMeters,
-    direction,
-    facilities,
-    furnitures,
-    wallMaterial,
-    decorLevel,
-    elevator,
-    rentPrice,
-    deposit,
-    rentIncludes,
-    electricityFee,
-    managementFee,
-    minRentPeriod,
-    parkingSpace,
-    identityRequirements,
-    genderRequirement,
-    landlordLiveIn,
-    cooking,
-    pets,
-    availableDate
-  } = infoSettings;
+  const { infoSettings, setInfoSettings, rentalInfo, setRentalInfo, property, setProperty } = usePublishStore();
+
+  // const { 
+  //   squareMeters,
+  //   direction,
+  //   facilities,
+  //   furnitures,
+  //   wallMaterial,
+  //   decorLevel,
+  //   elevator,
+  //   rentPrice,
+  //   deposit,
+  //   rentIncludes,
+  //   electricityFee,
+  //   managementFee,
+  //   minRentPeriod,
+  //   parkingSpace,
+  //   identityRequirements,
+  //   genderRequirement,
+  //   landlordLiveIn,
+  //   cooking,
+  //   pets,
+  //   availableDate
+  // } = infoSettings;
 
   return (
     <>
       <FieldGroup title="物件細項">
         <TextField
           type="number"
-          value={squareMeters}
-          onChange={(e) => setInfoSettings({ squareMeters: e.target.value })}
+          value={property.squareMeters}
+          onChange={(e) => setProperty({ squareMeters: e.target.value })}
           placeholder="請輸入坪數"
           sx={{ width: '302px' }}
           slotProps={{
@@ -75,18 +76,6 @@ const RentHouseInfoSetting = () => {
             },
           }}
         />
-        <FormControl sx={{ width: 300 }}>
-          <InputLabel>物件朝向＊</InputLabel>
-          <Select
-            value={direction}
-            onChange={(e) => setInfoSettings({ direction: e.target.value })}
-            label="物件朝向"
-          >
-            {DIRECTION_OPTIONS.map((item) => (
-              <MenuItem key={item.value} value={item.value}>{item.displayName}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <FormGroup className='flex gap-4'>
           <div className="flex flex-wrap gap-4 items-center">
           <FormLabel>提供設備</FormLabel>
@@ -95,12 +84,12 @@ const RentHouseInfoSetting = () => {
               key={item.value}
               control={
                 <Checkbox
-                  checked={facilities?.includes(item.value)}
+                  checked={rentalInfo.offerIds?.includes(item.value)}
                   onChange={(e) => {
-                    const newFacilities = e.target.checked
-                      ? [...(facilities || []), item.value]
-                      : facilities?.filter(v => v !== item.value);
-                    setInfoSettings({ facilities: newFacilities });
+                    const newEquipmentIds = e.target.checked
+                      ? [...(rentalInfo.offerIds || []), item.value]
+                      : rentalInfo.offerIds?.filter(v => v !== item.value);
+                    setRentalInfo({ offerIds: newEquipmentIds });
                   }}
                 />
               }
@@ -111,51 +100,86 @@ const RentHouseInfoSetting = () => {
             control={<Checkbox />}
             label="全選"
             onChange={(e) => {
-              setInfoSettings({
-                facilities: e.target.checked ? FacilityOptions.map(item => item.value) : []
+              setRentalInfo({
+                offerIds: e.target.checked ? FacilityOptions.map(item => item.value) : []
               });
             }}
           />
           </div>
         </FormGroup>
         <FormGroup>
-        <div className="flex flex-wrap gap-4 items-center">
-
-          <FormLabel>提供傢俱</FormLabel>
-          {FurnitureOptions.map((item) => (
+          <div className="flex flex-wrap gap-4 items-center">
+            <FormLabel>提供傢俱</FormLabel>
+            {FurnitureOptions.map((item) => (
+              <FormControlLabel
+                key={item.value}
+                control={
+                  <Checkbox
+                    checked={rentalInfo.offerIds?.includes(item.value)}
+                    onChange={(e) => {
+                      const newFurnitureIds = e.target.checked
+                        ? [...(rentalInfo.offerIds || []), item.value]
+                        : rentalInfo.offerIds?.filter(v => v !== item.value);
+                      setRentalInfo({ offerIds: newFurnitureIds });
+                    }}
+                  />
+                }
+                label={item.text}
+              />
+            ))}
             <FormControlLabel
-              key={item.value}
-              control={
-                <Checkbox
-                  checked={facilities?.includes(item.value)}
-                  onChange={(e) => {
-                    const newFacilities = e.target.checked
-                      ? [...(facilities || []), item.value]
-                      : facilities?.filter(v => v !== item.value);
-                    setInfoSettings({ facilities: newFacilities });
-                  }}
-                />
-              }
-              label={item.text}
+              control={<Checkbox />}
+              label="全選"
+              onChange={(e) => {
+                setRentalInfo({
+                  offerIds: e.target.checked ? FurnitureOptions.map(item => item.value) : []
+                });
+              }}
             />
-          ))}
-          <FormControlLabel
-            control={<Checkbox />}
-            label="全選"
-            onChange={(e) => {
-              setInfoSettings({
-                facilities: e.target.checked ? FurnitureOptions.map(item => item.value) : []
-              });
-            }}
-          />
-        </div>
+          </div>
         </FormGroup>
+        <FormControl sx={{ width: 300 }}>
+          <InputLabel>隔間材質＊</InputLabel>
+          <Select
+            value={property.decorLevelId}
+            onChange={(e) => setProperty({ decorLevelId: e.target.value })}
+            label="隔間材質"
+          >
+            {DecorLevelOptions.map((item) => (
+              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: 300 }}>
+          <InputLabel>裝潢程度＊</InputLabel>
+          <Select
+            value={property.decorLevelId}
+            onChange={(e) => setProperty({ decorLevelId: e.target.value })}
+            label="裝潢程度"
+          >
+            {DecorLevelOptions.map((item) => (
+              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: 300 }}>
+          <InputLabel>電梯</InputLabel>
+          <Select
+            value={property.hasElevator}
+            onChange={(e) => setProperty({ hasElevator: e.target.value })}
+            label="電梯"
+          >
+            {ElevatorOptions.map((item) => (
+              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </FieldGroup>
       <FieldGroup title="物件租金/押金">
         <TextField
           type="number"
-          value={rentPrice}
-          onChange={(e) => setInfoSettings({ rentPrice: e.target.value })}
+          value={rentalInfo.price}
+          onChange={(e) => setRentalInfo({ price: e.target.value })}
           placeholder="請輸入租金"
           sx={{ width: '302px' }}
         slotProps={{
@@ -165,12 +189,11 @@ const RentHouseInfoSetting = () => {
           },
         }}
       />
-
       <FormControl sx={{ width: 300 }}>
         <InputLabel>押金＊</InputLabel>
         <Select
-          value={deposit}
-          onChange={(e) => setInfoSettings({ deposit: e.target.value })}
+          value={rentalInfo.depositMonths}
+          onChange={(e) => setRentalInfo({ depositMonths: e.target.value })}
           label="押金"
         >
           {DepositOptions.map((item) => (
@@ -188,12 +211,13 @@ const RentHouseInfoSetting = () => {
               key={item.value}
               control={
                 <Checkbox
-                  checked={rentIncludes?.includes(item.value)}
+                  checked={rentalInfo.includedInRentIds?.includes(item.value)}
                   onChange={(e) => {
+                    //TODO: 若車位勾起，則下方
                     const newIncludes = e.target.checked
-                      ? [...(rentIncludes || []), item.value]
-                      : rentIncludes?.filter(v => v !== item.value);
-                    setInfoSettings({ rentIncludes: newIncludes });
+                      ? [...(rentalInfo.includedInRentIds || []), item.value]
+                      : rentalInfo.includedInRentIds?.filter(v => v !== item.value);
+                    setRentalInfo({ includedInRentIds: newIncludes });
                   }}
                 />
               }
@@ -204,8 +228,8 @@ const RentHouseInfoSetting = () => {
             control={
               <Checkbox
                 onChange={(e) => {
-                  setInfoSettings({
-                    rentIncludes: e.target.checked 
+                  setRentalInfo({
+                    includedInRentIds: e.target.checked 
                       ? RentIncludeOptions.map(item => item.value)
                       : []
                   });
@@ -218,8 +242,8 @@ const RentHouseInfoSetting = () => {
       </FormGroup>
         <TextField
           type="number"
-          value={electricityFee}
-          onChange={(e) => setInfoSettings({ electricityFee: e.target.value })}
+          value={rentalInfo.electricityFee}
+          onChange={(e) => setRentalInfo({ electricityFee: e.target.value })}
           placeholder="請輸入電費"
           sx={{ width: '302px' }}
           slotProps={{
@@ -231,8 +255,8 @@ const RentHouseInfoSetting = () => {
         />
         <TextField
           type="number"
-          value={managementFee}
-          onChange={(e) => setInfoSettings({ managementFee: e.target.value })}
+          value={rentalInfo.managementFee}
+          onChange={(e) => setRentalInfo({ managementFee: e.target.value })}
           placeholder="請輸入管理費"
           sx={{ width: '302px' }}
           slotProps={{
@@ -244,8 +268,8 @@ const RentHouseInfoSetting = () => {
         />
         <TextField
           type="number"
-          value={minRentPeriod}
-          onChange={(e) => setInfoSettings({ minRentPeriod: e.target.value })}
+          value={rentalInfo.minRentPeriod}
+          onChange={(e) => setRentalInfo({ minRentPeriod: e.target.value })}
           placeholder="請輸入最短租期"
           sx={{ width: '302px' }}
           slotProps={{
@@ -255,20 +279,43 @@ const RentHouseInfoSetting = () => {
             },
           }}
         />
-        <FormControl sx={{ width: 300 }}>
-          <InputLabel>車位</InputLabel>
-          <Select
-            value={parkingSpace}
-            onChange={(e) => setInfoSettings({ parkingSpace: e.target.value })}
-            label="車位"
-          >
-            {ParkingOptions.map((item) => (
-              <MenuItem key={item.value} value={item.value}>
-                {item.text}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div className="flex flex-wrap gap-4 items-center">
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel>車位</InputLabel>
+            <Select
+              value={rentalInfo.parkingSpace}
+              onChange={(e) => {
+                if(e.target.value === '無') {
+                  setRentalInfo({ parkingSpace: null });
+                  setProperty({ hasParking: false });
+                } else {
+                  setRentalInfo({ parkingSpace: e.target.value });
+                  setProperty({ hasParking: true });
+                }
+              }}
+              label="車位"
+            >
+              {ParkingOptions.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.text}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            type="number"
+            value={rentalInfo.managementFee}
+            onChange={(e) => setRentalInfo({ managementFee: e.target.value })}
+            placeholder="車位費"
+            sx={{ width: '302px' }}
+            slotProps={{
+              input: {
+                startAdornment: <InputAdornment position="start">車位費</InputAdornment>,
+                endAdornment: <InputAdornment position="end">元/月</InputAdornment>,
+              },
+            }}
+          />
+        </div>
     </FieldGroup>
     <FieldGroup title="租屋規則">
       <FormGroup>
@@ -279,12 +326,12 @@ const RentHouseInfoSetting = () => {
               key={item.value}
               control={
                 <Checkbox
-                  checked={identityRequirements?.includes(item.value)}
+                  checked={rentalInfo.ruleIds?.includes(item.value)}
                   onChange={(e) => {
                     const newIdentities = e.target.checked
-                      ? [...(identityRequirements || []), item.value]
-                      : identityRequirements?.filter(v => v !== item.value);
-                    setInfoSettings({ identityRequirements: newIdentities });
+                      ? [...(rentalInfo.ruleIds || []), item.value]
+                      : rentalInfo.ruleIds?.filter(v => v !== item.value);
+                    setRentalInfo({ ruleIds: newIdentities });
                   }}
                 />
               }
@@ -295,8 +342,8 @@ const RentHouseInfoSetting = () => {
             control={
               <Checkbox
                 onChange={(e) => {
-                  setInfoSettings({
-                    identityRequirements: e.target.checked 
+                  setRentalInfo({
+                    ruleIds: e.target.checked 
                       ? IdentityOptions.map(item => item.value)
                       : []
                   });
@@ -307,13 +354,12 @@ const RentHouseInfoSetting = () => {
           />
         </div>
       </FormGroup>
-
-      <div className="flex gap-10">
+      {/* <div className="flex gap-10">
         <FormControl>
           <FormLabel>性別要求</FormLabel>
           <RadioGroup
-            value={genderRequirement}
-            onChange={(e) => setInfoSettings({ genderRequirement: e.target.value })}
+            value={rentalInfo.genderRequirement}
+            onChange={(e) => setRentalInfo({ genderRequirement: e.target.value })}
           >
             {GenderOptions.map((item) => (
               <FormControlLabel
@@ -329,8 +375,8 @@ const RentHouseInfoSetting = () => {
         <FormControl>
           <FormLabel>房東同住</FormLabel>
           <RadioGroup
-            value={landlordLiveIn}
-            onChange={(e) => setInfoSettings({ landlordLiveIn: e.target.value })}
+            value={rentalInfo.landlordLiveIn}
+            onChange={(e) => setRentalInfo({ landlordLiveIn: e.target.value })}
           >
             <FormControlLabel value="yes" control={<Radio />} label="是" />
             <FormControlLabel value="no" control={<Radio />} label="否" />
@@ -340,8 +386,8 @@ const RentHouseInfoSetting = () => {
         <FormControl>
           <FormLabel>開伙</FormLabel>
           <RadioGroup
-            value={cooking}
-            onChange={(e) => setInfoSettings({ cooking: e.target.value })}
+            value={rentalInfo.cooking}
+            onChange={(e) => setRentalInfo({ cooking: e.target.value })}
           >
             <FormControlLabel value="yes" control={<Radio />} label="可以" />
             <FormControlLabel value="no" control={<Radio />} label="不可以" />
@@ -351,19 +397,18 @@ const RentHouseInfoSetting = () => {
         <FormControl>
           <FormLabel>養寵物</FormLabel>
           <RadioGroup
-            value={pets}
-            onChange={(e) => setInfoSettings({ pets: e.target.value })}
+            value={rentalInfo.pets}
+            onChange={(e) => setRentalInfo({ pets: e.target.value })}
           >
             <FormControlLabel value="yes" control={<Radio />} label="可以" />
             <FormControlLabel value="no" control={<Radio />} label="不可以" />
           </RadioGroup>
         </FormControl>
-      </div>
-
+      </div> */}
       <DatePicker
         label="可遷入日期"
-        value={availableDate}
-        onChange={(newValue) => setInfoSettings({ availableDate: newValue })}
+        value={rentalInfo.moveInDate}
+        onChange={(newValue) => setRentalInfo({ moveInDate: newValue })}
       />
       </FieldGroup>
     </>
