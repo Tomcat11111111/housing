@@ -62,7 +62,6 @@ const Main = ({ type, detailData }) => {
   } = property;
 
   const firstFiveImages = slice(0, 5, images);
-
   const { city, district, geolocation } = location;
 
   return (
@@ -84,8 +83,8 @@ const Main = ({ type, detailData }) => {
         />
       </nav>
       <DetailImage images={firstFiveImages} />
-      <div className={styles.detail}>
-        <article className={styles.detailContent}>
+      <div className="flex justify-between mx-4 gap-9">
+        <article className="w-[60%] flex flex-col gap-4">
           <PropertyInfo
             title={title}
             categoryStr={categoryStr}

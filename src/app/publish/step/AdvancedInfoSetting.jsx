@@ -26,8 +26,6 @@ import SortableImage from './SortableImage';
 const AdvancedInfoSetting = () => {
   const {
     itemTypeSettings,
-    // advancedInfoSettings,
-    // setAdvancedInfoSettings,
     property,
     setProperty,
     saleInfo,
@@ -70,7 +68,7 @@ const AdvancedInfoSetting = () => {
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
       console.log('Response data:', data);
-      setAdvancedInfoSettings({
+      setProperty({
         images: [...property.images, ...data],
       });
     },
@@ -92,7 +90,7 @@ const AdvancedInfoSetting = () => {
       const oldIndex = parseInt(active.id);
       const newIndex = parseInt(over.id);
 
-      setAdvancedInfoSettings({
+      setProperty({
         images: arrayMove(property.images, oldIndex, newIndex),
       });
     }

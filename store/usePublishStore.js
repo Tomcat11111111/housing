@@ -18,7 +18,7 @@ const usePublishStore = create((set) => ({
     type: 'buy',
     views: 0,
     shapeId: 1,
-    decorLevelId: null,
+    decorLevelId: 1,
     contactName: '勝藥',
     contactNumber: '0912345678',
     contactEmail: 'test@gmail.com',

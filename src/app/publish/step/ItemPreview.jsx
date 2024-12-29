@@ -41,7 +41,7 @@ const ItemPreview = () => {
           </div>
         </div>
         <div className=" w-[40%]">
-          <DetailPreview/>
+          {/* <DetailPreview/> */}
         </div>
         <div className="flex flex-col justify-end items-end w-[30%]">
           <Button
