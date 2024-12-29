@@ -20,7 +20,7 @@ import ItemPreview from './step/ItemPreview';
 import ItemTypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const {
     itemTypeSettings,
     property,
@@ -29,8 +29,6 @@ const Publish = () => {
     location,
     setPorperty,
   } = usePublishStore();
-
-  const itemStatusRef = useRef('');
 
   const {
     formState: { errors },

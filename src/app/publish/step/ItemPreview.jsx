@@ -15,9 +15,10 @@ const ItemPreview = () => {
     property,
     salesInfo,
     rentalInfo,
+    location,
   } = usePublishStore();
   const [openModal, setOpenModal] = useState(false);
-
+  
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 

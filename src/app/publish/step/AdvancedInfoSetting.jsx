@@ -30,8 +30,8 @@ const AdvancedInfoSetting = () => {
     setProperty,
     salesInfo,
     setsalesInfo,
-    // rentInfo,
-    // setRentInfo,
+    rentalInfo,
+    setRentInfo,
   } = usePublishStore();
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -43,13 +43,18 @@ const AdvancedInfoSetting = () => {
   const MAX_CHAR = 2000;
   const handleIntroductionChange = (e) => {
     const inputText = e.target.value;
-    if (inputText > MAX_CHAR) {
+    const type = itemTypeSettings.publishType;
+    const updateFunction = type === 'buy' ? setsalesInfo : setRentInfo;
+
+    if (inputText.length > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
-      setsalesInfo({
+      updateFunction({
+        ...type === 'buy' ? salesInfo : rentalInfo,
         introduction: truncatedText,
       });
     } else {
-      setsalesInfo({
+      updateFunction({
+        ...type === 'buy' ? salesInfo : rentalInfo,
         introduction: inputText,
       });
     }
@@ -103,6 +108,11 @@ const AdvancedInfoSetting = () => {
     accept: '.jpg,.jpeg,.png,.gif',
     multiple: true,
   });
+
+  const type = itemTypeSettings.publishType;
+  const info = type === 'buy' ? salesInfo : rentalInfo;
+  console.log("🚀 ~ AdvancedInfoSetting ~ type:", type)
+  console.log("🚀 ~ AdvancedInfoSetting ~ test:", info)
 
   return (
     <div className="flex flex-col gap-6 my-6">
@@ -186,22 +196,19 @@ const AdvancedInfoSetting = () => {
         <div className="relative w-full">
           {/* TextField with word count */}
           <TextField
-            id="introduction"
-            multiline
-            rows={6}
             placeholder="可以描述物件特色或現況"
-            value={salesInfo.introduction}
+            value={info.introduction}
             onChange={handleIntroductionChange}
             fullWidth
             sx={{
               '& .MuiInputBase-root': {
-                paddingBottom: '1.5rem', // Add padding to prevent overlap
+                paddingBottom: '1.5rem',
               },
             }}
           />
 
           <div className="absolute bottom-2 right-2 text-[#333333] text-sm font-bold">
-            {`${salesInfo.introduction.length}/${MAX_CHAR}`}
+            {`${info.introduction.length}/${MAX_CHAR}`}
           </div>
         </div>
       </FieldGroup>

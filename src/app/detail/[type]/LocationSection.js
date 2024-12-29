@@ -3,8 +3,6 @@ import Map from '@/common/Map/Map';
 import styles from './Main.module.scss';
 
 const LocationSection = ({ location, geolocation }) => {
-  console.log('🚀 ~ LocationSection ~ geolocation:', geolocation?.coordinates);
-
   return (
     <div className={styles.area}>
       <span className={styles.title}>位置＆周邊</span>

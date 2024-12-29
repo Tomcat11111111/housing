@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { slice } from 'lodash';
 
 import DetailImage from '@/app/detail/[type]/DetailImage';
@@ -11,11 +13,173 @@ import DetailSideBar from '@/app/detail/[type]/DetailSideBar';
 import usePublishStore from '@/store/usePublishStore';
 
 const PreviewDetailPage = () => {
-  const { property, itemTypeSettings, rentalInfo, salesInfo } = usePublishStore();
+  const { property, itemTypeSettings, rentalInfo, salesInfo, location } = usePublishStore();
   const type = itemTypeSettings.publishType;
-
+  const [coordinates, setCoordinates] = useState([]);
   const firstFiveImages = slice(property.images, 0, 5);
 
+  useEffect(() => {
+    const getCoordinates = async () => {
+      if (!location.address) return;
+      
+      try {
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+            location.address
+          )}&key=AIzaSyCudV7XzW3pXqAE-RljZ5JdGkOE8Dd-XQM`
+        );
+        const data = await response.json();
+        
+        if (data.results && data.results[0]) {
+          const { lat, lng } = data.results[0].geometry.location;
+          setCoordinates({ lat, lng });
+          // 如果需要，可以更新 store 中的 geolocation
+          // updateGeolocation({ lat, lng });
+        }
+      } catch (error) {
+        console.error('Error fetching coordinates:', error);
+      }
+    };
+
+    getCoordinates();
+  }, [location.address]);
+  const registeredArea = salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea;
+
+  const propertySummary = [
+    {
+      title: "房屋資料",
+      content: [
+        {
+          subtitle: "現況",
+          description: salesInfo.status || null
+        },
+        {
+          subtitle: "裝潢狀況",
+          description: salesInfo.decorationStatus || null
+        },
+        {
+          subtitle: "公設比",
+          description: salesInfo.publicRatio || null
+        },
+        {
+          subtitle: "法定用途",
+          description: salesInfo.legalUse || null
+        },
+        {
+          subtitle: "管理費",
+          description: salesInfo.managementFee || null
+        },
+        {
+          subtitle: "帶租約",
+          description: salesInfo.hasLease ? "帶租約" : "不帶租約"
+        },
+        {
+          subtitle: "車位",
+          description: salesInfo.parkingSpace || null
+        }
+      ]
+    },
+    {
+      title: "坪數說明",
+      content: [
+        {
+          subtitle: "建物登記",
+          description: registeredArea ? `${registeredArea}坪` : null
+        },
+        {
+          subtitle: "附屬建物",
+          description: salesInfo.accessoryBuildingArea ? `${salesInfo.accessoryBuildingArea}坪` : null
+        },
+        {
+          subtitle: "主建物",
+          description: salesInfo.mainBuildingArea ? `${salesInfo.mainBuildingArea}坪` : null
+        },
+        {
+          subtitle: "公共設施",
+          description: salesInfo.publicFacilityArea ? `${salesInfo.publicFacilityArea}坪` : null
+        }
+      ]
+    }
+  ];
+
+  const formattedData = {
+    landLordOffer: {
+      title: "房東提供",
+      content: [
+        {
+          subtitle: "設備",
+          description: rentalInfo.landLordOffer?.equipment || null
+        },
+        {
+          subtitle: "傢俱",
+          description: rentalInfo.landLordOffer?.furniture || null
+        }
+      ]
+    },
+    equipments: {
+      title: "房屋設備",
+      content: [
+        {
+          subtitle: "隔間",
+          description: rentalInfo.equipments?.partition || null
+        },
+        {
+          subtitle: "車位",
+          description: rentalInfo.equipments?.parking || null
+        },
+        {
+          subtitle: "管理",
+          description: rentalInfo.equipments?.management || null
+        }
+      ]
+    },
+    modifyRules: [
+      {
+        subtitle: "可遷入日",
+        description: rentalInfo.modifyRules?.moveInDate || null
+      },
+      {
+        subtitle: "短期租賃",
+        description: rentalInfo.modifyRules?.shortTerm ? "可以" : "不可以"
+      },
+      {
+        subtitle: "裝潢程度",
+        description: rentalInfo.modifyRules?.decorationLevel || null
+      },
+      {
+        subtitle: "押金",
+        description: rentalInfo.modifyRules?.deposit || null
+      },
+      {
+        subtitle: "電費",
+        description: rentalInfo.modifyRules?.electricityFee || null
+      },
+      {
+        subtitle: "租期",
+        description: rentalInfo.modifyRules?.leaseTerm || null
+      },
+      {
+        subtitle: "房東同住",
+        description: rentalInfo.modifyRules?.landlordLiveIn ? "是" : "否"
+      },
+      {
+        subtitle: "開伙",
+        description: rentalInfo.modifyRules?.cooking ? "可以" : "不可以"
+      },
+      {
+        subtitle: "飼養寵物",
+        description: rentalInfo.modifyRules?.pets ? "可以" : "不可以"
+      },
+      {
+        subtitle: "性別要求",
+        description: rentalInfo.modifyRules?.genderRestriction || null
+      }
+    ],
+    inclusions: {
+      subtitle: "租金內含",
+      description: rentalInfo.inclusions?.items || null
+    }
+  };
 
   return (
     <div className="bg-[#FFF] rounded-2xl p-2 h-[100%] overflow-hidden relative">
@@ -37,23 +201,27 @@ const PreviewDetailPage = () => {
             totalFloors={property.totalFloors}
             shape={property.shape}
           />
-          <LocationSection location={property.location} geolocation={property.geolocation} />
+          <LocationSection location={location} geolocation={{coordinates: [
+            coordinates.lat,
+            coordinates.lng
+          ]}} />
           {type === 'rent' && (
             <FacilityRules
-              landLordOffer={property.landLordOffer}
-              equipments={property.equipments}
-              modifyRules={property.modifyRules}
-              inclusions={property.inclusions}
+              landLordOffer={formattedData.landLordOffer}
+              equipments={formattedData.equipments}
+              modifyRules={formattedData.modifyRules}
+              inclusions={formattedData.inclusions}
             />
           )}
           {type === 'buy' && (
-            <PropertySummary propertySummary={property.propertySummary} />
+            <PropertySummary propertySummary={propertySummary} />
           )}
-          {property.introduction && <Introduction introduction={property.introduction} />}
+          {salesInfo.introduction && <Introduction introduction={salesInfo.introduction} />}
+          {rentalInfo.introduction && <Introduction introduction={rentalInfo.introduction} />}
         </article>
         <DetailSideBar
           price={type === 'buy' ? salesInfo?.totalPrice : rentalInfo?.price}
-          unitPrice={salesInfo?.unitPrice}
+          unitPrice={salesInfo?.totalPrice / property.squareMeters}
           views={property?.views}
           type={type}
           id={property?.id}

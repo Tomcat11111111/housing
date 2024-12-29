@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
   itemTypeSettings: {
-    publishType: 'buy',
+    publishType: 'rent',
     itemType: null,
   },
   property: {
@@ -53,17 +53,17 @@ const usePublishStore = create((set) => ({
     status: null, // 從原始的 status 欄位
     legalUsage: null,
     hiddenLegalUsage: false,
-    managementFee: null,
+    managementFee: 1000,
     leaseStatus: '',
-    mainBuildingArea: null,
-    accessoryBuildingArea: null,
-    publicFacilityArea: null,
-    introduction: '',
+    mainBuildingArea: 40,
+    accessoryBuildingArea: 5,
+    publicFacilityArea: 15,
+    introduction: '測試說明文字',
   },
   location: {
     cityId: 3,
     districtId: 40,
-    address: '',
+    address: '新港路123號',
     street: '',
     alley: null,
     lane: null,
@@ -82,6 +82,10 @@ const usePublishStore = create((set) => ({
   setsalesInfo: (updates) =>
     set((state) => ({
       salesInfo: { ...state.salesInfo, ...updates },
+    })),
+  setRentalInfo: (updates) =>
+    set((state) => ({
+      rentalInfo: { ...state.rentalInfo, ...updates },
     })),
   setLocation: (updates) =>
     set((state) => ({

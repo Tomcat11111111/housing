@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Building } from 'lucide-react';
 
 export const PublishTypeList = [
@@ -49,14 +50,6 @@ export const LegalUsageOptions = [
   { value: '工三', text: '工三' },
 ];
 
-//TODO:有 API 的要替換
-export const DecorLevelOptions = [
-  { value: 'undecorated', text: '尚未裝潢' },
-  { value: 'simple', text: '簡易裝潢' },
-  { value: 'medium', text: '中等裝潢' },
-  { value: 'high', text: '高等裝潢' },
-];
-
 export const CurrentStatusOptions = [
   { value: 'self_living', text: '自住中' },
   { value: 'rented', text: '出租中' },
@@ -71,34 +64,6 @@ export const LeaseStatusOptions = [
   { value: 'yes', text: '有' },
 ];
 
-export const FacilityOptions = [
-  { value: 'air_conditioner', text: '冷氣' },
-  { value: 'washing_machine', text: '洗衣機' },
-  { value: 'natural_gas', text: '天然瓦斯' },
-  { value: '', text: '電視' },
-  { value: '', text: '瓦斯爐' },
-  { value: 'water_heater', text: '熱水器' },
-  { value: 'refrigerator', text: '冰箱' },
-  { value: 'internet', text: '網路' },
-  { value: '', text: '微波爐' },
-  { value: '', text: '脫水機' },
-];
-
-export const FurnitureOptions = [
-  { value: '', text: '衣櫃' },
-  { value: 'single_bed', text: '單人床' },
-  { value: 'double_bed', text: '雙人床' },
-  { value: 'couch', text: '沙發' },
-  { value: 'desk', text: '書桌' },
-  { value: 'locker', text: '置物櫃' },
-];
-
-export const WallMaterialOptions = [
-  { value: 'light_partition', text: '輕隔間' },
-  { value: 'concrete_partition', text: '混泥土隔間' },
-  { value: 'brick_partition', text: '磚牆隔間' },
-];
-
 export const ElevatorOptions = [
   { value: false, text: '無' },
   { value: true, text: '有' },
@@ -111,25 +76,15 @@ export const IdentityOptions = [
 ];
 
 export const GenderOptions = [
-  { value: 'all', text: '性別不限' },
-  { value: 'male', text: '生理男性' },
-  { value: 'female', text: '生理女性' },
+  { id: 1, value: 'no_gender_restriction', text: '性別不限' },
+  { id: 2, value: 'female_only', text: '生理女性' },
+  { id: 3, value: 'male_only', text: '生理男性' },
 ];
 
 export const ParkingOptions = [
   { value: '無', text: '無' },
   { value: 'planar', text: '平面式' },
   { value: 'mechanical', text: '機械式' },
-];
-
-export const RentIncludeOptions = [
-  { value: 'water', text: '水費' },
-  { value: 'electricity', text: '電費' },
-  { value: 'cable_tw', text: '第四臺' },
-  { value: 'internet', text: '網路費' },
-  { value: 'gas', text: '瓦斯費' },
-  { value: '', text: '管理費' },
-  { value: 'parking', text: '車位費' },
 ];
 
 export const DepositOptions = [
@@ -139,3 +94,63 @@ export const DepositOptions = [
   { value: 3, text: '三個月' },
   { value: 6, text: '六個月' },
 ];
+
+export const getFeaturesApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/features');
+  return response.data;
+};
+
+export const getShapesApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/shapes');
+  return response.data;
+};
+
+export const getIncludedInRentApi = async () => {
+  const response = await axios.get(
+    'https://jzj-api.zeabur.app/included-in-rent'
+  );
+  return response.data;
+};
+
+export const getDecorLevelsApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/decor-levels');
+  return response.data;
+};
+
+export const getEquipmentApi = async () => {
+  const response = await axios.get(
+    'https://jzj-api.zeabur.app/offers?type=equipment'
+  );
+  return response.data;
+};
+
+export const getFurnitureApi = async () => {
+  const response = await axios.get(
+    'https://jzj-api.zeabur.app/offers?type=furniture'
+  );
+  return response.data;
+};
+
+export const getMaterialsApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/materials');
+  return response.data;
+};
+
+export const getRulesApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/rules');
+  return response.data;
+};
+
+export const getCityDistrictApi = async (data) => {
+  const { city } = data.meta;
+  const response = await axios.get(
+    `https://jzj-api.zeabur.app/locations/city/${city}`
+  );
+
+  return response.data.districts;
+};
+
+export const getSurroundingsApi = async () => {
+  const response = await axios.get('https://jzj-api.zeabur.app/surroundings');
+  return response.data;
+};

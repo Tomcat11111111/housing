@@ -1,7 +1,7 @@
 import { useLoadScript } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react';
 
-import { set, slice } from 'ramda';
+import { slice } from 'ramda';
 
 import TypeSwitch from '@/common/Map/TypeSwitch';
 
@@ -87,7 +87,9 @@ function Map({ coordinates = [] }) {
     <>
       {isLoaded ? (
         <div className={styles.mapContainer}>
-          <div id="map" className={styles.dmap}></div>
+          <div className="h-[310px]">
+            <div id="map" className={styles.dmap}></div>
+          </div>
           <TypeSwitch
             selectedType={selectedType}
             setSelectedType={setSelectedType}

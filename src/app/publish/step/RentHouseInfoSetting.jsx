@@ -10,55 +10,70 @@ import {
   RadioGroup,
   Radio,
   FormGroup,
-  TextField
+  TextField,
+  Button
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useQuery } from '@tanstack/react-query';
 import usePublishStore from '@/store/usePublishStore';
 
 import {
-  DirectionOptions,
-  FacilityOptions,
-  FurnitureOptions,
-  WallMaterialOptions,
-  DecorLevelOptions,
   ElevatorOptions,
   IdentityOptions,
   GenderOptions,
   ParkingOptions,
-  RentIncludeOptions,
   DepositOptions,
+  getIncludedInRentApi,
+  getDecorLevelsApi,
+  getEquipmentApi,
+  getFurnitureApi,
+  getMaterialsApi,
+  getRulesApi,
 } from './publishHelper';
-
-import { DIRECTION_OPTIONS } from '@/utils/tools';
 
 import FieldGroup from './FieldGroup';
 
 
 const RentHouseInfoSetting = () => {
-  const { infoSettings, setInfoSettings, rentalInfo, setRentalInfo, property, setProperty } = usePublishStore();
+  const { rentalInfo, setRentalInfo, property, setProperty } = usePublishStore();
 
-  // const { 
-  //   squareMeters,
-  //   direction,
-  //   facilities,
-  //   furnitures,
-  //   wallMaterial,
-  //   decorLevel,
-  //   elevator,
-  //   rentPrice,
-  //   deposit,
-  //   rentIncludes,
-  //   electricityFee,
-  //   managementFee,
-  //   minRentPeriod,
-  //   parkingSpace,
-  //   identityRequirements,
-  //   genderRequirement,
-  //   landlordLiveIn,
-  //   cooking,
-  //   pets,
-  //   availableDate
-  // } = infoSettings;
+   
+    // 提供設備
+    const { data: equipmentOptions } = useQuery({
+      queryKey: ['getEquipmentApi'],
+      queryFn: getEquipmentApi,
+    });
+    
+      // 提供家具
+      const { data: furnitureOptions } = useQuery({
+        queryKey: ['getFurnitureApi'],
+        queryFn: getFurnitureApi,
+      });
+
+      // 隔間材質
+      const { data: materialsOptions } = useQuery({
+        queryKey: ['getMaterialsApi'],
+        queryFn: getMaterialsApi,
+      });
+
+      
+        // 裝潢程度
+        const { data: decorLevelsOptions } = useQuery({
+          queryKey: ['getDecorLevelsApi'],
+          queryFn: getDecorLevelsApi,
+        });
+
+    // 租金內含
+    const { data: includedInRentOptions } = useQuery({
+      queryKey: ['getIncludedInRentApi'],
+      queryFn: getIncludedInRentApi,
+    });
+ 
+    // 租屋規則
+    const { data: rulesOptions } = useQuery({
+      queryKey: ['getRulesApi'],
+      queryFn: getRulesApi,
+    });
 
   return (
     <>
@@ -79,74 +94,79 @@ const RentHouseInfoSetting = () => {
         <FormGroup className='flex gap-4'>
           <div className="flex flex-wrap gap-4 items-center">
           <FormLabel>提供設備</FormLabel>
-          {FacilityOptions.map((item) => (
+          {equipmentOptions?.map((item) => (
             <FormControlLabel
               key={item.value}
               control={
                 <Checkbox
-                  checked={rentalInfo.offerIds?.includes(item.value)}
+                  checked={rentalInfo.offerIds?.includes(item.id)}
                   onChange={(e) => {
                     const newEquipmentIds = e.target.checked
-                      ? [...(rentalInfo.offerIds || []), item.value]
-                      : rentalInfo.offerIds?.filter(v => v !== item.value);
+                      ? [...(rentalInfo.offerIds || []), item.id]
+                      : rentalInfo.offerIds?.filter(v => v !== item.id);
+
                     setRentalInfo({ offerIds: newEquipmentIds });
                   }}
                 />
               }
-              label={item.text}
+              label={item.displayName}
             />
           ))}
-          <FormControlLabel
-            control={<Checkbox />}
-            label="全選"
-            onChange={(e) => {
+          <Button 
+            variant="outlined" 
+            onClick={() => {
               setRentalInfo({
-                offerIds: e.target.checked ? FacilityOptions.map(item => item.value) : []
+                offerIds: [
+                  ...(rentalInfo.offerIds || []), 
+                  ...equipmentOptions?.map(item => item.id)
+                ]
               });
-            }}
-          />
+            }}>
+            全選
+          </Button>
           </div>
         </FormGroup>
         <FormGroup>
           <div className="flex flex-wrap gap-4 items-center">
             <FormLabel>提供傢俱</FormLabel>
-            {FurnitureOptions.map((item) => (
+            {furnitureOptions?.map((item) => (
               <FormControlLabel
                 key={item.value}
                 control={
                   <Checkbox
-                    checked={rentalInfo.offerIds?.includes(item.value)}
+                    checked={rentalInfo.offerIds?.includes(item.id)}
                     onChange={(e) => {
                       const newFurnitureIds = e.target.checked
-                        ? [...(rentalInfo.offerIds || []), item.value]
-                        : rentalInfo.offerIds?.filter(v => v !== item.value);
+                        ? [...(rentalInfo.offerIds || []), item.id]
+                        : rentalInfo.offerIds?.filter(v => v !== item.id);
                       setRentalInfo({ offerIds: newFurnitureIds });
                     }}
                   />
                 }
-                label={item.text}
+                label={item.displayName}
               />
             ))}
-            <FormControlLabel
-              control={<Checkbox />}
-              label="全選"
-              onChange={(e) => {
-                setRentalInfo({
-                  offerIds: e.target.checked ? FurnitureOptions.map(item => item.value) : []
-                });
-              }}
-            />
+            <Button variant="outlined" onClick={() => {
+              setRentalInfo({
+                offerIds: [
+                  ...(rentalInfo.offerIds || []), 
+                  ...furnitureOptions?.map(item => item.id)
+                ]
+              });
+            }}>
+              全選
+            </Button>
           </div>
         </FormGroup>
         <FormControl sx={{ width: 300 }}>
           <InputLabel>隔間材質＊</InputLabel>
           <Select
-            value={property.decorLevelId}
-            onChange={(e) => setProperty({ decorLevelId: e.target.value })}
+            value={property.materialId}
+            onChange={(e) => setProperty({ materialId: e.target.value })}
             label="隔間材質"
           >
-            {DecorLevelOptions.map((item) => (
-              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            {materialsOptions?.map((item) => (
+              <MenuItem key={item.value} value={item.id}>{item.displayName}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -157,8 +177,8 @@ const RentHouseInfoSetting = () => {
             onChange={(e) => setProperty({ decorLevelId: e.target.value })}
             label="裝潢程度"
           >
-            {DecorLevelOptions.map((item) => (
-              <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>
+            {decorLevelsOptions?.map((item) => (
+              <MenuItem key={item.value} value={item.id}>{item.displayName}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -206,38 +226,34 @@ const RentHouseInfoSetting = () => {
       <FormGroup>
         <div className="flex flex-wrap gap-4 items-center">
         <FormLabel>租金包含</FormLabel>
-          {RentIncludeOptions.map((item) => (
+          {includedInRentOptions?.map((item) => (
             <FormControlLabel
               key={item.value}
               control={
                 <Checkbox
-                  checked={rentalInfo.includedInRentIds?.includes(item.value)}
+                  checked={rentalInfo.includedInRentIds?.includes(item.id)}
                   onChange={(e) => {
-                    //TODO: 若車位勾起，則下方
                     const newIncludes = e.target.checked
-                      ? [...(rentalInfo.includedInRentIds || []), item.value]
-                      : rentalInfo.includedInRentIds?.filter(v => v !== item.value);
+                      ? [...(rentalInfo.includedInRentIds || []), item.id]
+                      : rentalInfo.includedInRentIds?.filter(v => v !== item.id);
                     setRentalInfo({ includedInRentIds: newIncludes });
                   }}
                 />
               }
-              label={item.text}
+              label={item.displayName}
             />
           ))}
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={(e) => {
-                  setRentalInfo({
-                    includedInRentIds: e.target.checked 
-                      ? RentIncludeOptions.map(item => item.value)
-                      : []
-                  });
-                }}
-              />
-            }
-            label="全選"
-          />
+          <Button 
+            variant="outlined"
+            onClick={() => {
+              setRentalInfo({
+                includedInRentIds: includedInRentOptions.map(item => item.id)
+                  ? includedInRentOptions.map(item => item.id)
+                  : []
+                });
+              }}>
+                全選
+            </Button>
         </div>
       </FormGroup>
         <TextField
@@ -319,11 +335,12 @@ const RentHouseInfoSetting = () => {
     </FieldGroup>
     <FieldGroup title="租屋規則">
       <FormGroup>
-        <FormLabel>身份要求</FormLabel>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-6 items-center">
+        <FormLabel className="w-[67px]">身份要求</FormLabel>
           {IdentityOptions.map((item) => (
             <FormControlLabel
               key={item.value}
+              className="mx-0 w-[120px]"
               control={
                 <Checkbox
                   checked={rentalInfo.ruleIds?.includes(item.value)}
@@ -338,77 +355,87 @@ const RentHouseInfoSetting = () => {
               label={item.text}
             />
           ))}
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={(e) => {
-                  setRentalInfo({
-                    ruleIds: e.target.checked 
-                      ? IdentityOptions.map(item => item.value)
-                      : []
-                  });
-                }}
-              />
-            }
-            label="全選"
-          />
+          <Button variant="outlined" onClick={() => {
+            setRentalInfo({
+              ruleIds: IdentityOptions.map(item => item.value)
+                  ? IdentityOptions.map(item => item.value)
+                  : []
+              });
+            }}>
+              全選
+            </Button>
         </div>
       </FormGroup>
-      {/* <div className="flex gap-10">
         <FormControl>
-          <FormLabel>性別要求</FormLabel>
-          <RadioGroup
-            value={rentalInfo.genderRequirement}
+          <div className="flex gap-6 items-center">
+            <FormLabel className="w-[67px]">性別要求</FormLabel>
+            <RadioGroup
+              value={rentalInfo.genderRequirement}
             onChange={(e) => setRentalInfo({ genderRequirement: e.target.value })}
           >
+            <div className="flex gap-6 items-center">
             {GenderOptions.map((item) => (
               <FormControlLabel
                 key={item.value}
+                className="mx-0 w-[120px]"
                 value={item.value}
                 control={<Radio />}
                 label={item.text}
               />
             ))}
-          </RadioGroup>
+            </div>
+            </RadioGroup>
+          </div>
         </FormControl>
-
         <FormControl>
-          <FormLabel>房東同住</FormLabel>
+        <div className="flex gap-6 items-center">
+          <FormLabel className="w-[67px]">房東同住</FormLabel>
           <RadioGroup
             value={rentalInfo.landlordLiveIn}
             onChange={(e) => setRentalInfo({ landlordLiveIn: e.target.value })}
           >
-            <FormControlLabel value="yes" control={<Radio />} label="是" />
-            <FormControlLabel value="no" control={<Radio />} label="否" />
-          </RadioGroup>
+          <div className="flex gap-6 items-center">
+            <FormControlLabel className="mx-0 w-[100px]" value="yes" control={<Radio />} label="是" />
+            <FormControlLabel className="mx-0 w-[100px]" value="no" control={<Radio />} label="否" />
+            </div>
+            </RadioGroup>
+          </div>
         </FormControl>
-
         <FormControl>
-          <FormLabel>開伙</FormLabel>
+          <div className="flex gap-6 items-center">
+            <FormLabel className="w-[67px]">開伙</FormLabel>
           <RadioGroup
             value={rentalInfo.cooking}
             onChange={(e) => setRentalInfo({ cooking: e.target.value })}
           >
-            <FormControlLabel value="yes" control={<Radio />} label="可以" />
-            <FormControlLabel value="no" control={<Radio />} label="不可以" />
-          </RadioGroup>
+            <div className="flex gap-6 items-center">
+              <FormControlLabel className="mx-0 w-[100px]" value="yes" control={<Radio />} label="可以" />
+              <FormControlLabel className="mx-0 w-[100px]" value="no" control={<Radio />} label="不可以" />
+            </div>
+            </RadioGroup>
+          </div>
         </FormControl>
 
         <FormControl>
-          <FormLabel>養寵物</FormLabel>
+          <div className="flex gap-6 items-center">
+          <FormLabel className="w-[67px]">養寵物</FormLabel>
           <RadioGroup
             value={rentalInfo.pets}
             onChange={(e) => setRentalInfo({ pets: e.target.value })}
           >
-            <FormControlLabel value="yes" control={<Radio />} label="可以" />
-            <FormControlLabel value="no" control={<Radio />} label="不可以" />
+          <div className="flex gap-6 items-center">
+            <FormControlLabel className="mx-0 w-[100px]" value="yes" control={<Radio />} label="可以" />
+            <FormControlLabel className="mx-0 w-[100px]" value="no" control={<Radio />} label="不可以" />
+          </div>
           </RadioGroup>
+          </div>
         </FormControl>
-      </div> */}
       <DatePicker
+        className="w-[232px]"
         label="可遷入日期"
         value={rentalInfo.moveInDate}
         onChange={(newValue) => setRentalInfo({ moveInDate: newValue })}
+        placeholder="請選擇日期"
       />
       </FieldGroup>
     </>
