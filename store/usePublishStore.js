@@ -4,6 +4,7 @@ const usePublishStore = create((set) => ({
   itemTypeSettings: {
     publishType: '',
     itemType: '',
+    category: '',
   },
   property: {
     title: '',
@@ -39,7 +40,7 @@ const usePublishStore = create((set) => ({
     materialId: 1,
     ruleIds: [3, 4],
     moveInDate: '2024-12-12',
-    category: '',
+    // category: '',
     introduction: '<p>測試介紹</p>',
     parkingSpace: 'mechanical', // mechanical, planar
   },
@@ -49,7 +50,7 @@ const usePublishStore = create((set) => ({
     direction: 'east_to_west',
     source: 'platform',
     surroundingIds: [],
-    category: '',
+    // category: '',
     status: 'self_living',
     legalUsage: '住一',
     hiddenLegalUsage: true,

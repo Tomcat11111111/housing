@@ -19,8 +19,9 @@ import ItemPreview from './step/ItemPreview';
 import TypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const typeSettingRef = useRef(null);
+  const advancedInfoRef = useRef(null);
   const {
     itemTypeSettings,
     property,
@@ -28,6 +29,8 @@ const Publish = () => {
     rentalInfo,
     location,
     setPorperty,
+    setSalesInfo,
+    setRentInfo,
   } = usePublishStore();
 
   const handleNextStep = async () => {
@@ -37,8 +40,17 @@ const Publish = () => {
         // 可以加入錯誤提示
         return;
       }
-      setStep(step + 1);
     }
+
+    if (step === 2) {
+      const isValid = await advancedInfoRef.current?.trigger();
+      if (!isValid) {
+        // 可以加入錯誤提示
+        return;
+      }
+    }
+
+    setStep(step + 1);
   };
 
   const scrollToError = (errorField) => {
@@ -59,14 +71,14 @@ const Publish = () => {
   });
 
   const onPublishProperty = () => {
-    const publishType =
-      itemTypeSettings.publishType === 'buy' ? 'salesInfo' : 'rentalInfo';
+    const publishType = itemTypeSettings.publishType;
+    const infoName = publishType === 'buy' ? 'salesInfo' : 'rentalInfo';
+    const info = publishType === 'buy' ? salesInfo : rentalInfo;
 
     publishProperty({
       property,
       location,
-      [publishType]:
-        itemTypeSettings.publishType === 'buy' ? salesInfo : rentalInfo,
+      [infoName]: { ...info, category: itemTypeSettings.category },
     });
   };
 
@@ -101,7 +113,7 @@ const Publish = () => {
           <StepBar step={step} />
           {step === 0 && <TypeSetting ref={typeSettingRef} />}
           {step === 1 && <InfoSetting />}
-          {step === 2 && <AdvancedInfoSetting />}
+          {step === 2 && <AdvancedInfoSetting ref={advancedInfoRef} />}
           {step === 3 && <ItemPreview />}
         </div>
         <div className="z-10 fixed bottom-0 left-0 h-[100px] w-full px-[80px] py-[24px] bg-white flex justify-between">

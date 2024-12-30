@@ -10,9 +10,9 @@ import { PublishTypeList, ItemTypeList, BuyHouseTypeList, RentHouseTypeList } fr
 import FieldGroup from './FieldGroup';
 
 const typeSettingSchema = yup.object().shape({
-  publishType: yup.string().required('請選擇刊登類別'),
-  itemType: yup.string().required('請選擇物件類型'),
-  category: yup.string().required('請選擇類型細項'),
+  publishType: yup.string().required('刊登類別未選'),
+  itemType: yup.string().required('物件類型未選'),
+  category: yup.string().required('類型細項未選'),
 });
 
 const TypeSetting = forwardRef((props, ref) => {
@@ -24,11 +24,8 @@ const TypeSetting = forwardRef((props, ref) => {
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(typeSettingSchema),
-    defaultValues: itemTypeSettings,
     values: itemTypeSettings // 讓表單值始終跟隨 store
   });
-
-  console.log("🚀 ~ TypeSetting ~ errors:", errors);
 
 
   // 暴露方法給父組件

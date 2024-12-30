@@ -163,7 +163,7 @@ const RentHouseInfoSetting = () => {
           </div>
         </FormGroup>
         <FormControl sx={{ width: 300 }}>
-          <InputLabel>隔間材質＊</InputLabel>
+          <InputLabel  sx={{ bgcolor: 'white' }}>隔間材質＊</InputLabel>
           <Select
             value={property.materialId}
             onChange={(e) => setProperty({ materialId: e.target.value })}
@@ -175,7 +175,7 @@ const RentHouseInfoSetting = () => {
           </Select>
         </FormControl>
         <FormControl sx={{ width: 300 }}>
-          <InputLabel>裝潢程度＊</InputLabel>
+          <InputLabel  sx={{ bgcolor: 'white' }}>裝潢程度＊</InputLabel>
           <Select
             value={property.decorLevelId}
             onChange={(e) => setProperty({ decorLevelId: e.target.value })}
@@ -187,7 +187,7 @@ const RentHouseInfoSetting = () => {
           </Select>
         </FormControl>
         <FormControl sx={{ width: 300 }}>
-          <InputLabel>電梯</InputLabel>
+          <InputLabel  sx={{ bgcolor: 'white' }}>電梯</InputLabel>
           <Select
             value={property.hasElevator}
             onChange={(e) => setProperty({ hasElevator: e.target.value })}
@@ -214,7 +214,7 @@ const RentHouseInfoSetting = () => {
         }}
       />
       <FormControl sx={{ width: 300 }}>
-        <InputLabel>押金＊</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>押金＊</InputLabel>
         <Select
           value={rentalInfo.depositMonths}
           onChange={(e) => setRentalInfo({ depositMonths: e.target.value })}
@@ -301,7 +301,7 @@ const RentHouseInfoSetting = () => {
         />
         <div className="flex flex-wrap gap-4 items-center">
           <FormControl sx={{ width: 300 }}>
-            <InputLabel>車位</InputLabel>
+            <InputLabel  sx={{ bgcolor: 'white' }}>車位</InputLabel>
             <Select
               value={rentalInfo.parkingSpace}
               onChange={(e) => {

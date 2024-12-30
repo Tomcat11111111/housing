@@ -1,5 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
@@ -24,7 +27,15 @@ import {
  } from '../publishHelper';
 import SortableImage from './SortableImage';
 
-const AdvancedInfoSetting = () => {
+const advancedInfoSchema = yup.object().shape({
+  images: yup.array().min(5, '請至少上傳5張照片'),
+  contactName: yup.string().required('請輸入聯絡人姓名'),
+  contactNumber: yup.string()
+    .required('請輸入行動電話')
+    .matches(/^09\d{8}$/, '請輸入正確的手機號碼格式'),
+});
+
+const AdvancedInfoSetting = forwardRef((props, ref) => {
   const {
     itemTypeSettings,
     property,
@@ -65,11 +76,41 @@ const AdvancedInfoSetting = () => {
   const RegisterFileRef = useRef(null);
   const ItemFileRef = useRef(null);
 
+  const {
+    formState: { errors },
+    trigger
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(advancedInfoSchema),
+    values: {
+      contactName: property.contactName,
+      contactNumber: property.contactNumber,
+      images: property.images,
+    },
+  });
+
+
+  // 暴露方法給父組件
+  useImperativeHandle(ref, () => ({
+    trigger,
+    errors
+  }));
+
+  const handleContactChange = (e, field) => {
+    const value = e.target.value;
+    setProperty({
+      ...property,
+      [field]: value,
+    });
+  };
+
   const { mutate: uploadMutation } = useMutation({
     mutationFn: uploadImageApi,
     onSuccess: (data) => {
+      const newImages = [...property.images, ...data];
       setProperty({
-        images: [...property.images, ...data],
+        ...property,
+        images: newImages,
       });
     },
     onError: (error) => {
@@ -123,7 +164,7 @@ const AdvancedInfoSetting = () => {
         {getTextFromList(property.shapeId, shapesOptions)} &gt;
         {property.title}
       </div>
-      <FieldGroup title="物件照片">
+      <FieldGroup title="物件照片" error={errors.images?.message}>
         <div className=" text-[#909090] ">
           <ul>
             <li>．圖片比例為6:4，非此比例會進行裁切</li>
@@ -282,14 +323,11 @@ const AdvancedInfoSetting = () => {
       <FieldGroup title="聯絡人資料">
         <div className=" flex flex-col gap-4">
           <TextField
-            id="contacts"
             value={property.contactName}
-            onChange={(e) => {
-              setProperty({
-                contactName: e.target.value,
-              });
-            }}
+            onChange={(e) => handleContactChange(e, 'contactName')}
             placeholder="請輸入姓名"
+            error={!!errors.contactName}
+            helperText={errors.contactName?.message}
             sx={{ width: '258px' }}
             slotProps={{
               input: {
@@ -299,16 +337,14 @@ const AdvancedInfoSetting = () => {
               },
             }}
           />
+          
           <div className="flex gap-4">
             <TextField
-              id="contacts"
-              placeholder="請輸入行動電話"
               value={property.contactNumber}
-              onChange={(e) => {
-                setProperty({
-                  contactNumber: e.target.value,
-                });
-              }}
+              onChange={(e) => handleContactChange(e, 'contactNumber')}
+              placeholder="請輸入行動電話"
+              error={!!errors.contactNumber}
+              helperText={errors.contactNumber?.message}
               sx={{ width: '324px' }}
               slotProps={{
                 input: {
@@ -331,7 +367,7 @@ const AdvancedInfoSetting = () => {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <InputAdornment position="start">固定電話＊</InputAdornment>
+                    <InputAdornment position="start">固定電話</InputAdornment>
                   ),
                 },
               }}
@@ -359,6 +395,8 @@ const AdvancedInfoSetting = () => {
       </FieldGroup>
     </div>
   );
-};
+});
+
+AdvancedInfoSetting.displayName = 'AdvancedInfoSetting';
 
 export default AdvancedInfoSetting;

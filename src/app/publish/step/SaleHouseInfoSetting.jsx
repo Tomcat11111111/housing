@@ -128,7 +128,7 @@ const SaleHouseInfoSetting = () => {
     </div>
     <div className="flex gap-10">
       <FormControl sx={{ width: 300 }}>
-        <InputLabel>法定用途＊</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>法定用途＊</InputLabel>
         <Select
           id="legalUsage"
           value={salesInfo.legalUsage}
@@ -147,7 +147,7 @@ const SaleHouseInfoSetting = () => {
       />} label="隱藏詳細用途" />
     </div>
     <FormControl sx={{ width: 300 }}>
-      <InputLabel>物件現況＊</InputLabel>
+      <InputLabel  sx={{ bgcolor: 'white' }}>物件現況＊</InputLabel>
       <Select
         id="status"
         value={salesInfo.status}
@@ -180,7 +180,7 @@ const SaleHouseInfoSetting = () => {
           }}
       />
       <FormControl sx={{ minWidth: 196 }}>
-        <InputLabel>裝潢程度＊</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>裝潢程度＊</InputLabel>
         <Select
           value={property.decorLevelId}
           onChange={(e) => setProperty({ decorLevelId: e.target.value })}
@@ -217,7 +217,7 @@ const SaleHouseInfoSetting = () => {
     </div>
     <div className="flex gap-2">
       <FormControl className="w-[168px]">
-        <InputLabel>帶租約</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>帶租約</InputLabel>
         <Select
           id="leaseStatus"
           value={salesInfo.leaseStatus}
@@ -231,7 +231,7 @@ const SaleHouseInfoSetting = () => {
         </Select>
       </FormControl>
       <FormControl className="w-[168px]">
-        <InputLabel>電梯</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>電梯</InputLabel>
         <Select
           id="elevator"
           value={property.hasElevator}
@@ -249,7 +249,7 @@ const SaleHouseInfoSetting = () => {
         </Select>
       </FormControl>
       <FormControl className="w-[168px]">
-        <InputLabel>車位</InputLabel>
+        <InputLabel  sx={{ bgcolor: 'white' }}>車位</InputLabel>
         <Select
           id="parkingSpace"
           value={property.parkingSpace}

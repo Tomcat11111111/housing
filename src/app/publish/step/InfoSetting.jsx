@@ -127,7 +127,7 @@ const InfoSetting = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ minWidth: 134 }}>
+          <FormControl sx={{ minWidth: 160 }}>
             <InputLabel sx={{ bgcolor: 'white' }}>
               請選擇鄉鎮市區
             </InputLabel>
