@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
   itemTypeSettings: {
-    publishType: 'buy',
+    publishType: 'rent',
     itemType: 'house',
   },
   property: {
@@ -34,8 +34,8 @@ const usePublishStore = create((set) => ({
     includedInRentIds: [3],
     electricityFee: 0,
     managementFee: 0,
-    minRentPeriod: 0,
-    offerIds: [4],
+    minRentPeriod: 3,
+    offerIds: [1, 2, 3, 4, 5, 6],
     materialId: 1,
     ruleIds: [3, 4],
     moveInDate: '2024-12-12',

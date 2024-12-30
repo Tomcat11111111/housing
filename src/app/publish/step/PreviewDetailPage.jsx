@@ -11,8 +11,8 @@ import PropertySummary from '@/app/detail/[type]/PropertySummary';
 import Introduction from '@/app/detail/[type]/Introduction';
 import DetailSideBar from '@/app/detail/[type]/DetailSideBar';
 
-import { getTextFromList, CurrentStatusOptions } from '../publishHelper';
-import { getDecorLevelsApi } from '../actions';
+import { getTextFromList, CurrentStatusOptions, ParkingOptions } from '../publishHelper';
+import { getDecorLevelsApi, getEquipmentApi, getFurnitureApi, getMaterialsApi, getIncludedInRentApi, getRulesApi } from '../actions';
 import usePublishStore from '@/store/usePublishStore';
 
 const PreviewDetailPage = () => {
@@ -46,11 +46,42 @@ const PreviewDetailPage = () => {
     getCoordinates();
   }, [location.address]);
 
-  // 裝潢程度
-  const { data: decorLevelsOptions } = useQuery({
-    queryKey: ['getDecorLevelsApi'],
-    queryFn: getDecorLevelsApi,
-  });
+    // 提供設備
+    const { data: equipmentOptions } = useQuery({
+      queryKey: ['getEquipmentApi'],
+      queryFn: getEquipmentApi,
+    });
+    
+    // 提供家具
+    const { data: furnitureOptions } = useQuery({
+      queryKey: ['getFurnitureApi'],
+      queryFn: getFurnitureApi,
+    });
+  
+    // 隔間材質
+    const { data: materialsOptions } = useQuery({
+      queryKey: ['getMaterialsApi'],
+      queryFn: getMaterialsApi,
+    });
+  
+        
+    // 裝潢程度
+    const { data: decorLevelsOptions } = useQuery({
+      queryKey: ['getDecorLevelsApi'],
+      queryFn: getDecorLevelsApi,
+    });
+  
+    // 租金內含
+    const { data: includedInRentOptions } = useQuery({
+      queryKey: ['getIncludedInRentApi'],
+      queryFn: getIncludedInRentApi,
+    });
+   
+    // 租屋規則
+    // const { data: rulesOptions } = useQuery({
+    //   queryKey: ['getRulesApi'],
+    //   queryFn: getRulesApi,
+    // });
 
   const registeredArea = salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea;
   const legalUsageDisplay = salesInfo.hiddenLegalUsage ? salesInfo.legalUsage.charAt(0) : salesInfo.legalUsage;
@@ -115,17 +146,37 @@ const PreviewDetailPage = () => {
     }
   ];
 
+  const formatIds = (ids, options = []) => {
+    // 篩選出現在 options 中的 offerIds
+    return ids
+      .filter(id => options.some(option => option.id === id))
+      .map(id => {
+        const match = options.find(option => option.id === id);
+        return match ? match.displayName : null;
+      })
+      .filter(name => name !== null) // 去掉可能的 null 值
+      .join(' | ') || '';  
+  };
+
+  const formatGender = (ids) => {
+    if(ids.includes(1)) return "不限性別";
+    if(ids.includes(2)) return "限男";
+    if(ids.includes(3)) return "限女";
+
+    return "";
+  }
+
   const formattedData = {
     landLordOffer: {
       title: "房東提供",
       content: [
         {
           subtitle: "設備",
-          description: rentalInfo.landLordOffer?.equipment || null
+          description: formatIds(rentalInfo.offerIds, equipmentOptions) || null
         },
         {
           subtitle: "傢俱",
-          description: rentalInfo.landLordOffer?.furniture || null
+          description: formatIds(rentalInfo.offerIds, furnitureOptions) || null
         }
       ]
     },
@@ -134,63 +185,63 @@ const PreviewDetailPage = () => {
       content: [
         {
           subtitle: "隔間",
-          description: rentalInfo.equipments?.partition || null
+          description: rentalInfo.materialId ? getTextFromList(rentalInfo.materialId, materialsOptions) : null
         },
         {
           subtitle: "車位",
-          description: rentalInfo.equipments?.parking || null
+          description: getTextFromList(rentalInfo.parkingSpace, ParkingOptions) || null
         },
         {
           subtitle: "管理",
-          description: rentalInfo.equipments?.management || null
+          description: rentalInfo?.managementFee ? `${rentalInfo.managementFee}元/月` : null
         }
       ]
     },
     modifyRules: [
       {
         subtitle: "可遷入日",
-        description: rentalInfo.modifyRules?.moveInDate || null
+        description: rentalInfo?.moveInDate || null
       },
       {
         subtitle: "短期租賃",
-        description: rentalInfo.modifyRules?.shortTerm ? "可以" : "不可以"
+        description: rentalInfo?.minRentPeriod <= 2 ? "可以" : "不可以"
       },
       {
         subtitle: "裝潢程度",
-        description: rentalInfo.modifyRules?.decorationLevel || null
+        description: property.decorLevelId ? getTextFromList(property.decorLevelId, decorLevelsOptions) : null
       },
       {
         subtitle: "押金",
-        description: rentalInfo.modifyRules?.deposit || null
+        description: rentalInfo?.depositMonths ? `${rentalInfo.depositMonths}個月` : null
       },
       {
         subtitle: "電費",
-        description: rentalInfo.modifyRules?.electricityFee || null
+        description: rentalInfo?.electricityFee ? `${rentalInfo.electricityFee}元/月` : null
       },
       {
         subtitle: "租期",
-        description: rentalInfo.modifyRules?.leaseTerm || null
+        description: rentalInfo?.minRentPeriod ? `${rentalInfo.minRentPeriod}個月` : null
       },
       {
         subtitle: "房東同住",
-        description: rentalInfo.modifyRules?.landlordLiveIn ? "是" : "否"
+        description: rentalInfo?.ruleIds.includes(11) ? "是" : "否"
       },
       {
         subtitle: "開伙",
-        description: rentalInfo.modifyRules?.cooking ? "可以" : "不可以"
+        description: rentalInfo?.ruleIds.includes(7) ? "可以" : "不可以"
       },
       {
         subtitle: "飼養寵物",
-        description: rentalInfo.modifyRules?.pets ? "可以" : "不可以"
+        description: rentalInfo?.ruleIds.includes(5) ? "可以" : "不可以"
       },
       {
         subtitle: "性別要求",
-        description: rentalInfo.modifyRules?.genderRestriction || null
+        description: formatGender(rentalInfo.ruleIds)
       }
     ],
     inclusions: {
       subtitle: "租金內含",
-      description: rentalInfo.inclusions?.items || null
+      description: rentalInfo?.includedInRentIds.length > 0 ? formatIds(rentalInfo.includedInRentIds, includedInRentOptions) : null
     }
   };
 

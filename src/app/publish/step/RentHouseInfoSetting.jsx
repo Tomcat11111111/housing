@@ -14,6 +14,8 @@ import {
   Button
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+
+import dayjs from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
 import usePublishStore from '@/store/usePublishStore';
 
@@ -436,7 +438,7 @@ const RentHouseInfoSetting = () => {
         className="w-[232px]"
         label="可遷入日期"
         value={rentalInfo.moveInDate}
-        onChange={(newValue) => setRentalInfo({ moveInDate: newValue })}
+        onChange={(newValue) => setRentalInfo({ moveInDate: dayjs(newValue).format('YYYY-MM-DD') })}
         placeholder="請選擇日期"
       />
       </FieldGroup>
