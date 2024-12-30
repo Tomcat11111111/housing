@@ -1,4 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react';
+
+import { forwardRef, useImperativeHandle } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,20 +25,99 @@ import {
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import { getTextFromList, PublishTypeList, ItemTypeList, RentHouseTypeList } from '../publishHelper';
+import { getTextFromList, PublishTypeList, ItemTypeList, RentHouseTypeList, BuyHouseTypeList } from '../publishHelper';
 import { getCitiesApi, getShapesApi } from '../actions';
+
+import usePublishStore from '@/store/usePublishStore';
 
 import SaleHouseInfoSetting from './SaleHouseInfoSetting';
 import RentHouseInfoSetting from './RentHouseInfoSetting';
 
 import clsx from 'clsx';
 
-import usePublishStore from '@/store/usePublishStore';
+const infoSettingSchema = yup.object().shape({
+  shapeId: yup.string().required('請選擇格局'),
+  title: yup.string().required('請輸入物件出售名稱'),
+  cityId: yup.string().required('請選擇縣市'),
+  districtId: yup.string().required('請選擇行政區'),
+  address: yup.string().required('請輸入詳細地址'),
+  floor: yup
+    .number()
+    .typeError('請選擇樓層')
+    .required('請選擇樓層'),
+  totalFloors: yup
+    .number()
+    .typeError('請選擇總樓層')
+    .required('請選擇總樓層')
+    .min(1, '總樓層必須大於0')
+    .test('is-greater-than-floor', '總樓層必須大於或等於所在樓層', function(value) {
+      return value >= this.parent.floor;
+    }),
+  room: yup
+    .number()
+    .typeError('請選擇房數')
+    .required('請選擇房數')
+    .min(0, '房數不可為負數'),
+  livingRoom: yup
+    .number()
+    .typeError('請選擇廳數')
+    .required('請選擇廳數')
+    .min(0, '廳數不可為負數'),
+  bathroom: yup
+    .number()
+    .typeError('請選擇衛浴數')
+    .required('請選擇衛浴數')
+    .min(0, '衛浴數不可為負數'),
+  balcony: yup
+    .number()
+    .typeError('請選擇陽台數')
+    .required('請選擇陽台數')
+    .min(0, '陽台數不可為負數'),
+});
 
-const InfoSetting = () => {
-  const { property, setProperty, location, setLocation, itemTypeSettings } = usePublishStore();
+const InfoSetting = forwardRef((props, ref) => {
+  const {  property, itemTypeSettings, location, setLocation, setProperty } = usePublishStore();
+  const publishType = itemTypeSettings.publishType;
+  const saleHouseRef = useRef(null);
+  const rentHouseRef = useRef(null);
 
-  
+  // InfoSetting 自己的表單驗證
+  const {
+    formState: { errors },
+    trigger: infoTrigger
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(infoSettingSchema),
+    values: {
+      title: property.title,
+      shapeId: property.shapeId,
+      cityId: location.cityId,
+      districtId: location.districtId,
+      address: location.address,
+      floor: property.floor,
+      totalFloors: property.totalFloors,
+      room: property.room,
+      livingRoom: property.livingRoom,
+      bathroom: property.bathroom,
+      balcony: property.balcony,  
+    }
+  });
+
+  useImperativeHandle(ref, () => ({
+    trigger: async () => {
+      // 先驗證 InfoSetting 本身的欄位
+      const isInfoValid = await infoTrigger();
+      const isDetailValid = publishType === 'buy' ? await saleHouseRef.current?.trigger() : await rentHouseRef.current?.trigger();
+      return isInfoValid && isDetailValid;
+    },
+    errors: {
+      ...errors,
+      // ...(publishType === 'buy' 
+      //   ? saleHouseRef.current?.errors 
+      //   : rentHouseRef.current?.errors)
+    }
+  }));
+
   const { data: citiesOptions } = useQuery({
     queryKey: ['getCitiesApi'],
     queryFn: getCitiesApi,
@@ -46,8 +130,8 @@ const InfoSetting = () => {
     queryFn: getShapesApi,
   });
   
-  const publishType = itemTypeSettings.publishType;
   const districtsOptions = citiesOptions.find((city) => city.id === location.cityId)?.districts || [];
+  const itemFormList = publishType === 'buy' ? BuyHouseTypeList : RentHouseTypeList;
 
   useEffect(() => {
     if (location.cityId && location.districtId) {
@@ -55,14 +139,15 @@ const InfoSetting = () => {
     }
   }, [location.cityId]);
 
+
   return (
     <div className="flex flex-col gap-6 my-6">
       <div className="text-[#333] text-xl font-bold leading-8">
         {getTextFromList(itemTypeSettings.publishType, PublishTypeList)} &gt;
         {getTextFromList(itemTypeSettings.itemType, ItemTypeList)} &gt;
-        {getTextFromList(itemTypeSettings.category, RentHouseTypeList)} &gt;
+        {getTextFromList(itemTypeSettings.category, itemFormList)}
       </div>
-      <FieldGroup title="請選擇物件型態">
+      <FieldGroup title="請選擇物件型態" error={errors.shapeId?.message}>
         <div className="flex gap-6">
           {shapesOptions?.map((item) => (
             <Button
@@ -82,12 +167,14 @@ const InfoSetting = () => {
           ))}
         </div>
       </FieldGroup>
-      <FieldGroup title="出售名稱＊">
+        <FieldGroup title={publishType === 'buy' ? "出售名稱＊" : "出租名稱＊"}>
         <TextField
           id="contacts"
           value={property.title}
-          placeholder="請輸入物件出售名稱"
+          placeholder={publishType === 'buy' ? "請輸入物件出售名稱" : "請輸入物件出租名稱"}
           sx={{ width: '80%' }}
+          error={!!errors.title}
+          helperText={errors.title?.message}
           onChange={(e) => {
             if (property.title && property.title.length === 60) return;
 
@@ -110,8 +197,8 @@ const InfoSetting = () => {
       <FieldGroup title="物件位置＊">
         <div className="flex gap-2 items-center">
           <p className="text-sm text-[#333333] font-bold">出售地址＊</p>
-          <FormControl sx={{ minWidth: 134 }}>
-            <InputLabel sx={{ bgcolor: 'white' }}>
+          <FormControl sx={{ minWidth: 134 }} error={errors.cityId?.message}>
+            <InputLabel sx={{ bgcolor: 'white' }} >
               請選擇縣市
             </InputLabel>
             <Select
@@ -127,7 +214,7 @@ const InfoSetting = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ minWidth: 160 }}>
+          <FormControl sx={{ minWidth: 160 }} error={errors.districtId?.message}>
             <InputLabel sx={{ bgcolor: 'white' }}>
               請選擇鄉鎮市區
             </InputLabel>
@@ -151,6 +238,8 @@ const InfoSetting = () => {
             id="contacts"
             value={location.address}
             onChange={(e) => setLocation({ address: e.target.value })}
+            error={!!errors.address}
+            helperText={errors.address?.message}
             placeholder="請輸入道路或街名"
             sx={{ width: '200px' }}
           />
@@ -201,6 +290,8 @@ const InfoSetting = () => {
             id="contacts"
             value={property.floor}
             onChange={(e) => setProperty({ floor: e.target.value })}
+            error={!!errors.floor}
+            helperText={errors.floor?.message}
             placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
             slotProps={{
               input: {
@@ -229,6 +320,8 @@ const InfoSetting = () => {
             className="w-[158px]"
             value={property.totalFloors}
             onChange={(e) => setProperty({ totalFloors: e.target.value })}
+            error={!!errors.totalFloors}
+            helperText={errors.totalFloors?.message}
             slotProps={{
               input: {
                 startAdornment: (
@@ -261,6 +354,8 @@ const InfoSetting = () => {
             id="room"
             value={property.room}
             onChange={(e) => setProperty({ room: e.target.value })}
+            error={!!errors.room}
+            helperText={errors.room?.message}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -277,6 +372,8 @@ const InfoSetting = () => {
             id="livingRoom"
             value={property.livingRoom}
             onChange={(e) => setProperty({ livingRoom: e.target.value })}
+            error={!!errors.livingRoom}
+            helperText={errors.livingRoom?.message}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -293,6 +390,8 @@ const InfoSetting = () => {
             id="bathroom"
             value={property.bathroom}
             onChange={(e) => setProperty({ bathroom: e.target.value })}
+            error={!!errors.bathroom}
+            helperText={errors.bathroom?.message}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -309,6 +408,8 @@ const InfoSetting = () => {
             id="balcony"
             value={property.balcony}
             onChange={(e) => setProperty({ balcony: e.target.value })}
+            error={!!errors.balcony}
+            helperText={errors.balcony?.message}
             sx={{ width: '150px' }}
             slotProps={{
               input: {
@@ -325,13 +426,15 @@ const InfoSetting = () => {
         </div>
       </FieldGroup>
       {publishType === 'buy' && (
-        <SaleHouseInfoSetting />
+        <SaleHouseInfoSetting ref={saleHouseRef} />
       )}
       {publishType === 'rent' && (
-        <RentHouseInfoSetting />
+        <RentHouseInfoSetting ref={rentHouseRef} />
       )}
     </div>
   );
-};
+});
+
+InfoSetting.displayName = 'InfoSetting';
 
 export default InfoSetting;

@@ -1,4 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, forwardRef, useImperativeHandle } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import {
   FormControl,
@@ -9,6 +12,7 @@ import {
   Select,
   TextField,
   Checkbox,
+  FormHelperText,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,8 +29,75 @@ import {
 
 import { getDecorLevelsApi } from '../actions';
 
-const SaleHouseInfoSetting = () => {
-  const {  property, setProperty, salesInfo, setSalesInfo } = usePublishStore();
+const saleHouseSchema = yup.object().shape({
+  mainBuildingArea: yup
+    .number()
+    .typeError('請輸入主建物坪數')
+    .required('請輸入主建物坪數')
+    .min(0, '主建物坪數不可為負數'),
+  accessoryBuildingArea: yup
+    .number()
+    .typeError('請輸入附屬建物坪數')
+    .required('請輸入附屬建物坪數')
+    .min(0, '附屬建物坪數不可為負數'),
+  publicFacilityArea: yup
+    .number()
+    .typeError('請輸入公共設施坪數')
+    .required('請輸入公共設施坪數')
+    .min(0, '公共設施坪數不可為負數'),
+  legalUsage: yup.string().required('請選擇法定用途'),
+  status: yup.string().required('請選擇物件現況'),
+  decorLevelId: yup.string().required('請選擇裝潢程度'),
+  totalPrice: yup
+    .number()
+    .typeError('請輸入物件總價')
+    .required('請輸入物件總價')
+    .min(1, '物件總價必須大於0'),
+});
+
+const SaleHouseInfoSetting = forwardRef((props, ref) => {
+  const { property, setProperty, salesInfo, setSalesInfo } = usePublishStore();
+
+  const {
+    formState: { errors },
+    trigger,
+    setValue,
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(saleHouseSchema),
+    values: {
+      mainBuildingArea: salesInfo.mainBuildingArea,
+      accessoryBuildingArea: salesInfo.accessoryBuildingArea,
+      publicFacilityArea: salesInfo.publicFacilityArea,
+      legalUsage: salesInfo.legalUsage,
+      status: salesInfo.status,
+      decorLevelId: property.decorLevelId,
+      totalPrice: salesInfo.totalPrice,
+    },
+  });
+
+  useImperativeHandle(ref, () => ({
+    trigger,
+    errors
+  }));
+
+  const handleSalesInfoChange = async (field, value) => {
+    setSalesInfo({
+      ...salesInfo,
+      [field]: value,
+    });
+    setValue(field, value);
+    // await trigger(field);
+  };
+
+  const handlePropertyChange = async (field, value) => {
+    setProperty({
+      ...property,
+      [field]: value,
+    });
+    setValue(field, value);
+    // await trigger(field);
+  };
 
   const buildingRegistrationArea = useMemo(() => {
     return (salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea);
@@ -46,9 +117,16 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="contacts"
         value={salesInfo.mainBuildingArea}
-        onChange={(e) => setSalesInfo({ mainBuildingArea: e.target.value })}
+        onChange={(e) => handleSalesInfoChange('mainBuildingArea', e.target.value)}
+        error={!!errors.mainBuildingArea}
+        helperText={errors.mainBuildingArea?.message || ' '}
         placeholder="請輸入坪數"
-        sx={{ width: '302px' }}
+        sx={{ 
+          width: '302px',
+          '& .MuiFormHelperText-root': {
+            minHeight: '20px',
+          }
+        }}
         slotProps={{
           input: {
             startAdornment: (
@@ -67,9 +145,16 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="contacts"
         value={salesInfo.accessoryBuildingArea}
-        onChange={(e) => setInfoSettings({ accessoryBuildingArea: e.target.value })}
+        onChange={(e) => handleSalesInfoChange('accessoryBuildingArea', e.target.value)}
+        error={!!errors.accessoryBuildingArea}
+        helperText={errors.accessoryBuildingArea?.message || ' '}
         placeholder="請輸入坪數"
-        sx={{ width: '302px' }}
+        sx={{ 
+          width: '302px',
+          '& .MuiFormHelperText-root': {
+            minHeight: '20px',
+          }
+        }}
         slotProps={{
           input: {
             startAdornment: (
@@ -88,9 +173,16 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="publicFacilityArea"
         value={salesInfo.publicFacilityArea}
-        onChange={(e) => setSalesInfo({ publicFacilityArea: e.target.value })}
+        onChange={(e) => handleSalesInfoChange('publicFacilityArea', e.target.value)}
+        error={!!errors.publicFacilityArea}
+        helperText={errors.publicFacilityArea?.message || ' '}
         placeholder="請輸入坪數"
-        sx={{ width: '302px' }}
+        sx={{ 
+          width: '302px',
+          '& .MuiFormHelperText-root': {
+            minHeight: '20px',
+          }
+        }}
         slotProps={{
           input: {
             startAdornment: (
@@ -127,12 +219,12 @@ const SaleHouseInfoSetting = () => {
       />
     </div>
     <div className="flex gap-10">
-      <FormControl sx={{ width: 300 }}>
+      <FormControl sx={{ width: 300 }} error={!!errors.legalUsage}>
         <InputLabel  sx={{ bgcolor: 'white' }}>法定用途＊</InputLabel>
         <Select
           id="legalUsage"
           value={salesInfo.legalUsage}
-          onChange={(e) => setSalesInfo({ legalUsage: e.target.value })}
+          onChange={(e) => handleSalesInfoChange('legalUsage', e.target.value)}
         >
           {LegalUsageOptions.map((item) => (
             <MenuItem key={item.value} value={item.value}>
@@ -140,18 +232,19 @@ const SaleHouseInfoSetting = () => {
             </MenuItem>
           ))}
         </Select>
+        <FormHelperText>{errors.legalUsage?.message || ' '}</FormHelperText>
       </FormControl>
       <FormControlLabel control={<Checkbox
         checked={salesInfo.hiddenLegalUsage}
         onChange={(e) => setSalesInfo({ hiddenLegalUsage: !salesInfo.hiddenLegalUsage })}
       />} label="隱藏詳細用途" />
     </div>
-    <FormControl sx={{ width: 300 }}>
+    <FormControl sx={{ width: 300 }} error={!!errors.status}>
       <InputLabel  sx={{ bgcolor: 'white' }}>物件現況＊</InputLabel>
       <Select
         id="status"
         value={salesInfo.status}
-        onChange={(e) => setSalesInfo({ status: e.target.value })}
+        onChange={(e) => handleSalesInfoChange('status', e.target.value)}
       >
         {CurrentStatusOptions.map((item) => (
           <MenuItem key={item.value} value={item.value}>
@@ -159,13 +252,14 @@ const SaleHouseInfoSetting = () => {
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>{errors.status?.message || ' '}</FormHelperText>
     </FormControl>
     <div className="flex gap-2">
       <TextField
         type="number"
         id="age"
         value={property.age}
-        onChange={(e) => setProperty({ age: e.target.value })}
+        onChange={(e) => handlePropertyChange('age', e.target.value)}
         placeholder="請輸入屋齡"
         sx={{ width: '302px' }}
         slotProps={{  
@@ -179,11 +273,11 @@ const SaleHouseInfoSetting = () => {
             },
           }}
       />
-      <FormControl sx={{ minWidth: 196 }}>
+      <FormControl sx={{ minWidth: 196 }} error={!!errors.decorLevelId}>
         <InputLabel  sx={{ bgcolor: 'white' }}>裝潢程度＊</InputLabel>
         <Select
           value={property.decorLevelId}
-          onChange={(e) => setProperty({ decorLevelId: e.target.value })}
+          onChange={(e) => handlePropertyChange('decorLevelId', e.target.value)}
           id="decorLevelId"
         >
           {decorLevelsOptions?.map((item) => (
@@ -192,6 +286,7 @@ const SaleHouseInfoSetting = () => {
             </MenuItem>
           ))}
         </Select>
+        <FormHelperText>{errors.decorLevelId?.message || ' '}</FormHelperText>
       </FormControl>
     </div>
     <div className="flex gap-10">
@@ -273,7 +368,9 @@ const SaleHouseInfoSetting = () => {
       type="number"
       id="totalPrice"
       value={salesInfo.totalPrice}
-      onChange={(e) => setSalesInfo({ totalPrice: e.target.value })}
+      onChange={(e) => handleSalesInfoChange('totalPrice', e.target.value)}
+      error={!!errors.totalPrice}
+      helperText={errors.totalPrice?.message || ' '}
       placeholder="請輸入物件總價"
       sx={{ width: '302px' }}
       slotProps={{
@@ -288,7 +385,9 @@ const SaleHouseInfoSetting = () => {
       }}
     />
   </FieldGroup>
-</>;
-};
+  </>;
+});
+
+SaleHouseInfoSetting.displayName = 'SaleHouseInfoSetting';
 
 export default SaleHouseInfoSetting;

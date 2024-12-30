@@ -21,7 +21,11 @@ import TypeSetting from './step/TypeSetting';
 const Publish = () => {
   const [step, setStep] = useState(1);
   const typeSettingRef = useRef(null);
+  const infoSettingRef = useRef(null);
+  const saleHouseRef = useRef(null);
+  const rentHouseRef = useRef(null);
   const advancedInfoRef = useRef(null);
+
   const {
     itemTypeSettings,
     property,
@@ -36,6 +40,14 @@ const Publish = () => {
   const handleNextStep = async () => {
     if (step === 0) {
       const isValid = await typeSettingRef.current?.trigger();
+      if (!isValid) {
+        // 可以加入錯誤提示
+        return;
+      }
+    }
+
+    if (step === 1) {
+      const isValid = await infoSettingRef.current?.trigger();
       if (!isValid) {
         // 可以加入錯誤提示
         return;
@@ -112,7 +124,13 @@ const Publish = () => {
         >
           <StepBar step={step} />
           {step === 0 && <TypeSetting ref={typeSettingRef} />}
-          {step === 1 && <InfoSetting />}
+          {step === 1 && (
+            <InfoSetting
+              ref={infoSettingRef}
+              saleHouseRef={saleHouseRef}
+              rentHouseRef={rentHouseRef}
+            />
+          )}
           {step === 2 && <AdvancedInfoSetting ref={advancedInfoRef} />}
           {step === 3 && <ItemPreview />}
         </div>

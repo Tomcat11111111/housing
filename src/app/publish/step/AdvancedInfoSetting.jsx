@@ -30,9 +30,11 @@ import SortableImage from './SortableImage';
 const advancedInfoSchema = yup.object().shape({
   images: yup.array().min(5, '請至少上傳5張照片'),
   contactName: yup.string().required('請輸入聯絡人姓名'),
+  // landline: yup.string().matches(/^0\d{8}$/, '請輸入正確的電話號碼格式'),
   contactNumber: yup.string()
     .required('請輸入行動電話')
     .matches(/^09\d{8}$/, '請輸入正確的手機號碼格式'),
+  // contactEmail: yup.string().email('請輸入正確的電子信箱格式'),
 });
 
 const AdvancedInfoSetting = forwardRef((props, ref) => {
@@ -85,9 +87,14 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
     values: {
       contactName: property.contactName,
       contactNumber: property.contactNumber,
+      landline: property.landline,
+      contactEmail: property.contactEmail,
       images: property.images,
     },
   });
+
+  console.log("🚀 ~ AdvancedInfoSetting ~ errors:", errors)
+
 
 
   // 暴露方法給父組件
@@ -95,14 +102,6 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
     trigger,
     errors
   }));
-
-  const handleContactChange = (e, field) => {
-    const value = e.target.value;
-    setProperty({
-      ...property,
-      [field]: value,
-    });
-  };
 
   const { mutate: uploadMutation } = useMutation({
     mutationFn: uploadImageApi,
@@ -324,7 +323,9 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
         <div className=" flex flex-col gap-4">
           <TextField
             value={property.contactName}
-            onChange={(e) => handleContactChange(e, 'contactName')}
+            onChange={(e) =>  setProperty({
+              contactName: e.target.value,
+            })}
             placeholder="請輸入姓名"
             error={!!errors.contactName}
             helperText={errors.contactName?.message}
@@ -341,7 +342,9 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
           <div className="flex gap-4">
             <TextField
               value={property.contactNumber}
-              onChange={(e) => handleContactChange(e, 'contactNumber')}
+              onChange={(e) => setProperty({
+                contactNumber: e.target.value,
+              })}
               placeholder="請輸入行動電話"
               error={!!errors.contactNumber}
               helperText={errors.contactNumber?.message}
