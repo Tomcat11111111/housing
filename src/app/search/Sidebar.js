@@ -113,7 +113,7 @@ export default function Sidebar({
     queryFn: getFeaturesApi,
   });
 
-  // 物件格局
+  // 物件型態
   const { data: shapesOptions } = useQuery({
     queryKey: ['getShapesApi'],
     queryFn: getShapesApi,

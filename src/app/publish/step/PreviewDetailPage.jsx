@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { slice } from 'lodash';
+import { useQuery } from '@tanstack/react-query';
 
 import DetailImage from '@/app/detail/[type]/DetailImage';
 import PropertyInfo from '@/app/detail/[type]/PropertyInfo';
@@ -10,13 +11,14 @@ import PropertySummary from '@/app/detail/[type]/PropertySummary';
 import Introduction from '@/app/detail/[type]/Introduction';
 import DetailSideBar from '@/app/detail/[type]/DetailSideBar';
 
+import { getTextFromList, CurrentStatusOptions } from '../publishHelper';
+import { getDecorLevelsApi } from '../actions';
 import usePublishStore from '@/store/usePublishStore';
 
 const PreviewDetailPage = () => {
   const { property, itemTypeSettings, rentalInfo, salesInfo, location } = usePublishStore();
-  const type = itemTypeSettings.publishType;
+  
   const [coordinates, setCoordinates] = useState([]);
-  const firstFiveImages = slice(property.images, 0, 5);
 
   useEffect(() => {
     const getCoordinates = async () => {
@@ -43,7 +45,18 @@ const PreviewDetailPage = () => {
 
     getCoordinates();
   }, [location.address]);
+
+  // 裝潢程度
+  const { data: decorLevelsOptions } = useQuery({
+    queryKey: ['getDecorLevelsApi'],
+    queryFn: getDecorLevelsApi,
+  });
+
   const registeredArea = salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea;
+  const legalUsageDisplay = salesInfo.hiddenLegalUsage ? salesInfo.legalUsage.charAt(0) : salesInfo.legalUsage;
+  const type = itemTypeSettings.publishType;
+  const firstFiveImages = slice(property.images, 0, 5);
+  const publicRatio = salesInfo.publicFacilityArea / registeredArea * 100;
 
   const propertySummary = [
     {
@@ -51,31 +64,31 @@ const PreviewDetailPage = () => {
       content: [
         {
           subtitle: "現況",
-          description: salesInfo.status || null
+          description: getTextFromList(salesInfo.status, CurrentStatusOptions) || null
         },
         {
           subtitle: "裝潢狀況",
-          description: salesInfo.decorationStatus || null
+          description: getTextFromList(property.decorLevelId, decorLevelsOptions) || null
         },
         {
           subtitle: "公設比",
-          description: salesInfo.publicRatio || null
+          description: publicRatio ? publicRatio + '%' : null
         },
         {
           subtitle: "法定用途",
-          description: salesInfo.legalUse || null
+          description: legalUsageDisplay || null
         },
         {
           subtitle: "管理費",
-          description: salesInfo.managementFee || null
+          description: salesInfo.managementFee ? `${salesInfo.managementFee}元/月` : null
         },
         {
           subtitle: "帶租約",
-          description: salesInfo.hasLease ? "帶租約" : "不帶租約"
+          description: property.hasLease ? "是" : "否"
         },
         {
           subtitle: "車位",
-          description: salesInfo.parkingSpace || null
+          description: property.hasParking ? "是" : "否"
         }
       ]
     },

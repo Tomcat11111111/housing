@@ -10,6 +10,7 @@ import {
   TextField,
   Checkbox,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
 import FieldGroup from './FieldGroup';
 import usePublishStore from '@/store/usePublishStore';
@@ -19,17 +20,25 @@ import {
   ParkingOptions,
   LegalUsageOptions,
   CurrentStatusOptions,
-  DecorLevelOptions,
   LeaseStatusOptions,
-} from './publishHelper';
+} from '../publishHelper';
+
+import { getDecorLevelsApi } from '../actions';
 
 const SaleHouseInfoSetting = () => {
-  const {  property, setProperty, salesInfo, setsalesInfo } = usePublishStore();
+  const {  property, setProperty, salesInfo, setSalesInfo } = usePublishStore();
 
   const buildingRegistrationArea = useMemo(() => {
     return (salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea);
   }, [salesInfo.mainBuildingArea, salesInfo.accessoryBuildingArea, salesInfo.publicFacilityArea]);
   
+      
+  // 裝潢程度
+  const { data: decorLevelsOptions } = useQuery({
+    queryKey: ['getDecorLevelsApi'],
+    queryFn: getDecorLevelsApi,
+  });
+
   return <>
   <FieldGroup title="物件細項">
     <div className="flex items-center gap-2">
@@ -37,7 +46,7 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="contacts"
         value={salesInfo.mainBuildingArea}
-        onChange={(e) => setInfoSettings({ mainBuildingArea: e.target.value })}
+        onChange={(e) => setSalesInfo({ mainBuildingArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -79,7 +88,7 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="publicFacilityArea"
         value={salesInfo.publicFacilityArea}
-        onChange={(e) => setInfoSettings({ publicFacilityArea: e.target.value })}
+        onChange={(e) => setSalesInfo({ publicFacilityArea: e.target.value })}
         placeholder="請輸入坪數"
         sx={{ width: '302px' }}
         slotProps={{
@@ -123,7 +132,7 @@ const SaleHouseInfoSetting = () => {
         <Select
           id="legalUsage"
           value={salesInfo.legalUsage}
-          onChange={(e) => setInfoSettings({ legalUsage: e.target.value })}
+          onChange={(e) => setSalesInfo({ legalUsage: e.target.value })}
         >
           {LegalUsageOptions.map((item) => (
             <MenuItem key={item.value} value={item.value}>
@@ -134,7 +143,7 @@ const SaleHouseInfoSetting = () => {
       </FormControl>
       <FormControlLabel control={<Checkbox
         checked={salesInfo.hiddenLegalUsage}
-        onChange={(e) => setInfoSettings({ hiddenLegalUsage: !salesInfo.hiddenLegalUsage })}
+        onChange={(e) => setSalesInfo({ hiddenLegalUsage: !salesInfo.hiddenLegalUsage })}
       />} label="隱藏詳細用途" />
     </div>
     <FormControl sx={{ width: 300 }}>
@@ -142,7 +151,7 @@ const SaleHouseInfoSetting = () => {
       <Select
         id="status"
         value={salesInfo.status}
-        onChange={(e) => setInfoSettings({ status: e.target.value })}
+        onChange={(e) => setSalesInfo({ status: e.target.value })}
       >
         {CurrentStatusOptions.map((item) => (
           <MenuItem key={item.value} value={item.value}>
@@ -177,9 +186,9 @@ const SaleHouseInfoSetting = () => {
           onChange={(e) => setProperty({ decorLevelId: e.target.value })}
           id="decorLevelId"
         >
-          {DecorLevelOptions.map((item) => (
-            <MenuItem key={item.value} value={item.value}>
-              {item.text}
+          {decorLevelsOptions?.map((item) => (
+            <MenuItem key={item.value} value={item.id}>
+              {item.displayName}
             </MenuItem>
           ))}
         </Select>
@@ -190,7 +199,7 @@ const SaleHouseInfoSetting = () => {
         type="number"
         id="managementFee"
         value={salesInfo.managementFee}
-        onChange={(e) => setsalesInfo({ managementFee: e.target.value })}
+        onChange={(e) => setSalesInfo({ managementFee: e.target.value })}
         placeholder="請輸入管理費"
         sx={{ width: '302px' }}
         slotProps={{
@@ -212,7 +221,7 @@ const SaleHouseInfoSetting = () => {
         <Select
           id="leaseStatus"
           value={salesInfo.leaseStatus}
-          onChange={(e) => setsalesInfo({ leaseStatus: e.target.value })}
+          onChange={(e) => setSalesInfo({ leaseStatus: e.target.value })}
         >
           {LeaseStatusOptions.map((item) => (
             <MenuItem key={item.value} value={item.value}>
@@ -264,7 +273,7 @@ const SaleHouseInfoSetting = () => {
       type="number"
       id="totalPrice"
       value={salesInfo.totalPrice}
-      onChange={(e) => setsalesInfo({ totalPrice: e.target.value })}
+      onChange={(e) => setSalesInfo({ totalPrice: e.target.value })}
       placeholder="請輸入物件總價"
       sx={{ width: '302px' }}
       slotProps={{

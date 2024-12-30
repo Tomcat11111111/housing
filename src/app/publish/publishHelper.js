@@ -1,94 +1,101 @@
-const checkStepData = (step, data) => {
-  const { itemTypeSettings, infoSettings, advancedInfoSettings } = data;
+import axios from 'axios';
+import { Building } from 'lucide-react';
 
-  if (step === 0) {
-    return (
-      !!itemTypeSettings.publishType &&
-      !!itemTypeSettings.itemType &&
-      !!itemTypeSettings.category
-    );
-  }
+export const PublishTypeList = [
+  { value: 'buy', text: '出售', icon: <Building /> },
+  { value: 'rent', text: '出租', icon: <Building /> },
+  { value: '', text: '新建案', icon: <Building /> },
+];
 
-  if (step === 1) {
-    return (
-      infoSettings.title &&
-      infoSettings.cityId &&
-      infoSettings.districtId &&
-      infoSettings.address
-    );
-  }
+export const ItemTypeList = [
+  { value: 'house', text: '住宅', icon: <Building /> },
+  { value: '', text: '店面', icon: <Building /> },
+  { value: '', text: '辦公', icon: <Building /> },
+  { value: '', text: '土地', icon: <Building /> },
+  { value: '', text: '廠房', icon: <Building /> },
+];
 
-  if (step === 2) {
-    return true;
-  }
+export const RentHouseTypeList = [
+  { value: 'whole_house', text: '整層住家', icon: <Building /> },
+  { value: 'studio_apartment', text: '分租套房', icon: <Building /> },
+  { value: 'shared_apartment', text: '獨立套房', icon: <Building /> },
+  { value: 'room_to_share', text: '雅房', icon: <Building /> },
+];
+
+export const BuyHouseTypeList = [
+  { value: 'house', text: '住家', icon: <Building /> },
+  { value: 'studio', text: '套房', icon: <Building /> },
+  { value: 'foreclosed_home', text: '法拍屋', icon: <Building /> },
+];
+
+export const HouseFormList = [
+  { value: 'apartment', text: '公寓', icon: <Building /> },
+  { value: 'CondoWithElevator', text: '電梯大樓', icon: <Building /> },
+  { value: 'townhouse', text: '透天厝', icon: <Building /> },
+  { value: 'villa', text: '別墅', icon: <Building /> },
+];
+
+export const LegalUsageOptions = [
+  { value: '住一', text: '住一' },
+  { value: '住二之一', text: '住二之一' },
+  { value: '住二之二', text: '住二之二' },
+  { value: '住三', text: '住三' },
+  { value: '住三之一', text: '住三之一' },
+  { value: '住三之二', text: '住三之二' },
+  { value: '住四', text: '住四' },
+  { value: '商一', text: '商一' },
+  { value: '商二', text: '商二' },
+  { value: '商三', text: '商三' },
+  { value: '工二', text: '工二' },
+  { value: '工三', text: '工三' },
+];
+
+export const CurrentStatusOptions = [
+  { value: 'self_living', text: '自住中' },
+  { value: 'rented', text: '出租中' },
+  { value: 'vacant', text: '空屋' },
+  { value: 'under_construction', text: '尚未完工' },
+  { value: 'needs_repair', text: '需修繕' },
+  { value: 'new', text: '新成屋' },
+];
+
+export const LeaseStatusOptions = [
+  { value: 'no', text: '無' },
+  { value: 'yes', text: '有' },
+];
+
+export const ElevatorOptions = [
+  { value: false, text: '無' },
+  { value: true, text: '有' },
+];
+
+export const IdentityOptions = [
+  { value: 'student', text: '學生' },
+  { value: 'office_worker', text: '上班族' },
+  { value: 'family', text: '家庭' },
+];
+
+export const GenderOptions = [
+  { id: 1, value: 'no_gender_restriction', text: '性別不限' },
+  { id: 2, value: 'female_only', text: '生理女性' },
+  { id: 3, value: 'male_only', text: '生理男性' },
+];
+
+export const ParkingOptions = [
+  { value: '無', text: '無' },
+  { value: 'planar', text: '平面式' },
+  { value: 'mechanical', text: '機械式' },
+];
+
+export const DepositOptions = [
+  { value: 0, text: '面議' },
+  { value: 1, text: '一個月' },
+  { value: 2, text: '二個月' },
+  { value: 3, text: '三個月' },
+  { value: 6, text: '六個月' },
+];
+
+export const getTextFromList = (value, list = []) => {
+  const item = list.find((i) => i.id === value || i.value === value);
+  return item ? item.displayName || item.text : value; // 若沒有找到對應的項目，則回傳原始值
 };
-
-// const MockSaleData = {
-//   property: {
-//     title: '中正區臨沂街巷內溫馨小宅（含坡平車位)',
-//     age: 8,
-//     squareMeters: 52,
-//     floor: 1,
-//     totalFloors: 17,
-//     room: 0,
-//     livingRoom: 0,
-//     bathroom: 0,
-//     balcony: 0,
-//     views: 0,
-//     shapeId: 2,
-//     decorLevelId: 4,
-//     images: [
-//       'https://jzj-storage.zeabur.app/uploads/67bab49a-f821-4a14-a5ac-29319675354f',
-//     ],
-//     status: 'draft',
-//   },
-//   salesInfo: {
-//     category: 'residential',
-//     totalPrice: 88888888,
-//     unitPrice: 1720100,
-//     direction: 'southwest_to_northeast',
-//     source: 'platform',
-//     parkingSpace: 'planar',
-//     ownership: 42,
-//     surroundingIds: [],
-//   },
-//   location: {
-//     cityId: 1,
-//     districtId: 1,
-//     address: '台北市中正區臨沂街',
-//   },
-// };
-
-// const MockRentData = {
-//   property: {
-//     title: '忠孝國小學區旁近華山',
-//     age: 25,
-//     squareMeters: 5,
-//     floor: 5,
-//     totalFloors: 8,
-//     room: 1,
-//     livingRoom: 1,
-//     bathroom: 1,
-//     balcony: 1,
-//     type: 'rental',
-//     views: 120,
-//     shapeId: 2,
-//     decorLevelId: 1,
-//   },
-//   rentalInfo: {
-//     category: 'private_study',
-//     price: 87000,
-//     type: 'room_to_share',
-//     featureIds: [1],
-//     includedInRentIds: [3],
-//     offerIds: [4],
-//     ruleIds: [3, 4],
-//     materialId: 1,
-//     introduction: '<p>測試介紹</p>',
-//   },
-//   location: {
-//     cityId: 1,
-//     districtId: 1,
-//     address: '台北市中正區臨沂街',
-//   },
-// };

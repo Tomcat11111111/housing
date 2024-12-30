@@ -68,13 +68,12 @@ const ItemPreview = () => {
           <Modal
             open={openModal}
             onClose={handleCloseModal}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            aria-describedby="modal-preview"
           >
             <Box sx={{ width: '90%', maxHeight: '90%', backgroundColor: '#FFF', borderRadius: '16px', overflowY: 'auto', position: 'absolute', top: '69px', left: '50%', transform: 'translateX(-50%)' }}>
               <X className='cursor-pointer absolute top-4 right-4 text-[#333] text-xl font-bold leading-8' onClick={handleCloseModal} />
               <div className='py-16 px-32'>
-              <PreviewDetailPage />
+                <PreviewDetailPage />
               </div>
             </Box>
           </Modal>

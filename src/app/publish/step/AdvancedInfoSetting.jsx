@@ -10,17 +10,18 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import usePublishStore from '@/store/usePublishStore';
 
-import { uploadImageApi } from '../actions';
+import { uploadImageApi, getShapesApi } from '../actions';
 import FieldGroup from './FieldGroup';
-import { HouseFormList,
+import {
   ItemTypeList,
   PublishTypeList,
   RentHouseTypeList,
- } from './publishHelper';
+  getTextFromList
+ } from '../publishHelper';
 import SortableImage from './SortableImage';
 
 const AdvancedInfoSetting = () => {
@@ -29,22 +30,17 @@ const AdvancedInfoSetting = () => {
     property,
     setProperty,
     salesInfo,
-    setsalesInfo,
+    setSalesInfo,
     rentalInfo,
     setRentInfo,
   } = usePublishStore();
   const [selectedOption, setSelectedOption] = useState('');
 
-  const getTextFromList = (value, list) => {
-    const item = list.find((i) => i.value === value);
-    return item ? item.text : value; // 若沒有找到對應的項目，則回傳原始值
-  };
-
   const MAX_CHAR = 2000;
   const handleIntroductionChange = (e) => {
     const inputText = e.target.value;
     const type = itemTypeSettings.publishType;
-    const updateFunction = type === 'buy' ? setsalesInfo : setRentInfo;
+    const updateFunction = type === 'buy' ? setSalesInfo : setRentInfo;
 
     if (inputText.length > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
@@ -111,16 +107,20 @@ const AdvancedInfoSetting = () => {
 
   const type = itemTypeSettings.publishType;
   const info = type === 'buy' ? salesInfo : rentalInfo;
-  console.log("🚀 ~ AdvancedInfoSetting ~ type:", type)
-  console.log("🚀 ~ AdvancedInfoSetting ~ test:", info)
+
+  // 物件型態
+  const { data: shapesOptions } = useQuery({
+    queryKey: ['getShapesApi'],
+    queryFn: getShapesApi,
+  });
 
   return (
     <div className="flex flex-col gap-6 my-6">
-      <div className="text-[#333] text-xl font-bold leading-8 ">
+      <div className="text-[#333] text-xl font-bold leading-8">
         {getTextFromList(itemTypeSettings.publishType, PublishTypeList)} &gt;
         {getTextFromList(itemTypeSettings.itemType, ItemTypeList)} &gt;
         {getTextFromList(itemTypeSettings.category, RentHouseTypeList)} &gt;
-        {getTextFromList(property.shapeId, HouseFormList)} &gt;
+        {getTextFromList(property.shapeId, shapesOptions)} &gt;
         {property.title}
       </div>
       <FieldGroup title="物件照片">

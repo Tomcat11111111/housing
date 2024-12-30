@@ -6,7 +6,7 @@ import {
   ItemTypeList,
   PublishTypeList,
   RentHouseTypeList,
-} from './publishHelper';
+} from '../publishHelper';
 
 import usePublishStore from '@/store/usePublishStore';
 

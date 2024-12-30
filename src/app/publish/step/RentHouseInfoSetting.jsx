@@ -23,13 +23,16 @@ import {
   GenderOptions,
   ParkingOptions,
   DepositOptions,
+} from '../publishHelper';
+
+import {
   getIncludedInRentApi,
   getDecorLevelsApi,
   getEquipmentApi,
   getFurnitureApi,
   getMaterialsApi,
   getRulesApi,
-} from './publishHelper';
+} from '../actions';
 
 import FieldGroup from './FieldGroup';
 
@@ -37,43 +40,42 @@ import FieldGroup from './FieldGroup';
 const RentHouseInfoSetting = () => {
   const { rentalInfo, setRentalInfo, property, setProperty } = usePublishStore();
 
-   
-    // 提供設備
-    const { data: equipmentOptions } = useQuery({
-      queryKey: ['getEquipmentApi'],
-      queryFn: getEquipmentApi,
-    });
-    
-      // 提供家具
-      const { data: furnitureOptions } = useQuery({
-        queryKey: ['getFurnitureApi'],
-        queryFn: getFurnitureApi,
-      });
+  // 提供設備
+  const { data: equipmentOptions } = useQuery({
+    queryKey: ['getEquipmentApi'],
+    queryFn: getEquipmentApi,
+  });
+  
+  // 提供家具
+  const { data: furnitureOptions } = useQuery({
+    queryKey: ['getFurnitureApi'],
+    queryFn: getFurnitureApi,
+  });
 
-      // 隔間材質
-      const { data: materialsOptions } = useQuery({
-        queryKey: ['getMaterialsApi'],
-        queryFn: getMaterialsApi,
-      });
+  // 隔間材質
+  const { data: materialsOptions } = useQuery({
+    queryKey: ['getMaterialsApi'],
+    queryFn: getMaterialsApi,
+  });
 
       
-        // 裝潢程度
-        const { data: decorLevelsOptions } = useQuery({
-          queryKey: ['getDecorLevelsApi'],
-          queryFn: getDecorLevelsApi,
-        });
+  // 裝潢程度
+  const { data: decorLevelsOptions } = useQuery({
+    queryKey: ['getDecorLevelsApi'],
+    queryFn: getDecorLevelsApi,
+  });
 
-    // 租金內含
-    const { data: includedInRentOptions } = useQuery({
-      queryKey: ['getIncludedInRentApi'],
-      queryFn: getIncludedInRentApi,
-    });
+  // 租金內含
+  const { data: includedInRentOptions } = useQuery({
+    queryKey: ['getIncludedInRentApi'],
+    queryFn: getIncludedInRentApi,
+  });
  
-    // 租屋規則
-    const { data: rulesOptions } = useQuery({
-      queryKey: ['getRulesApi'],
-      queryFn: getRulesApi,
-    });
+  // 租屋規則
+  const { data: rulesOptions } = useQuery({
+    queryKey: ['getRulesApi'],
+    queryFn: getRulesApi,
+  });
 
   return (
     <>

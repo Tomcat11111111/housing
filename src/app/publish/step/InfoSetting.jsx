@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { getCitiesApi } from '../actions';
 import { useQuery } from '@tanstack/react-query';
 
 import Bed from '@/icon/BedIcon/BedIcon'
@@ -21,7 +20,8 @@ import {
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import { HouseFormList } from './publishHelper';
+import { getTextFromList, PublishTypeList, ItemTypeList, RentHouseTypeList } from '../publishHelper';
+import { getCitiesApi, getShapesApi } from '../actions';
 
 import SaleHouseInfoSetting from './SaleHouseInfoSetting';
 import RentHouseInfoSetting from './RentHouseInfoSetting';
@@ -39,6 +39,12 @@ const InfoSetting = () => {
     queryFn: getCitiesApi,
     initialData: [],
   });
+
+  // 物件型態
+  const { data: shapesOptions } = useQuery({
+    queryKey: ['getShapesApi'],
+    queryFn: getShapesApi,
+  });
   
   const publishType = itemTypeSettings.publishType;
   const districtsOptions = citiesOptions.find((city) => city.id === location.cityId)?.districts || [];
@@ -51,22 +57,27 @@ const InfoSetting = () => {
 
   return (
     <div className="flex flex-col gap-6 my-6">
+      <div className="text-[#333] text-xl font-bold leading-8">
+        {getTextFromList(itemTypeSettings.publishType, PublishTypeList)} &gt;
+        {getTextFromList(itemTypeSettings.itemType, ItemTypeList)} &gt;
+        {getTextFromList(itemTypeSettings.category, RentHouseTypeList)} &gt;
+      </div>
       <FieldGroup title="請選擇物件型態">
         <div className="flex gap-6">
-          {HouseFormList.map((item) => (
+          {shapesOptions?.map((item) => (
             <Button
               key={item.value}
               className={clsx('h-20 flex-1 text-xl')}
-              color={item.value === property.shapeId ? 'primary' : ''}
-              variant={item.value === property.shapeId ? 'contained' : 'outlined'}
+              color={item.id === property.shapeId ? 'primary' : ''}
+              variant={item.id === property.shapeId ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() =>
                 setProperty({
-                  shapeId: item.value,
+                  shapeId: item.id,
                 })
               }
             >
-              {item.text}
+              {item.displayName}
             </Button>
           ))}
         </div>

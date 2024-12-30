@@ -2,8 +2,8 @@ import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
   itemTypeSettings: {
-    publishType: 'rent',
-    itemType: null,
+    publishType: 'buy',
+    itemType: 'house',
   },
   property: {
     title: '新莊副都心',
@@ -39,7 +39,7 @@ const usePublishStore = create((set) => ({
     materialId: 1,
     ruleIds: [3, 4],
     moveInDate: '2024-12-12',
-    category: 'whole_house', // 類型細項 whole_house, studio_apartment, shared_apartment, room_to_share
+    category: 'whole_house',
     introduction: '<p>測試介紹</p>',
     parkingSpace: 'mechanical', // mechanical, planar
   },
@@ -50,9 +50,9 @@ const usePublishStore = create((set) => ({
     source: 'platform',
     surroundingIds: [],
     category: 'house',
-    status: null, // 從原始的 status 欄位
-    legalUsage: null,
-    hiddenLegalUsage: false,
+    status: 'self_living',
+    legalUsage: '住一',
+    hiddenLegalUsage: true,
     managementFee: 1000,
     leaseStatus: '',
     mainBuildingArea: 40,
@@ -79,7 +79,7 @@ const usePublishStore = create((set) => ({
     set((state) => ({
       property: { ...state.property, ...updates },
     })),
-  setsalesInfo: (updates) =>
+  setSalesInfo: (updates) =>
     set((state) => ({
       salesInfo: { ...state.salesInfo, ...updates },
     })),
