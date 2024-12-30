@@ -12,13 +12,11 @@ const UserCard = () => {
             height: '150px',
             width: '150px',
           }}
-        >
-          H
-        </Avatar>
+        ></Avatar>
       </div>
       <div className=" flex flex-col">
         <div className=" flex justify-center items-center gap-4 mb-2">
-          <p className=" text-[32px] font-bold">Hunter</p>
+          <p className=" text-[32px] font-bold">Username</p>
           <Pencil className=" bg-[#E9E9E9] w-10 h-10 rounded-2xl items-center justify-center p-2" />
         </div>
         <Divider />
