@@ -54,7 +54,6 @@ const Main = ({ type, detailData }) => {
 
   const firstFiveImages = slice(0, 5, images);
   const { city, district, geolocation } = location;
-  console.log('🚀 ~ Main ~ geolocation:', geolocation);
 
   return (
     <>

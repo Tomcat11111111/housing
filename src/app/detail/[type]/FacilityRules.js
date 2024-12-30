@@ -2,7 +2,6 @@ import styles from './Main.module.scss';
 
 const FacilityRules = (props) => {
   const { landLordOffer, equipments, modifyRules, inclusions } = props;
-  console.log('🚀 ~ FacilityRules ~ props:', props);
   return (
     <div className={styles.area}>
       <span className={styles.title}>設備＆規則</span>

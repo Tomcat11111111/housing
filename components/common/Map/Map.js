@@ -48,9 +48,6 @@ function Map({ coordinates = [] }) {
       };
 
       service.nearbySearch(request, (results, status) => {
-        console.log('status: ', status);
-        console.log(window.google.maps.places.PlacesServiceStatus.OK);
-
         const placesWithDistance = results.map((place) => {
           const placeLocation = new window.google.maps.LatLng(
             place.geometry.location.lat(),
@@ -72,8 +69,6 @@ function Map({ coordinates = [] }) {
             );
           return { ...place, distance };
         });
-
-        console.log('placesWithDistance: ', placesWithDistance);
 
         setPlaces(placesWithDistance);
       });
