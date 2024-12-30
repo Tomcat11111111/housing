@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const useToastStore = create((set) => ({
+const useToastStore = create((set) => ({
   toastOpen: false,
   status: '',
   successText: '',
@@ -18,3 +18,5 @@ export const useToastStore = create((set) => ({
     set(() => ({ errorText: text }));
   },
 }));
+
+export default useToastStore;

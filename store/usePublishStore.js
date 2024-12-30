@@ -2,11 +2,11 @@ import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
   itemTypeSettings: {
-    publishType: 'rent',
-    itemType: 'house',
+    publishType: '',
+    itemType: '',
   },
   property: {
-    title: '新莊副都心',
+    title: '',
     age: 10,
     squareMeters: 20,
     floor: 7,
@@ -17,7 +17,7 @@ const usePublishStore = create((set) => ({
     balcony: 0,
     type: 'buy',
     views: 0,
-    shapeId: 1,
+    shapeId: null,
     decorLevelId: 1,
     contactName: '勝藥',
     contactNumber: '0912345678',
@@ -39,7 +39,7 @@ const usePublishStore = create((set) => ({
     materialId: 1,
     ruleIds: [3, 4],
     moveInDate: '2024-12-12',
-    category: 'whole_house',
+    category: '',
     introduction: '<p>測試介紹</p>',
     parkingSpace: 'mechanical', // mechanical, planar
   },
@@ -49,7 +49,7 @@ const usePublishStore = create((set) => ({
     direction: 'east_to_west',
     source: 'platform',
     surroundingIds: [],
-    category: 'house',
+    category: '',
     status: 'self_living',
     legalUsage: '住一',
     hiddenLegalUsage: true,

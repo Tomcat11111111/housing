@@ -13,7 +13,7 @@ import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
+import useToastStore from '@/store/useToastStore';
 
 import ModalHeader from './ModalHeader';
 import { signinApi } from './actions';

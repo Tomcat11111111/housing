@@ -15,7 +15,7 @@ import SearchBar from '@/layout/SearchBar/SearchBar';
 import RecommendList from '@/components/RecommendList/RecommendList';
 
 import useSearchStore from '@/store/useSearchStore';
-import { useToastStore } from '@/store/useToastStore';
+import useToastStore from '@/store/useToastStore';
 
 import Arrow from '@/icon/Arrow/Arrow';
 import Domain from '@/icon/Domain/Domain';

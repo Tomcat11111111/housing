@@ -4,15 +4,15 @@ import { Building } from 'lucide-react';
 export const PublishTypeList = [
   { value: 'buy', text: '出售', icon: <Building /> },
   { value: 'rent', text: '出租', icon: <Building /> },
-  { value: '', text: '新建案', icon: <Building /> },
+  { value: 'disabled_1', text: '新建案', icon: <Building /> },
 ];
 
 export const ItemTypeList = [
   { value: 'house', text: '住宅', icon: <Building /> },
-  { value: '', text: '店面', icon: <Building /> },
-  { value: '', text: '辦公', icon: <Building /> },
-  { value: '', text: '土地', icon: <Building /> },
-  { value: '', text: '廠房', icon: <Building /> },
+  { value: 'disabled_2', text: '店面', icon: <Building /> },
+  { value: 'disabled_3', text: '辦公', icon: <Building /> },
+  { value: 'disabled_4', text: '土地', icon: <Building /> },
+  { value: 'disabled_5', text: '廠房', icon: <Building /> },
 ];
 
 export const RentHouseTypeList = [

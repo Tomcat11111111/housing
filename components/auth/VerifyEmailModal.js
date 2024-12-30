@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
+import useToastStore from '@/store/useToastStore';
 
 import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';

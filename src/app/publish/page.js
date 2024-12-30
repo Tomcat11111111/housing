@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 import Button from '@mui/material/Button';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -14,13 +13,14 @@ import usePublishStore from '@/store/usePublishStore';
 import PublishHeader from './PublishHeader';
 import StepBar from './StepBar';
 import { createRentPropertyApi, createSalePropertyApi } from './actions';
-import ItemAdvancedInfoSetting from './step/AdvancedInfoSetting';
-import ItemInfoSetting from './step/InfoSetting';
+import AdvancedInfoSetting from './step/AdvancedInfoSetting';
+import InfoSetting from './step/InfoSetting';
 import ItemPreview from './step/ItemPreview';
-import ItemTypeSetting from './step/TypeSetting';
+import TypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(0);
+  const typeSettingRef = useRef(null);
   const {
     itemTypeSettings,
     property,
@@ -30,30 +30,22 @@ const Publish = () => {
     setPorperty,
   } = usePublishStore();
 
-  const {
-    formState: { errors },
-    trigger,
-  } = useForm({
-    defaultValues: {
-      ...itemTypeSettings,
-      ...property,
-      ...salesInfo,
-    },
-  });
-
   const handleNextStep = async () => {
-    const isStepValid = await trigger();
-
-    if (!isStepValid) {
-      const firstError = Object.keys(errors)[0];
-      const errorElement = document.querySelector(`[name="${firstError}"]`);
-      if (errorElement) {
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (step === 0) {
+      const isValid = await typeSettingRef.current?.trigger();
+      if (!isValid) {
+        // 可以加入錯誤提示
+        return;
       }
-      return;
+      setStep(step + 1);
     }
+  };
 
-    setStep(step + 1);
+  const scrollToError = (errorField) => {
+    const errorElement = document.querySelector(`[name="${errorField}"]`);
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   const { mutate: publishProperty } = useMutation({
@@ -107,9 +99,9 @@ const Publish = () => {
           }}
         >
           <StepBar step={step} />
-          {step === 0 && <ItemTypeSetting />}
-          {step === 1 && <ItemInfoSetting />}
-          {step === 2 && <ItemAdvancedInfoSetting />}
+          {step === 0 && <TypeSetting ref={typeSettingRef} />}
+          {step === 1 && <InfoSetting />}
+          {step === 2 && <AdvancedInfoSetting />}
           {step === 3 && <ItemPreview />}
         </div>
         <div className="z-10 fixed bottom-0 left-0 h-[100px] w-full px-[80px] py-[24px] bg-white flex justify-between">
