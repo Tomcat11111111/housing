@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { useToast } from '@/app/contexts/ToastContext';
 import {
   Button,
   Divider,
@@ -13,7 +14,6 @@ import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
-import useToastStore from '@/store/useToastStore';
 
 import ModalHeader from './ModalHeader';
 import { signinApi } from './actions';
@@ -30,8 +30,7 @@ const SignInModal = ({ setOpen }) => {
     setAccessToken,
   } = useSigninStore();
   const { setAuthType } = useAuthTypeStore();
-  const { setToastOpen, setStatus, setSuccessText, setErrorText } =
-    useToastStore();
+  const { showToast } = useToast();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -48,15 +47,11 @@ const SignInModal = ({ setOpen }) => {
         sameSite: 'Strict',
       });
 
-      setStatus('success');
-      setSuccessText('登入成功');
-      setToastOpen(true);
+      showToast('success', '登入成功');
       setOpen(false);
     },
     onError: (error) => {
-      setStatus('error');
-      setErrorText('信箱/密碼錯誤');
-      setToastOpen(true);
+      showToast('error', '登入失敗');
     },
   });
 

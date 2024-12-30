@@ -15,7 +15,6 @@ import SearchBar from '@/layout/SearchBar/SearchBar';
 import RecommendList from '@/components/RecommendList/RecommendList';
 
 import useSearchStore from '@/store/useSearchStore';
-import useToastStore from '@/store/useToastStore';
 
 import Arrow from '@/icon/Arrow/Arrow';
 import Domain from '@/icon/Domain/Domain';
@@ -30,8 +29,6 @@ export default function Home() {
   const [headerType, setHeaderType] = useState('default');
   const [isFixed, setIsFixed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const { toastOpen, setToastOpen, status, errorText, successText } =
-    useToastStore();
 
   const router = useRouter();
 
@@ -145,49 +142,7 @@ export default function Home() {
         <RecommendList type="buy" queryKey="home_2" />
         <RecommendList type="rent" queryKey="home_1" />
       </div>
-      <Footer />
-      {/* Toast訊息 */}
-      <Snackbar
-        open={toastOpen}
-        autoHideDuration={2000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        sx={{
-          '& .MuiSnackbarContent-root': {
-            backgroundColor: status === 'success' ? '#0ABD13' : '#F44336',
-            color: '#FFFFFF',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-        }}
-      >
-        <SnackbarContent
-          message={
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              {status === 'success' && (
-                <CheckCircleIcon style={{ color: '#FFFFFF' }} />
-              )}
-              {status === 'error' && (
-                <ShieldAlert style={{ color: '#FFFFFF' }} />
-              )}
-              <span>{status === 'success' && successText}</span>
-              <span>{status === 'error' && errorText}</span>
-            </div>
-          }
-        />
-      </Snackbar>
-      ;
+      <Footer />;
     </main>
   );
 }

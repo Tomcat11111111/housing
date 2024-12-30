@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
-import useToastStore from '@/store/useToastStore';
 
 import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
@@ -14,7 +13,6 @@ import { sendVerificationCodeApi, verifyEmailApi } from './actions';
 const VerifyEmailModal = ({ setOpen }) => {
   const [countdown, setCountdown] = useState(0);
   const { setAuthType } = useAuthTypeStore();
-  const { setToastOpen, setStatus, setErrorText } = useToastStore();
   const {
     email,
     verificationCode,
@@ -22,6 +20,7 @@ const VerifyEmailModal = ({ setOpen }) => {
     verificationToken,
     setVerificationToken,
   } = useRegisterStore();
+  const { showToast } = useToast();
 
   const { mutate: verifyEmail } = useMutation({
     mutationFn: verifyEmailApi,
@@ -44,9 +43,7 @@ const VerifyEmailModal = ({ setOpen }) => {
       setAuthType('verifyEmail');
     },
     onError: (error) => {
-      setStatus('error');
-      setErrorText('驗證碼錯誤');
-      setToastOpen(true);
+      showToast('error', '驗證碼錯誤');
       console.error('Sent Verification Code failed:', error);
     },
   });
