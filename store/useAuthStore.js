@@ -2,9 +2,11 @@ import { create } from 'zustand';
 
 export const useAuthTypeStore = create((set) => ({
   authType: '',
+  modalOpen: false,
   setAuthType: (type) => {
     set(() => ({ authType: type }));
   },
+  setModalOpen: (isOpen) => set({ modalOpen: isOpen }),
 }));
 
 export const useRegisterStore = create((set) => ({

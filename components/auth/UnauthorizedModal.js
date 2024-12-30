@@ -6,11 +6,11 @@ import { useAuthTypeStore } from '@/store/useAuthStore';
 
 import ModalHeader from './ModalHeader';
 
-const UnauthorizedModal = ({ setOpen }) => {
-  const { setAuthType } = useAuthTypeStore();
+const UnauthorizedModal = () => {
+  const { setAuthType, setModalOpen } = useAuthTypeStore();
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
       <div className="flex flex-1 flex-col items-center gap-2">
         <h1
           className=" font-bold"
@@ -32,7 +32,7 @@ const UnauthorizedModal = ({ setOpen }) => {
         }}
       >
         <Button
-          //   onClick={handleNext}
+          onClick={() => setAuthType('signin')}
           sx={{
             height: '56px',
             width: '400px',
@@ -46,7 +46,7 @@ const UnauthorizedModal = ({ setOpen }) => {
           前往登入
         </Button>
         <Button
-          //   onClick={handleNext}
+          onClick={() => setModalOpen(false)}
           sx={{
             height: '56px',
             width: '400px',

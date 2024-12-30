@@ -1,14 +1,13 @@
 'use client';
 
+import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 import BurgerMenu from '@/common/BurgerMenu/BurgerMenu';
-import Button from '@/common/Button/Button';
 
-import AuthButton from '@/components/auth/AuthButton';
 import Logo from '@/components/common/Logo/Logo';
 
-import useAuthTypeStore from '@/store/useAuthStore';
+import { useAuthTypeStore } from '@/store/useAuthStore';
 import useSearchStore from '@/store/useSearchStore';
 
 import Account from '@/icon/Account/Account';
@@ -18,6 +17,8 @@ import styles from './Header.module.scss';
 const Header = ({ headerType = 'default' }) => {
   const router = useRouter();
   const { selectedTab, setSelectedTab } = useSearchStore();
+
+  const { setAuthType, setModalOpen } = useAuthTypeStore();
 
   return (
     <header className={styles.headerContainer}>
@@ -76,39 +77,47 @@ const Header = ({ headerType = 'default' }) => {
           <div className={styles.buttonArea}>
             {headerType === 'default' && (
               <>
-                <Button
-                  buttonText="在TOPRE上刊登物件"
-                  textStyle={{ fontWeight: 600, lineHeight: '20px' }}
-                  buttonStyle={{
-                    padding: '8px',
-                  }}
-                  buttonType="transparent"
-                  action={() => {
-                    router.push('/publish');
-                  }}
-                />
+                <div className="flex items-center justify-center ">
+                  <Button
+                    onClick={() => {
+                      setAuthType('unauthorized');
+                      setModalOpen(true);
+                    }}
+                    className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] font-bold"
+                  >
+                    在TOPRE上刊登物件
+                  </Button>
+                  |
+                </div>
                 <div className={styles.memberArea}>
                   <div className={styles.memberButton}>
-                    {/* <Button
-                      buttonText="登入"
-                      textStyle={{ lineHeight: '20px' }}
-                      buttonStyle={{
-                        padding: '8px 16px',
+                    <Button
+                      onClick={() => {
+                        setAuthType('signin');
+                        setModalOpen(true);
                       }}
-                      buttonType="transparent"
-                    /> */}
-                    <AuthButton type={'signin'} />|
-                    {/* <Button
-                      buttonText="註冊"
-                      textStyle={{ lineHeight: '20px' }}
-                      buttonStyle={{
-                        padding: '8px 16px',
+                      className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] "
+                    >
+                      登入
+                    </Button>
+                    |
+                    <Button
+                      onClick={() => {
+                        setAuthType('signup');
+                        setModalOpen(true);
                       }}
-                      buttonType="transparent"
-                    /> */}
-                    <AuthButton type={'signup'} />
+                      className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] "
+                    >
+                      註冊
+                    </Button>
+                    |
                   </div>
-                  <Account color="#0936D8" />
+                  <div
+                    className=" cursor-pointer"
+                    onClick={() => router.push('/member')}
+                  >
+                    <Account color="#0936D8" />
+                  </div>
                 </div>
               </>
             )}

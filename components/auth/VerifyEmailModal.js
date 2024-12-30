@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { useToast } from '@/app/contexts/ToastContext';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
 
@@ -10,7 +10,7 @@ import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
 import { sendVerificationCodeApi, verifyEmailApi } from './actions';
 
-const VerifyEmailModal = ({ setOpen }) => {
+const VerifyEmailModal = () => {
   const [countdown, setCountdown] = useState(0);
   const { setAuthType } = useAuthTypeStore();
   const {
@@ -29,6 +29,7 @@ const VerifyEmailModal = ({ setOpen }) => {
       setAuthType('enterPassword');
     },
     onError: (error) => {
+      showToast('error', '驗證碼錯誤');
       console.error('Verification failed:', error);
     },
   });
@@ -62,7 +63,7 @@ const VerifyEmailModal = ({ setOpen }) => {
 
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
       <div
         className=" flex flex-col gap-4 justify-center "
         style={{ padding: '32px' }}

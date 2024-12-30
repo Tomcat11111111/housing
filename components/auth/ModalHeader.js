@@ -5,10 +5,10 @@ import { ChevronLeft, X } from 'lucide-react';
 
 import { useAuthTypeStore } from '@/store/useAuthStore';
 
-const ModalHeader = ({ setOpen }) => {
-  const { authType, setAuthType } = useAuthTypeStore();
+const ModalHeader = () => {
+  const { authType, setAuthType, setModalOpen } = useAuthTypeStore();
   const handleClose = () => {
-    setOpen(false);
+    setModalOpen(false);
   };
 
   const handleBack = () => {

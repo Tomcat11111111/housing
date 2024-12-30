@@ -8,7 +8,7 @@ import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
 import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
 
-const SignupModal = ({ setOpen }) => {
+const SignupModal = () => {
   const { setAuthType } = useAuthTypeStore();
   const { identity, setIdentity } = useRegisterStore();
 
@@ -18,7 +18,7 @@ const SignupModal = ({ setOpen }) => {
 
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
 
       <div
         className="flex flex-col gap-4 justify-center items-center"

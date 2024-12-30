@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { useToast } from '@/app/contexts/ToastContext';
 import {
   Button,
   IconButton,
@@ -17,10 +18,10 @@ import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
 import { completeRegistrationApi } from './actions';
 
-const EnterPasswordModal = ({ setOpen }) => {
+const EnterPasswordModal = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { setAuthType } = useAuthTypeStore();
+  const { setAuthType, setModalOpen } = useAuthTypeStore();
   const {
     email,
     verificationToken,
@@ -29,6 +30,7 @@ const EnterPasswordModal = ({ setOpen }) => {
     setAccessToken,
     accessToken,
   } = useRegisterStore();
+  const { showToast } = useToast();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -72,9 +74,11 @@ const EnterPasswordModal = ({ setOpen }) => {
         secure: true,
         sameSite: 'Strict',
       });
-      setOpen(false);
+      showToast('success', '登入成功');
+      setModalOpen(false);
     },
     onError: (error) => {
+      showToast('error', '註冊失敗');
       console.error('Complete Registration failed:', error);
     },
   });
@@ -85,7 +89,7 @@ const EnterPasswordModal = ({ setOpen }) => {
 
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
       <div
         className="flex flex-col gap-4 justify-center items-center"
         style={{

@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 
 import { useToast } from '@/app/contexts/ToastContext';
-import {
-  Button,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Snackbar,
-  TextField,
-} from '@mui/material';
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { useAuthTypeStore, useSigninStore } from '@/store/useAuthStore';
@@ -19,7 +11,7 @@ import ModalHeader from './ModalHeader';
 import { signinApi } from './actions';
 import Cookies from 'js-cookie';
 
-const SignInModal = ({ setOpen }) => {
+const SignInModal = () => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     email,
@@ -29,7 +21,7 @@ const SignInModal = ({ setOpen }) => {
     accessToken,
     setAccessToken,
   } = useSigninStore();
-  const { setAuthType } = useAuthTypeStore();
+  const { setAuthType, setModalOpen } = useAuthTypeStore();
   const { showToast } = useToast();
 
   const handleShowPassword = () => setShowPassword((show) => !show);
@@ -48,7 +40,7 @@ const SignInModal = ({ setOpen }) => {
       });
 
       showToast('success', '登入成功');
-      setOpen(false);
+      setModalOpen(false);
     },
     onError: (error) => {
       showToast('error', '登入失敗');
@@ -61,7 +53,7 @@ const SignInModal = ({ setOpen }) => {
 
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
       <div
         className="flex flex-col gap-4 justify-center items-center"
         style={{
