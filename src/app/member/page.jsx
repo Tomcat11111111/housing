@@ -9,27 +9,23 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Tab,
-  Tabs,
   TextField,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bookmark, ChevronRight, Search, Share2, SquareX } from 'lucide-react';
+import { Search, Share2, SquareX } from 'lucide-react';
 
 import ItemCard from '@/components/common/ItemCard/ItemCard';
 
+import { useMemberTabs } from '@/store/useTabsStore';
+
 import { useToast } from '../contexts/ToastContext';
 import { deleteBookmarkApi, getBookmarksApi } from './actions';
+import TabsBar from './components/TabsBar';
 
 const MemberPage = () => {
-  const [currentTab, setCurrentTab] = useState(0);
+  const { currentTab } = useMemberTabs();
   const [area, setArea] = useState('');
   const { showToast } = useToast();
-
-  // 切換 Tab 時更新狀態
-  const handleTabChange = (e, newValue) => {
-    setCurrentTab(newValue);
-  };
 
   const handleChange = (e) => {
     setArea(e.target.value);
@@ -58,6 +54,7 @@ const MemberPage = () => {
         balcony: property.balcony,
         location: property.location,
         images: [], // 預設為空陣列
+        isDisabled: property.isDisabled,
       };
 
       if (type === 'sales') {
@@ -99,7 +96,7 @@ const MemberPage = () => {
   };
 
   const handleShare = (propertyId) => {
-    const url = `https://jzj-api.zeabur.app/detail/buy?id=${propertyId}`;
+    const url = `https://jzj.hkg1.zeabur.app/detail/buy?id=${propertyId}`;
     navigator.clipboard
       .writeText(url)
       .then(() => {
@@ -113,40 +110,7 @@ const MemberPage = () => {
 
   return (
     <div className=" flex flex-col gap-6">
-      <div className="flex w-full items-center gap-6">
-        <div className="flex gap-2">
-          <Bookmark className=" h-8 w-8" />
-          <h1 className=" text-2xl font-bold">收藏管理</h1>
-        </div>
-        <div className=" flex flex-1 items-center font-bold justify-between">
-          <Tabs
-            value={currentTab}
-            onChange={handleTabChange}
-            centered
-            sx={{
-              '& .MuiTab-root': {
-                color: '#ccc', // 預設文字顏色
-              },
-              '& .MuiTab-root.Mui-selected': {
-                color: '#0936D8', // 選中時文字顏色
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#0936D8', // 指示器顏色
-              },
-            }}
-          >
-            <Tab label="出租物件" />
-            <p className=" self-center text-[#ccc]">|</p>
-            <Tab label="出售物件" />
-          </Tabs>
-          <div className=" border border-[#e9e9e9] rounded-lg">
-            <Button className="text-[#333333] p-2 gap-2">
-              <p>物件管理</p>
-              <ChevronRight />
-            </Button>
-          </div>
-        </div>
-      </div>
+      <TabsBar type={'bookmark'} />
       <div className=" flex w-full gap-2">
         <div className="w-[120px]">
           <FormControl fullWidth>
@@ -241,7 +205,7 @@ const MemberPage = () => {
                   <ItemCard itemData={item} index={index} type="buy" />
 
                   {/* 灰色遮罩和按鈕 */}
-                  <div className="absolute top-0 left-0 w-full h-full rounded-2xl bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 ">
+                  <div className="absolute top-0 left-0 w-full h-full rounded-2xl bg-[#333333] bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 ">
                     {/* 按鈕組 */}
                     <div className="flex flex-col items-center gap-2">
                       <Button

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 import { Box, Button, Modal } from '@mui/material';
@@ -8,13 +10,14 @@ import EnterEmailModal from './EnterEmailModal';
 import EnterPasswordModal from './EnterPasswordModal';
 import SignInModal from './SignInModal';
 import SignupModal from './SignupModal';
+import UnauthorizedModal from './UnauthorizedModal';
 import VerifyEmailModal from './VerifyEmailModal';
 
-const AuthModalContainer = ({ open, setOpen }) => {
-  const { authType, setAuthType } = useAuthTypeStore();
+const AuthModalContainer = () => {
+  const { authType, modalOpen, setModalOpen } = useAuthTypeStore();
 
   const handleClose = () => {
-    setOpen(false);
+    setModalOpen(false);
   };
 
   const style = {
@@ -30,15 +33,14 @@ const AuthModalContainer = ({ open, setOpen }) => {
 
   return (
     <div>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={modalOpen} onClose={handleClose}>
         <Box sx={style}>
-          {authType === 'signin' && <SignInModal setOpen={setOpen} />}
-          {authType === 'signup' && <SignupModal setOpen={setOpen} />}
-          {authType === 'enterEmail' && <EnterEmailModal setOpen={setOpen} />}
-          {authType === 'verifyEmail' && <VerifyEmailModal setOpen={setOpen} />}
-          {authType === 'enterPassword' && (
-            <EnterPasswordModal setOpen={setOpen} />
-          )}
+          {authType === 'unauthorized' && <UnauthorizedModal />}
+          {authType === 'signin' && <SignInModal />}
+          {authType === 'signup' && <SignupModal />}
+          {authType === 'enterEmail' && <EnterEmailModal />}
+          {authType === 'verifyEmail' && <VerifyEmailModal />}
+          {authType === 'enterPassword' && <EnterPasswordModal />}
         </Box>
       </Modal>
     </div>

@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-
+import { useToast } from '@/app/contexts/ToastContext';
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { useAuthTypeStore, useRegisterStore } from '@/store/useAuthStore';
 
@@ -10,7 +8,7 @@ import AuthStepper from './AuthStepper';
 import ModalHeader from './ModalHeader';
 import { sendVerificationCodeApi } from './actions';
 
-const EnterEmailModal = ({ setOpen }) => {
+const EnterEmailModal = () => {
   const { setAuthType } = useAuthTypeStore();
   const { email, name, setEmail, setName } = useRegisterStore();
   const { showToast } = useToast();
@@ -32,7 +30,7 @@ const EnterEmailModal = ({ setOpen }) => {
 
   return (
     <div>
-      <ModalHeader setOpen={setOpen} />
+      <ModalHeader />
       <div
         className=" flex flex-col gap-4 justify-center "
         style={{ padding: '32px' }}

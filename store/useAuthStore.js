@@ -1,9 +1,19 @@
 import { create } from 'zustand';
 
+import { deleteCookie, getCookie } from 'cookies-next';
+
 export const useAuthTypeStore = create((set) => ({
   authType: '',
+  modalOpen: false,
+  hasToken: !!getCookie('jzj_token'),
   setAuthType: (type) => {
     set(() => ({ authType: type }));
+  },
+  setModalOpen: (isOpen) => set({ modalOpen: isOpen }),
+  checkToken: () => set({ hasToken: !!getCookie('jzj_token') }),
+  logout: () => {
+    deleteCookie('jzj_token');
+    set({ hasToken: false });
   },
 }));
 

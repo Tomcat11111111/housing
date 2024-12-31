@@ -17,7 +17,7 @@ const Footer = () => {
   const router = useRouter();
 
   const { setSelectedTab } = useSearchStore();
-  const { setAuthType } = useAuthTypeStore();
+  const { setAuthType, setModalOpen } = useAuthTypeStore();
 
   return (
     <div className={styles.footer}>
@@ -82,7 +82,15 @@ const Footer = () => {
               <span>會員服務</span>
             </div>
             <ul className={styles.list}>
-              <li onClick={() => setAuthType('signup')}>加入會員</li>
+              <li
+                onClick={() => {
+                  setAuthType('signup');
+                  setModalOpen(true);
+                }}
+              >
+                加入會員
+              </li>
+
               <li onClick={() => router.push('/partner')}>合作業務</li>
             </ul>
           </div>

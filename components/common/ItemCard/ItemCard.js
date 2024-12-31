@@ -9,7 +9,11 @@ import Tag from '@/common/Tag/Tag';
 
 import CustomStepper from '@/components/common/Stepper/Stepper';
 
-import { getPriceStatusInfo, getSalePriceDisplay } from '@/utils/tools';
+import {
+  calculateUpdatedTime,
+  getPriceStatusInfo,
+  getSalePriceDisplay,
+} from '@/utils/tools';
 
 import Arrow from '@/icon/Arrow/Arrow';
 import BedIcon from '@/icon/BedIcon/BedIcon';
@@ -197,7 +201,7 @@ const ItemCard = (props) => {
             )}
             |
             <Tag
-              text={`${updatedAt}小時內更新`}
+              text={calculateUpdatedTime(updatedAt)}
               icon={<Clock />}
               gap="4px"
               iconPosition="left"

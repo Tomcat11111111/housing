@@ -6,7 +6,8 @@ export const createSalePropertyApi = async (data) => {
     data,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
+        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
       },
     }
   );
@@ -19,7 +20,7 @@ export const createRentPropertyApi = async (data) => {
     data,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
       },
     }
   );
@@ -32,7 +33,7 @@ export const getPropertyDetailApi = async (data) => {
     `https://jzj-api.zeabur.app/cms/properties/${id}`,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
       },
     }
   );
@@ -45,7 +46,7 @@ export const updateRentalPropertyApi = async (id, data) => {
     data,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
       },
     }
   );
@@ -58,7 +59,7 @@ export const updateSalePropertyApi = async (id, data) => {
     data,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
       },
     }
   );
@@ -77,7 +78,8 @@ export const uploadImageApi = async (images) => {
       formData,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('jzj_token')}`,
+          // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
           'Content-Type': 'multipart/form-data',
         },
       }

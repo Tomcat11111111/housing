@@ -9,7 +9,13 @@ const AnnouncementCard = () => {
       <div className="flex justify-between items-center pb-4">
         <h1 className=" text-2xl font-bold">網站公告</h1>
         <div className=" border border-[#e9e9e9] rounded-lg">
-          <Button className="text-[#333333] p-2 gap-2">
+          <Button
+            sx={{
+              color: '#333333',
+              padding: '8px',
+              gap: '8px',
+            }}
+          >
             <p>瀏覽更多</p>
             <ChevronRight />
           </Button>
