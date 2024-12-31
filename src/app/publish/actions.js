@@ -7,7 +7,6 @@ export const createSalePropertyApi = async (data) => {
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
       },
     }
   );
@@ -21,7 +20,45 @@ export const createRentPropertyApi = async (data) => {
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ3NjkzMzAsImV4cCI6MTczNDg1NTczMH0.z6KkJaxpKAjazjsHanMutL_jnl65y1p2x8OfneQKQXg`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const getPropertyDetailApi = async (data) => {
+  const { id } = data.meta;
+  const response = await axios.get(
+    `https://jzj-api.zeabur.app/cms/properties/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateRentalPropertyApi = async (id, data) => {
+  const response = await axios.put(
+    `https://jzj-api.zeabur.app/cms/properties/for-rent/${id}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateSalePropertyApi = async (id, data) => {
+  const response = await axios.put(
+    `https://jzj-api.zeabur.app/cms/properties/for-sale/${id}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     }
   );
@@ -41,7 +78,6 @@ export const uploadImageApi = async (images) => {
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
-          // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ5MzUzMzMsImV4cCI6MTczNTAyMTczM30.txF-ncNch68PP7nKx-KxbAWulS8T-T735OdULxlIRNA`,
           'Content-Type': 'multipart/form-data',
         },
       }

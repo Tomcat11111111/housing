@@ -1,9 +1,13 @@
 import { create } from 'zustand';
 
 const usePublishStore = create((set) => ({
+  editPropertyState: {
+    isEdit: false,
+    step: 0,
+  },
   itemTypeSettings: {
     publishType: null,
-    itemType: null,
+    itemType: 'house',
     category: null,
   },
   property: {
@@ -69,6 +73,10 @@ const usePublishStore = create((set) => ({
     floor: '',
     houseRoom: '',
   },
+  setEditPropertyState: (editProperty) =>
+    set((state) => ({
+      editPropertyState: { ...state.editPropertyState, ...editProperty },
+    })),
   setItemTypeSettings: (settings) =>
     set((state) => ({
       itemTypeSettings: { ...state.itemTypeSettings, ...settings },
