@@ -21,7 +21,7 @@ import { completeRegistrationApi } from './actions';
 const EnterPasswordModal = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { setAuthType, setModalOpen } = useAuthTypeStore();
+  const { setAuthType, setModalOpen, checkToken } = useAuthTypeStore();
   const {
     email,
     verificationToken,
@@ -67,13 +67,14 @@ const EnterPasswordModal = () => {
     onSuccess: (data) => {
       const token = data.access_token;
       setAccessToken(token);
-      localStorage.setItem('token', token);
-      Cookies.set('token', token, {
-        expires: 1,
+      localStorage.setItem('jzj_token', token);
+      Cookies.set('jzj_token', token, {
+        expires: 15,
         path: '/',
         secure: true,
         sameSite: 'Strict',
       });
+      checkToken();
       showToast('success', '登入成功');
       setModalOpen(false);
     },

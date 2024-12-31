@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
@@ -18,7 +20,12 @@ const Header = ({ headerType = 'default' }) => {
   const router = useRouter();
   const { selectedTab, setSelectedTab } = useSearchStore();
 
-  const { setAuthType, setModalOpen } = useAuthTypeStore();
+  const { setAuthType, setModalOpen, checkToken, hasToken } =
+    useAuthTypeStore();
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   return (
     <header className={styles.headerContainer}>
@@ -80,41 +87,64 @@ const Header = ({ headerType = 'default' }) => {
                 <div className="flex items-center justify-center ">
                   <Button
                     onClick={() => {
-                      setAuthType('unauthorized');
-                      setModalOpen(true);
+                      if (!hasToken) {
+                        setAuthType('unauthorized');
+                        setModalOpen(true);
+                      } else {
+                        router.push('/publish');
+                      }
                     }}
-                    className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] font-bold"
+                    sx={{
+                      color: '#333333',
+                      fontWeight: '700',
+                    }}
+                    className=" rounded-lg hover:bg-[#e9e9e9]  font-bold"
                   >
                     在TOPRE上刊登物件
                   </Button>
                   |
                 </div>
                 <div className={styles.memberArea}>
-                  <div className={styles.memberButton}>
-                    <Button
-                      onClick={() => {
-                        setAuthType('signin');
-                        setModalOpen(true);
-                      }}
-                      className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] "
-                    >
-                      登入
-                    </Button>
-                    |
-                    <Button
-                      onClick={() => {
-                        setAuthType('signup');
-                        setModalOpen(true);
-                      }}
-                      className=" rounded-lg hover:bg-[#e9e9e9] text-[#333333] "
-                    >
-                      註冊
-                    </Button>
-                    |
-                  </div>
+                  {!hasToken && (
+                    <div className={styles.memberButton}>
+                      <Button
+                        onClick={() => {
+                          setAuthType('signin');
+                          setModalOpen(true);
+                        }}
+                        sx={{
+                          color: '#333333',
+                        }}
+                        className=" rounded-lg hover:bg-[#e9e9e9]  "
+                      >
+                        登入
+                      </Button>
+                      |
+                      <Button
+                        onClick={() => {
+                          setAuthType('signup');
+                          setModalOpen(true);
+                        }}
+                        sx={{
+                          color: '#333333',
+                        }}
+                        className=" rounded-lg hover:bg-[#e9e9e9]  "
+                      >
+                        註冊
+                      </Button>
+                      |
+                    </div>
+                  )}
                   <div
                     className=" cursor-pointer"
-                    onClick={() => router.push('/member')}
+                    onClick={() => {
+                      if (!hasToken) {
+                        setAuthType('unauthorized');
+                        setModalOpen(true);
+                      } else {
+                        router.push('/member');
+                      }
+                    }}
                   >
                     <Account color="#0936D8" />
                   </div>
