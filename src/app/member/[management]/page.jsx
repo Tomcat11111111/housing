@@ -99,7 +99,6 @@ const ManagemnentPage = () => {
     { salesProperties: [], rentalProperties: [] }
   );
 
-  console.log(data?.data);
   return (
     <div className=" flex flex-col gap-6">
       <TabsBar type={'management'} />

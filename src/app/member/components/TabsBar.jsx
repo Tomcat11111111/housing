@@ -52,7 +52,11 @@ const TabsBar = ({ type }) => {
           </Tabs>
           <div className=" border border-[#e9e9e9] rounded-lg">
             <Button
-              className="text-[#333333] p-2 gap-2"
+              sx={{
+                color: '#333333',
+                padding: '8px',
+                gap: '8px',
+              }}
               onClick={() => {
                 if (type === 'bookmark') {
                   router.push('/member/management');
