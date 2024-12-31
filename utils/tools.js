@@ -201,3 +201,17 @@ export const getImageurl = (images, activeStep) => {
 
   return '/image/house_item.png';
 };
+
+export const calculateUpdatedTime = (updatedAt) => {
+  const now = new Date(); // 取得現在時間
+  const updatedDate = new Date(updatedAt); // 將 updatedAt 轉為 Date 物件
+
+  // 計算時間差 (毫秒)
+  const timeDifferenceMs = now - updatedDate;
+
+  // 將時間差轉換成小時
+  const hoursDifference = Math.floor(timeDifferenceMs / (1000 * 60 * 60));
+
+  // 回傳格式化字串
+  return `${hoursDifference}小時內更新`;
+};
