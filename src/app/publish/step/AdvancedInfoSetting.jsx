@@ -30,11 +30,11 @@ import SortableImage from './SortableImage';
 const advancedInfoSchema = yup.object().shape({
   images: yup.array().min(5, '請至少上傳5張照片'),
   contactName: yup.string().required('請輸入聯絡人姓名'),
-  // landline: yup.string().matches(/^0\d{8}$/, '請輸入正確的電話號碼格式'),
   contactNumber: yup.string()
-    .required('請輸入行動電話')
-    .matches(/^09\d{8}$/, '請輸入正確的手機號碼格式'),
-  // contactEmail: yup.string().email('請輸入正確的電子信箱格式'),
+  .required('請輸入行動電話')
+  .matches(/^09\d{8}$/, '請輸入正確的手機號碼格式'),
+  contactEmail: yup.string().email('請輸入正確的電子信箱格式'), // 可以不帶
+  // landline: yup.string().matches(/^0\d{8}$/, '請輸入正確的電話號碼格式'),
 });
 
 const AdvancedInfoSetting = forwardRef((props, ref) => {

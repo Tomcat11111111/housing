@@ -83,7 +83,7 @@ const PreviewDetailPage = () => {
     //   queryFn: getRulesApi,
     // });
 
-  const registeredArea = salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea;
+  const registeredArea = parseInt(salesInfo.mainBuildingArea) + parseInt(salesInfo.accessoryBuildingArea) + parseInt(salesInfo.publicFacilityArea)  ;
   const legalUsageDisplay = salesInfo.hiddenLegalUsage ? salesInfo.legalUsage.charAt(0) : salesInfo.legalUsage;
   const type = itemTypeSettings.publishType;
   const firstFiveImages = slice(property.images, 0, 5);
@@ -244,6 +244,7 @@ const PreviewDetailPage = () => {
       description: rentalInfo?.includedInRentIds.length > 0 ? formatIds(rentalInfo.includedInRentIds, includedInRentOptions) : null
     }
   };
+  console.log("🚀 ~ PreviewDetailPage ~ formattedData:", formattedData)
 
   return (
     <div className="bg-[#FFF] rounded-2xl p-2 h-[100%] overflow-hidden relative">

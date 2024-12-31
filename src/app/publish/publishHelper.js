@@ -51,12 +51,12 @@ export const LegalUsageOptions = [
 ];
 
 export const CurrentStatusOptions = [
-  { value: 'self_living', text: '自住中' },
-  { value: 'rented', text: '出租中' },
-  { value: 'vacant', text: '空屋' },
-  { value: 'under_construction', text: '尚未完工' },
+  { value: 'self_live', text: '自住中' },
+  { value: 'renting', text: '出租中' },
+  { value: 'empty', text: '空屋' },
+  { value: 'not_completed', text: '尚未完工' },
   { value: 'needs_repair', text: '需修繕' },
-  { value: 'new', text: '新成屋' },
+  { value: 'newly_built', text: '新成屋' },
 ];
 
 export const LeaseStatusOptions = [
@@ -98,4 +98,10 @@ export const DepositOptions = [
 export const getTextFromList = (value, list = []) => {
   const item = list.find((i) => i.id === value || i.value === value);
   return item ? item.displayName || item.text : value; // 若沒有找到對應的項目，則回傳原始值
+};
+
+export const handleNumberInput = (value) => {
+  const number = value.replace(/[^\d]/g, '');
+
+  return number ? parseInt(number) : 0;
 };

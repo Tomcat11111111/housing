@@ -6,17 +6,17 @@ const FacilityRules = (props) => {
     <div className={styles.area}>
       <span className={styles.title}>設備＆規則</span>
       <div className={styles.infoArea}>
-        <span className={styles.infoType}>{landLordOffer.title}</span>
-        {landLordOffer.content.map((offer, index) => (
+        <span className={styles.infoType}>{landLordOffer?.title}</span>
+        {landLordOffer?.content?.map((offer, index) => (
           <div key={`offer_${index}`} className={styles.infoGroup}>
-            <p className={styles.colon}>{offer.subtitle}：</p>
-            <p className={styles.info}>{offer.description}</p>
+            <p className={styles.colon}>{offer?.subtitle}：</p>
+            <p className={styles.info}>{offer?.description}</p>
           </div>
         ))}
       </div>
       <div className={styles.infoArea}>
         <span className={styles.infoType}>房屋設備</span>
-        {equipments?.content.map((item) => (
+        {equipments?.content?.map((item) => (
           <div className={styles.infoGroup} key={item?.subtitle}>
             <p className={styles.colon}>{item?.subtitle}：</p>
             <p className={styles.info}>{item?.description}</p>

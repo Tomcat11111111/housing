@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useMutation } from '@tanstack/react-query';
+import { dayjs } from 'dayjs';
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
 
 import usePublishStore from '@/store/usePublishStore';
@@ -19,7 +20,8 @@ import ItemPreview from './step/ItemPreview';
 import TypeSetting from './step/TypeSetting';
 
 const Publish = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
+
   const typeSettingRef = useRef(null);
   const infoSettingRef = useRef(null);
   const saleHouseRef = useRef(null);
@@ -82,10 +84,30 @@ const Publish = () => {
     },
   });
 
+  const formatrentInfo = (rentalInfo) => {
+    const moveInDate = rentalInfo.moveInDate
+      ? dayjs(rentalInfo.moveInDate).format('YYYY-MM-DD')
+      : null;
+
+    return {
+      ...rentalInfo,
+      moveInDate,
+    };
+  };
+
+  const formatSalesInfo = (salesInfo) => {
+    return {
+      ...salesInfo,
+    };
+  };
+
   const onPublishProperty = () => {
     const publishType = itemTypeSettings.publishType;
     const infoName = publishType === 'buy' ? 'salesInfo' : 'rentalInfo';
-    const info = publishType === 'buy' ? salesInfo : rentalInfo;
+    const info =
+      publishType === 'buy'
+        ? formatSalesInfo(salesInfo)
+        : formatrentInfo(rentalInfo);
 
     publishProperty({
       property,

@@ -74,6 +74,7 @@ const TypeSetting = forwardRef((props, ref) => {
               variant={itemTypeSettings.publishType === item.value ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() => handlePublishTypeChange(item.value)}
+              disabled={item.value.includes('disabled')}
             >
               {item.text}
             </Button>

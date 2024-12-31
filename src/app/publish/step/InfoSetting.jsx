@@ -25,7 +25,7 @@ import {
 } from '@mui/material';
 
 import FieldGroup from './FieldGroup';
-import { getTextFromList, PublishTypeList, ItemTypeList, RentHouseTypeList, BuyHouseTypeList } from '../publishHelper';
+import { getTextFromList, PublishTypeList, ItemTypeList, RentHouseTypeList, BuyHouseTypeList, handleNumberInput } from '../publishHelper';
 import { getCitiesApi, getShapesApi } from '../actions';
 
 import usePublishStore from '@/store/usePublishStore';
@@ -289,7 +289,9 @@ const InfoSetting = forwardRef((props, ref) => {
             className="w-[405px]"
             id="contacts"
             value={property.floor}
-            onChange={(e) => setProperty({ floor: e.target.value })}
+            onChange={(e) => {
+              setProperty({ floor: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.floor}
             helperText={errors.floor?.message}
             placeholder="0 為整棟 -1 為地下室 +1 為頂樓加蓋"
@@ -319,7 +321,9 @@ const InfoSetting = forwardRef((props, ref) => {
           <TextField
             className="w-[158px]"
             value={property.totalFloors}
-            onChange={(e) => setProperty({ totalFloors: e.target.value })}
+            onChange={(e) => {
+              setProperty({ totalFloors: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.totalFloors}
             helperText={errors.totalFloors?.message}
             slotProps={{
@@ -353,7 +357,9 @@ const InfoSetting = forwardRef((props, ref) => {
           <TextField
             id="room"
             value={property.room}
-            onChange={(e) => setProperty({ room: e.target.value })}
+            onChange={(e) => {
+              setProperty({ room: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.room}
             helperText={errors.room?.message}
             sx={{ width: '150px' }}
@@ -371,7 +377,9 @@ const InfoSetting = forwardRef((props, ref) => {
           <TextField
             id="livingRoom"
             value={property.livingRoom}
-            onChange={(e) => setProperty({ livingRoom: e.target.value })}
+            onChange={(e) => {
+              setProperty({ livingRoom: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.livingRoom}
             helperText={errors.livingRoom?.message}
             sx={{ width: '150px' }}
@@ -389,7 +397,9 @@ const InfoSetting = forwardRef((props, ref) => {
           <TextField
             id="bathroom"
             value={property.bathroom}
-            onChange={(e) => setProperty({ bathroom: e.target.value })}
+            onChange={(e) => {
+              setProperty({ bathroom: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.bathroom}
             helperText={errors.bathroom?.message}
             sx={{ width: '150px' }}
@@ -407,7 +417,9 @@ const InfoSetting = forwardRef((props, ref) => {
           <TextField
             id="balcony"
             value={property.balcony}
-            onChange={(e) => setProperty({ balcony: e.target.value })}
+            onChange={(e) => {
+              setProperty({ balcony: handleNumberInput(e.target.value) })
+            }}
             error={!!errors.balcony}
             helperText={errors.balcony?.message}
             sx={{ width: '150px' }}

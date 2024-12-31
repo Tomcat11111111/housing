@@ -56,13 +56,7 @@ export const uploadImageApi = async (images) => {
 
 export const getCitiesApi = async () => {
   const response = await axios.get(
-    'https://jzj-api.zeabur.app/locations/cities',
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzUwMDg1ODQsImV4cCI6MTczNTA5NDk4NH0.-sLhQKOG3MGLK7HXeyrpr9S7nInKrrsOth16F3CUsJo`,
-      },
-    }
+    'https://jzj-api.zeabur.app/locations/cities'
   );
 
   return response.data;

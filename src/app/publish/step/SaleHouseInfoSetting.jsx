@@ -25,6 +25,7 @@ import {
   LegalUsageOptions,
   CurrentStatusOptions,
   LeaseStatusOptions,
+  handleNumberInput
 } from '../publishHelper';
 
 import { getDecorLevelsApi } from '../actions';
@@ -100,7 +101,11 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
   };
 
   const buildingRegistrationArea = useMemo(() => {
-    return (salesInfo.mainBuildingArea + salesInfo.accessoryBuildingArea + salesInfo.publicFacilityArea);
+    const mainBuilding = parseInt(salesInfo.mainBuildingArea);
+    const accessoryBuilding = parseInt(salesInfo.accessoryBuildingArea);
+    const publicFacility = parseInt(salesInfo.publicFacilityArea);
+
+    return (mainBuilding + accessoryBuilding + publicFacility);
   }, [salesInfo.mainBuildingArea, salesInfo.accessoryBuildingArea, salesInfo.publicFacilityArea]);
   
       
@@ -114,10 +119,10 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
   <FieldGroup title="物件細項">
     <div className="flex items-center gap-2">
       <TextField
-        type="number"
-        id="contacts"
+        id="mainBuildingArea"
         value={salesInfo.mainBuildingArea}
-        onChange={(e) => handleSalesInfoChange('mainBuildingArea', e.target.value)}
+        onChange={(e) => {
+          handleSalesInfoChange('mainBuildingArea', handleNumberInput(e.target.value))}}
         error={!!errors.mainBuildingArea}
         helperText={errors.mainBuildingArea?.message || ' '}
         placeholder="請輸入坪數"
@@ -143,9 +148,10 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
       ＋
       <TextField
         type="number"
-        id="contacts"
+        id="accessoryBuildingArea"
         value={salesInfo.accessoryBuildingArea}
-        onChange={(e) => handleSalesInfoChange('accessoryBuildingArea', e.target.value)}
+        onChange={(e) => {
+          handleSalesInfoChange('accessoryBuildingArea', handleNumberInput(e.target.value))}}
         error={!!errors.accessoryBuildingArea}
         helperText={errors.accessoryBuildingArea?.message || ' '}
         placeholder="請輸入坪數"
@@ -173,7 +179,8 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
         type="number"
         id="publicFacilityArea"
         value={salesInfo.publicFacilityArea}
-        onChange={(e) => handleSalesInfoChange('publicFacilityArea', e.target.value)}
+        onChange={(e) => {
+          handleSalesInfoChange('publicFacilityArea', handleNumberInput(e.target.value))}}
         error={!!errors.publicFacilityArea}
         helperText={errors.publicFacilityArea?.message || ' '}
         placeholder="請輸入坪數"
@@ -259,7 +266,9 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
         type="number"
         id="age"
         value={property.age}
-        onChange={(e) => handlePropertyChange('age', e.target.value)}
+        onChange={(e) => {
+          handlePropertyChange('age', handleNumberInput(e.target.value))
+        }}
         placeholder="請輸入屋齡"
         sx={{ width: '302px' }}
         slotProps={{  
@@ -294,7 +303,9 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
         type="number"
         id="managementFee"
         value={salesInfo.managementFee}
-        onChange={(e) => setSalesInfo({ managementFee: e.target.value })}
+        onChange={(e) => {
+          setSalesInfo({ managementFee: handleNumberInput(e.target.value) })}
+        }
         placeholder="請輸入管理費"
         sx={{ width: '302px' }}
         slotProps={{
@@ -368,7 +379,9 @@ const SaleHouseInfoSetting = forwardRef((props, ref) => {
       type="number"
       id="totalPrice"
       value={salesInfo.totalPrice}
-      onChange={(e) => handleSalesInfoChange('totalPrice', e.target.value)}
+      onChange={(e) => {
+        handleSalesInfoChange('totalPrice', handleNumberInput(e.target.value))
+      }}
       error={!!errors.totalPrice}
       helperText={errors.totalPrice?.message || ' '}
       placeholder="請輸入物件總價"
