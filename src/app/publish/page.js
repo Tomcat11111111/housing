@@ -76,7 +76,7 @@ const Publish = () => {
 
   const { mutate: publishProperty } = useMutation({
     mutationFn:
-      itemTypeSettings.publishType === 'buy'
+      itemTypeSettings.publishType === 'sales'
         ? createSalePropertyApi
         : createRentPropertyApi,
     onSuccess: () => {
@@ -103,9 +103,9 @@ const Publish = () => {
 
   const onPublishProperty = () => {
     const publishType = itemTypeSettings.publishType;
-    const infoName = publishType === 'buy' ? 'salesInfo' : 'rentalInfo';
+    const infoName = publishType === 'sales' ? 'salesInfo' : 'rentalInfo';
     const info =
-      publishType === 'buy'
+      publishType === 'sales'
         ? formatSalesInfo(salesInfo)
         : formatrentInfo(rentalInfo);
 

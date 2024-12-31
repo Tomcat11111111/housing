@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { Building } from 'lucide-react';
 
 export const PublishTypeList = [
-  { value: 'buy', text: '出售', icon: <Building /> },
-  { value: 'rent', text: '出租', icon: <Building /> },
+  { value: 'sales', text: '出售', icon: <Building /> },
+  { value: 'rental', text: '出租', icon: <Building /> },
   { value: 'disabled_1', text: '新建案', icon: <Building /> },
 ];
 
@@ -104,4 +103,107 @@ export const handleNumberInput = (value) => {
   const number = value.replace(/[^\d]/g, '');
 
   return number ? parseInt(number) : 0;
+};
+
+export const transformRentalInfoData = (rentalInfoData) => {
+  return {
+    // 租金相關
+    price: rentalInfoData.price || 0,
+    depositMonths: rentalInfoData.depositMonths || 0,
+    deposit: rentalInfoData.deposit || 0,
+    electricityFee: rentalInfoData.electricityFee || '',
+    maintenance: rentalInfoData.maintenance || '',
+
+    // 租期相關
+    term: rentalInfoData.term || '',
+    availableDate: rentalInfoData.availableDate || null,
+
+    // 物件特性
+    category: rentalInfoData.category || '',
+    materialId: rentalInfoData.materialId || '',
+    parkingSpace: rentalInfoData.parkingSpace || '',
+
+    // 其他資訊
+    introduction: rentalInfoData.introduction || '',
+  };
+};
+
+export const transformSalesInfoData = (salesInfoData) => {
+  return {
+    // 建物面積相關
+    mainBuildingArea: salesInfoData.mainBuildingArea || 0,
+    accessoryBuildingArea: salesInfoData.accessoryBuildingArea || 0,
+    publicFacilityArea: salesInfoData.publicFacilityArea || 0,
+    buildingRegistrationArea: salesInfoData.buildingRegistrationArea || 0,
+    publicFacilityRatio: salesInfoData.publicFacilityRatio || null,
+
+    // 價格相關
+    totalPrice: salesInfoData.totalPrice || 0,
+    unitPrice: salesInfoData.unitPrice || 0,
+    managementFee: salesInfoData.managementFee || '',
+
+    // 物件狀態
+    status: salesInfoData.status || '',
+    leaseStatus: salesInfoData.leaseStatus || '',
+    legalUsage: salesInfoData.legalUsage || '',
+    hiddenLegalUsage: salesInfoData.hiddenLegalUsage || false,
+
+    // 物件特性
+    parkingSpace: salesInfoData.parkingSpace || '',
+    direction: salesInfoData.direction || '',
+    source: salesInfoData.source || '',
+    category: salesInfoData.category || '',
+
+    // 其他資訊
+    introduction: salesInfoData.introduction || '',
+  };
+};
+
+export const transformPropertyData = (propertyData) => {
+  return {
+    // 基本資訊
+    title: propertyData.title || '',
+    shapeId: propertyData.shapeId,
+    age: propertyData.age || 0,
+    squareMeters: propertyData.squareMeters || 0,
+    floor: propertyData.floor || '',
+    totalFloors: propertyData.totalFloors || '',
+    room: propertyData.room || 0,
+    livingRoom: propertyData.livingRoom || 0,
+    bathroom: propertyData.bathroom || 0,
+    balcony: propertyData.balcony || 0,
+
+    // 設備與狀態
+    hasElevator: propertyData.hasElevator || false,
+    hasParking: propertyData.hasParking || false,
+    decorLevelId: propertyData.decorLevelId,
+    status: propertyData.status || 'available',
+
+    // 聯絡資訊
+    contactName: propertyData.contactName || '',
+    contactNumber: propertyData.contactNumber || '',
+    contactEmail: propertyData.contactEmail || '',
+    landline: propertyData.landline || '',
+    // 圖片
+    images: propertyData.images?.map((image) => image.url) || [],
+
+    // 其他資訊
+    isDisabled: propertyData.isDisabled || false,
+    views: propertyData.views || 0,
+  };
+};
+
+export const transformLocationData = (locationData) => {
+  return {
+    cityId: locationData.cityId,
+    districtId: locationData.districtId,
+    address: locationData.address,
+    street: locationData.street || '',
+    alley: locationData.alley || '',
+    lane: locationData.lane || '',
+    number: locationData.number || '',
+    floor: locationData.floor || '',
+    room: locationData.room || '',
+    coordinates: locationData.geolocation?.coordinates || [],
+  };
 };

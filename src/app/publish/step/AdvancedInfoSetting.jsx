@@ -53,17 +53,17 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
   const handleIntroductionChange = (e) => {
     const inputText = e.target.value;
     const type = itemTypeSettings.publishType;
-    const updateFunction = type === 'buy' ? setSalesInfo : setRentInfo;
+    const updateFunction = type === 'sales' ? setSalesInfo : setRentInfo;
 
     if (inputText.length > MAX_CHAR) {
       const truncatedText = inputText.slice(0, MAX_CHAR);
       updateFunction({
-        ...type === 'buy' ? salesInfo : rentalInfo,
+        ...type === 'sales' ? salesInfo : rentalInfo,
         introduction: truncatedText,
       });
     } else {
       updateFunction({
-        ...type === 'buy' ? salesInfo : rentalInfo,
+        ...type === 'sales' ? salesInfo : rentalInfo,
         introduction: inputText,
       });
     }
@@ -92,9 +92,6 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
       images: property.images,
     },
   });
-
-  console.log("🚀 ~ AdvancedInfoSetting ~ errors:", errors)
-
 
 
   // 暴露方法給父組件
@@ -146,7 +143,7 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
   });
 
   const type = itemTypeSettings.publishType;
-  const info = type === 'buy' ? salesInfo : rentalInfo;
+  const info = type === 'sales' ? salesInfo : rentalInfo;
 
   // 物件型態
   const { data: shapesOptions } = useQuery({
@@ -380,6 +377,8 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
             id="contacts"
             placeholder="請輸入電子信箱"
             value={property.contactEmail}
+            error={!!errors.contactEmail}
+            helperText={errors.contactEmail?.message}
             onChange={(e) => {
               setProperty({
                 contactEmail:e.target.value,
@@ -389,7 +388,7 @@ const AdvancedInfoSetting = forwardRef((props, ref) => {
             slotProps={{
               input: {
                 startAdornment: (
-                  <InputAdornment position="start">Email</InputAdornment>
+                  <InputAdornment position="start">Email＊</InputAdornment>
                 ),
               },
             }}

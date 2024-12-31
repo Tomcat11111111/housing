@@ -16,6 +16,7 @@ const typeSettingSchema = yup.object().shape({
 });
 
 const TypeSetting = forwardRef((props, ref) => {
+  const { isEdit = false } = props;
   const { itemTypeSettings, setItemTypeSettings } = usePublishStore();
   
   const {
@@ -57,7 +58,7 @@ const TypeSetting = forwardRef((props, ref) => {
     });
   };
 
-  const ItemCategoryList = itemTypeSettings.publishType === 'buy' ? BuyHouseTypeList : RentHouseTypeList;
+  const ItemCategoryList = itemTypeSettings.publishType === 'sales' ? BuyHouseTypeList : RentHouseTypeList;
 
   return (
     <form className="flex flex-col gap-6 my-6">
@@ -74,7 +75,7 @@ const TypeSetting = forwardRef((props, ref) => {
               variant={itemTypeSettings.publishType === item.value ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() => handlePublishTypeChange(item.value)}
-              disabled={item.value.includes('disabled')}
+              disabled={item.value.includes('disabled') || isEdit}
             >
               {item.text}
             </Button>
@@ -92,11 +93,12 @@ const TypeSetting = forwardRef((props, ref) => {
             <Button
               key={item.value}
               className="h-20 flex-[0_1_calc(33%-24px)] text-xl"
+              // sx={{ bgcolor: '#0936D8' }} //TODO:顏色處理
               color={itemTypeSettings.itemType === item.value ? 'primary' : 'default'}
               variant={itemTypeSettings.itemType === item.value ? 'contained' : 'outlined'}
               startIcon={item.icon}
               onClick={() => handleItemTypeChange(item.value)}
-              disabled={item.value.includes('disabled')}
+              disabled={item.value.includes('disabled') || isEdit}
             >
               {item.text}
             </Button>

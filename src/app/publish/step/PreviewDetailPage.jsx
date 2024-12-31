@@ -244,7 +244,6 @@ const PreviewDetailPage = () => {
       description: rentalInfo?.includedInRentIds.length > 0 ? formatIds(rentalInfo.includedInRentIds, includedInRentOptions) : null
     }
   };
-  console.log("🚀 ~ PreviewDetailPage ~ formattedData:", formattedData)
 
   return (
     <div className="bg-[#FFF] rounded-2xl p-2 h-[100%] overflow-hidden relative">
@@ -270,7 +269,7 @@ const PreviewDetailPage = () => {
             coordinates.lat,
             coordinates.lng
           ]}} />
-          {type === 'rent' && (
+          {type === 'rental' && (
             <FacilityRules
               landLordOffer={formattedData.landLordOffer}
               equipments={formattedData.equipments}
@@ -278,14 +277,14 @@ const PreviewDetailPage = () => {
               inclusions={formattedData.inclusions}
             />
           )}
-          {type === 'buy' && (
+          {type === 'sales' && (
             <PropertySummary propertySummary={propertySummary} />
           )}
           {salesInfo.introduction && <Introduction introduction={salesInfo.introduction} />}
           {rentalInfo.introduction && <Introduction introduction={rentalInfo.introduction} />}
         </article>
         <DetailSideBar
-          price={type === 'buy' ? salesInfo?.totalPrice : rentalInfo?.price}
+          price={type === 'sales' ? salesInfo?.totalPrice : rentalInfo?.price}
           unitPrice={salesInfo?.totalPrice / property.squareMeters}
           views={property?.views}
           type={type}

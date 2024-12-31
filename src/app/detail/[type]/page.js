@@ -35,7 +35,7 @@ export default function Detail({ params }) {
 
   const getDetailApi = async () => {
     const response = await axios.get(
-      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}/${propertyId}`
+      `https://jzj-api.zeabur.app/properties/${type === 'rental' ? 'for-rent' : 'for-sale'}/${propertyId}`
     );
     return response.data;
   };
@@ -44,7 +44,7 @@ export default function Detail({ params }) {
     queryKey: [`detail_${propertyId}`],
     queryFn: getDetailApi,
     select: (response) => {
-      if (type === 'buy') return response;
+      if (type === 'sales') return response;
 
       const { property = {}, rentalOffersAndRules } = response;
       let modifyRules = [];

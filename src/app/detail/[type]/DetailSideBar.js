@@ -30,7 +30,7 @@ const DetailSideBar = (props) => {
 
   const reserveApi = async ({ name, phone, email }) => {
     const response = await axios.post(
-      `https://jzj-api.zeabur.app/properties/${type === 'rent' ? 'for-rent' : 'for-sale'}/${id}/reserve`,
+      `https://jzj-api.zeabur.app/properties/${type === 'rental' ? 'for-rent' : 'for-sale'}/${id}/reserve`,
       {
         name,
         phone,
@@ -52,10 +52,10 @@ const DetailSideBar = (props) => {
     <div className={styles.detailSideBar}>
       {price && (
         <div className={styles.priceArea}>
-          {type === 'rent' && (
+          {type === 'rental' && (
             <span className={styles.price}>{price.toLocaleString()}/月</span>
           )}
-          {type === 'buy' && (
+          {type === 'sales' && (
             <div>
               <div className={styles.price}>
                 {getSalePriceDisplay(price)}

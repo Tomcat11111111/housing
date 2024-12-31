@@ -107,12 +107,12 @@ const InfoSetting = forwardRef((props, ref) => {
     trigger: async () => {
       // 先驗證 InfoSetting 本身的欄位
       const isInfoValid = await infoTrigger();
-      const isDetailValid = publishType === 'buy' ? await saleHouseRef.current?.trigger() : await rentHouseRef.current?.trigger();
+      const isDetailValid = publishType === 'sales' ? await saleHouseRef.current?.trigger() : await rentHouseRef.current?.trigger();
       return isInfoValid && isDetailValid;
     },
     errors: {
       ...errors,
-      // ...(publishType === 'buy' 
+      // ...(publishType === 'sales' 
       //   ? saleHouseRef.current?.errors 
       //   : rentHouseRef.current?.errors)
     }
@@ -131,7 +131,7 @@ const InfoSetting = forwardRef((props, ref) => {
   });
   
   const districtsOptions = citiesOptions.find((city) => city.id === location.cityId)?.districts || [];
-  const itemFormList = publishType === 'buy' ? BuyHouseTypeList : RentHouseTypeList;
+  const itemFormList = publishType === 'sales' ? BuyHouseTypeList : RentHouseTypeList;
 
   useEffect(() => {
     if (location.cityId && location.districtId) {
@@ -167,11 +167,11 @@ const InfoSetting = forwardRef((props, ref) => {
           ))}
         </div>
       </FieldGroup>
-        <FieldGroup title={publishType === 'buy' ? "出售名稱＊" : "出租名稱＊"}>
+        <FieldGroup title={publishType === 'sales' ? "出售名稱＊" : "出租名稱＊"}>
         <TextField
           id="contacts"
           value={property.title}
-          placeholder={publishType === 'buy' ? "請輸入物件出售名稱" : "請輸入物件出租名稱"}
+          placeholder={publishType === 'sales' ? "請輸入物件出售名稱" : "請輸入物件出租名稱"}
           sx={{ width: '80%' }}
           error={!!errors.title}
           helperText={errors.title?.message}
@@ -437,10 +437,10 @@ const InfoSetting = forwardRef((props, ref) => {
           <FormControlLabel control={<Checkbox />} label="開放式格局" />
         </div>
       </FieldGroup>
-      {publishType === 'buy' && (
+      {publishType === 'sales' && (
         <SaleHouseInfoSetting ref={saleHouseRef} />
       )}
-      {publishType === 'rent' && (
+      {publishType === 'rental' && (
         <RentHouseInfoSetting ref={rentHouseRef} />
       )}
     </div>

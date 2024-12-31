@@ -91,7 +91,7 @@ const Main = ({ type, detailData }) => {
             shape={shape}
           />
           <LocationSection location={location} geolocation={geolocation} />
-          {type === 'rent' && (
+          {type === 'rental' && (
             <FacilityRules
               landLordOffer={landLordOffer}
               equipments={equipments}
@@ -99,13 +99,13 @@ const Main = ({ type, detailData }) => {
               inclusions={inclusions}
             />
           )}
-          {type === 'buy' && (
+          {type === 'sales' && (
             <PropertySummary propertySummary={propertySummary} />
           )}
           {introduction && <Introduction introduction={introduction} />}
         </article>
         <DetailSideBar
-          price={type === 'buy' ? totalPrice : price}
+          price={type === 'sales' ? totalPrice : price}
           unitPrice={unitPrice}
           views={views}
           type={type}
