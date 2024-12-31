@@ -85,6 +85,7 @@ export default function EditProperty({ params }) {
       console.log('Property:', propertyData.property);
       console.log('Sales Info:', propertyData.salesInfo);
       console.log('Rental Info:', propertyData.rentalInfo);
+      console.log('test');
       console.groupEnd();
 
       setItemTypeSettings({
